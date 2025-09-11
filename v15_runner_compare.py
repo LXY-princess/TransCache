@@ -115,23 +115,23 @@ def main():
     method_events["Tcache-Series"] = out1["events"]
     metrics_all["Tcache-Series"] = out1["metrics"]
 
-    # Tcache (cache when first seen)
-    clear_recent()
-    out1 = S3.run_strategy(workload, makers_all, predictor_cfg,
-                           prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
-                           max_compile=args.max_compile, shots=args.shots)
-    save_events_json("tcache_firstSeen", out1["events"])
-    method_events["tcache_firstSeen"] = out1["events"]
-    metrics_all["tcache_firstSeen"] = out1["metrics"]
+    # # Tcache (cache when first seen)
+    # clear_recent()
+    # out1 = S3.run_strategy(workload, makers_all, predictor_cfg,
+    #                        prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
+    #                        max_compile=args.max_compile, shots=args.shots)
+    # save_events_json("tcache_firstSeen", out1["events"])
+    # method_events["tcache_firstSeen"] = out1["events"]
+    # metrics_all["tcache_firstSeen"] = out1["metrics"]
 
-    # Tcache (remove prewarm time from results)
-    clear_recent()
-    out1 = S4.run_strategy(workload, makers_all, predictor_cfg,
-                           prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
-                           max_compile=args.max_compile, shots=args.shots)
-    save_events_json("tcache_preCompile_on_idle", out1["events"])
-    method_events["tcache_preCompile_on_idle"] = out1["events"]
-    metrics_all["tcache_preCompile_on_idle"] = out1["metrics"]
+    # # Tcache (remove prewarm time from results)
+    # clear_recent()
+    # out1 = S4.run_strategy(workload, makers_all, predictor_cfg,
+    #                        prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
+    #                        max_compile=args.max_compile, shots=args.shots)
+    # save_events_json("tcache_preCompile_on_idle", out1["events"])
+    # method_events["tcache_preCompile_on_idle"] = out1["events"]
+    # metrics_all["tcache_preCompile_on_idle"] = out1["metrics"]
     #
     # # Tcache (Idle-gap)
     # clear_recent()
@@ -161,5 +161,5 @@ def main():
 
 
 if __name__ == "__main__":
-    # main()
-    load_and_draw_timeline()
+    main()
+    # load_and_draw_timeline()

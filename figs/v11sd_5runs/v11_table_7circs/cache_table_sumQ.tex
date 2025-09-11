@@ -1,0 +1,50 @@
+\begin{table*}[t]
+\centering
+\caption{Cumulative latency and cache breakdown across all circuit–qubit–depth configurations.}
+\label{tab:cache_all}
+\resizebox{\textwidth}{!}{
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{| l || r r c || r r r r r c |}
+\hline
+Circuit & E2E (Base) & E2E (TC) & \textbf{E2E Speedup} & Transpile (B) & Cache Search (TC) & Transpile (TC) & Cache Write (TC) & TC Sum $^\dagger$ & \textbf{Compile Speedup} \\
+\hline
+\hline
+GHZ-Chain\_d1\_allQ & $1.605$ & $1.091$ & $\textbf{1.47}$$\times$ & $0.968$ & $0.006$ & $0.203$ & $0.241$ & $0.450$ & $\textbf{2.15}$$\times$ \\
+GHZ-Chain\_d4\_allQ & $1.718$ & $1.175$ & $\textbf{1.46}$$\times$ & $1.067$ & $0.007$ & $0.229$ & $0.239$ & $0.475$ & $\textbf{2.25}$$\times$ \\
+GHZ-Chain\_d8\_allQ & $1.898$ & $1.256$ & $\textbf{1.51}$$\times$ & $1.213$ & $0.009$ & $0.279$ & $0.257$ & $0.545$ & $\textbf{2.23}$$\times$ \\
+GHZ-Chain\_d16\_allQ & $2.001$ & $1.315$ & $\textbf{1.52}$$\times$ & $1.301$ & $0.011$ & $0.287$ & $0.274$ & $0.573$ & $\textbf{2.27}$$\times$ \\
+GHZ-Chain\_d25\_allQ & $2.131$ & $1.296$ & $\textbf{1.64}$$\times$ & $1.435$ & $0.013$ & $0.308$ & $0.255$ & $0.576$ & $\textbf{2.49}$$\times$ \\
+LinearEnt\_d1\_allQ & $1.923$ & $1.789$ & $\textbf{1.07}$$\times$ & $1.161$ & $0.010$ & $0.239$ & $0.801$ & $1.050$ & $\textbf{1.11}$$\times$ \\
+LinearEnt\_d4\_allQ & $3.917$ & $3.339$ & $\textbf{1.17}$$\times$ & $2.027$ & $0.026$ & $0.401$ & $0.945$ & $1.372$ & $\textbf{1.48}$$\times$ \\
+LinearEnt\_d8\_allQ & $6.636$ & $5.360$ & $\textbf{1.24}$$\times$ & $2.930$ & $0.049$ & $0.591$ & $0.915$ & $1.555$ & $\textbf{1.88}$$\times$ \\
+LinearEnt\_d16\_allQ & $13.287$ & $10.026$ & $\textbf{1.33}$$\times$ & $5.113$ & $0.097$ & $0.882$ & $1.067$ & $2.047$ & $\textbf{2.50}$$\times$ \\
+LinearEnt\_d25\_allQ & $19.830$ & $15.962$ & $\textbf{1.24}$$\times$ & $7.246$ & $0.150$ & $1.440$ & $0.854$ & $2.445$ & $\textbf{2.96}$$\times$ \\
+QFT-Like\_d1\_allQ & $6.714$ & $4.552$ & $\textbf{1.48}$$\times$ & $3.801$ & $0.039$ & $0.744$ & $0.770$ & $1.553$ & $\textbf{2.45}$$\times$ \\
+QFT-Like\_d4\_allQ & $23.232$ & $16.149$ & $\textbf{1.44}$$\times$ & $11.191$ & $0.137$ & $2.330$ & $0.834$ & $3.300$ & $\textbf{3.39}$$\times$ \\
+QFT-Like\_d8\_allQ & $46.883$ & $31.172$ & $\textbf{1.50}$$\times$ & $20.893$ & $0.222$ & $4.167$ & $0.784$ & $5.173$ & $\textbf{4.04}$$\times$ \\
+QFT-Like\_d16\_allQ & $87.659$ & $60.204$ & $\textbf{1.46}$$\times$ & $37.415$ & $0.427$ & $7.327$ & $0.937$ & $8.691$ & $\textbf{4.31}$$\times$ \\
+QFT-Like\_d25\_allQ & $136.492$ & $96.195$ & $\textbf{1.42}$$\times$ & $56.642$ & $0.687$ & $11.532$ & $1.005$ & $13.224$ & $\textbf{4.28}$$\times$ \\
+RCA\_d1\_allQ & $1.621$ & $0.942$ & $\textbf{1.72}$$\times$ & $1.024$ & $0.007$ & $0.203$ & $0.122$ & $0.332$ & $\textbf{3.08}$$\times$ \\
+RCA\_d4\_allQ & $3.565$ & $2.698$ & $\textbf{1.32}$$\times$ & $1.705$ & $0.020$ & $0.360$ & $0.393$ & $0.773$ & $\textbf{2.20}$$\times$ \\
+RCA\_d8\_allQ & $5.747$ & $4.110$ & $\textbf{1.40}$$\times$ & $2.444$ & $0.034$ & $0.483$ & $0.097$ & $0.614$ & $\textbf{3.98}$$\times$ \\
+RCA\_d16\_allQ & $10.421$ & $7.831$ & $\textbf{1.33}$$\times$ & $3.873$ & $0.061$ & $0.681$ & $0.106$ & $0.847$ & $\textbf{4.57}$$\times$ \\
+RCA\_d25\_allQ & $14.631$ & $11.100$ & $\textbf{1.32}$$\times$ & $5.076$ & $0.094$ & $1.094$ & $0.108$ & $1.296$ & $\textbf{3.92}$$\times$ \\
+QSIM-XXZ\_d1\_allQ & $1.977$ & $1.152$ & $\textbf{1.72}$$\times$ & $1.350$ & $0.022$ & $0.300$ & $0.295$ & $0.617$ & $\textbf{2.19}$$\times$ \\
+QSIM-XXZ\_d4\_allQ & $4.303$ & $2.253$ & $\textbf{1.91}$$\times$ & $2.963$ & $0.059$ & $0.560$ & $0.323$ & $0.942$ & $\textbf{3.14}$$\times$ \\
+QSIM-XXZ\_d8\_allQ & $7.476$ & $3.968$ & $\textbf{1.88}$$\times$ & $5.261$ & $0.117$ & $0.895$ & $0.466$ & $1.477$ & $\textbf{3.56}$$\times$ \\
+QSIM-XXZ\_d16\_allQ & $13.079$ & $6.803$ & $\textbf{1.92}$$\times$ & $8.569$ & $0.221$ & $1.616$ & $0.481$ & $2.317$ & $\textbf{3.70}$$\times$ \\
+QSIM-XXZ\_d25\_allQ & $20.545$ & $10.238$ & $\textbf{2.01}$$\times$ & $13.383$ & $0.348$ & $2.184$ & $0.637$ & $3.169$ & $\textbf{4.22}$$\times$ \\
+QAOA-3reg\_d1\_allQ & $2.901$ & $2.006$ & $\textbf{1.45}$$\times$ & $1.531$ & $0.018$ & $0.315$ & $0.479$ & $0.811$ & $\textbf{1.89}$$\times$ \\
+QAOA-3reg\_d4\_allQ & $6.955$ & $5.002$ & $\textbf{1.39}$$\times$ & $3.088$ & $0.058$ & $0.634$ & $0.378$ & $1.070$ & $\textbf{2.89}$$\times$ \\
+QAOA-3reg\_d8\_allQ & $13.755$ & $9.202$ & $\textbf{1.49}$$\times$ & $5.389$ & $0.111$ & $0.996$ & $0.521$ & $1.629$ & $\textbf{3.31}$$\times$ \\
+QAOA-3reg\_d16\_allQ & $26.480$ & $18.667$ & $\textbf{1.42}$$\times$ & $9.836$ & $0.222$ & $2.241$ & $0.506$ & $2.969$ & $\textbf{3.31}$$\times$ \\
+QAOA-3reg\_d25\_allQ & $39.641$ & $29.239$ & $\textbf{1.36}$$\times$ & $14.365$ & $0.351$ & $2.788$ & $0.429$ & $3.568$ & $\textbf{4.03}$$\times$ \\
+VQE-Full\_d1\_allQ & $2.064$ & $2.391$ & $\textbf{--}$$\times$ & $1.338$ & $0.189$ & $0.245$ & $1.212$ & $1.646$ & $\textbf{-}$$\times$ \\
+VQE-Full\_d4\_allQ & $4.739$ & $4.321$ & $\textbf{1.10}$$\times$ & $1.866$ & $0.024$ & $0.385$ & $1.253$ & $1.662$ & $\textbf{1.12}$$\times$ \\
+VQE-Full\_d8\_allQ & $7.351$ & $6.650$ & $\textbf{1.11}$$\times$ & $2.618$ & $0.044$ & $0.566$ & $1.260$ & $1.870$ & $\textbf{1.40}$$\times$ \\
+VQE-Full\_d16\_allQ & $13.686$ & $11.622$ & $\textbf{1.18}$$\times$ & $4.505$ & $0.084$ & $0.905$ & $1.313$ & $2.302$ & $\textbf{1.96}$$\times$ \\
+VQE-Full\_d25\_allQ & $21.914$ & $18.913$ & $\textbf{1.16}$$\times$ & $6.627$ & $0.130$ & $1.264$ & $1.348$ & $2.742$ & $\textbf{2.42}$$\times$ \\
+\hline
+\end{tabular}
+}
+\end{table*}

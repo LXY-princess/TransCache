@@ -1,0 +1,662 @@
+[
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 0.0,
+    "dur": 11.0652662999928
+  },
+  {
+    "kind": "prewarm",
+    "label": "LinearEnt_q5_d4",
+    "start": 11.0652662999928,
+    "dur": 0.027587899938225746
+  },
+  {
+    "kind": "prewarm",
+    "label": "QFT-Like_q5_d4",
+    "start": 11.092854199931026,
+    "dur": 0.034282000036910176
+  },
+  {
+    "kind": "prewarm",
+    "label": "QAOA-3reg_q5_d4",
+    "start": 11.127136199967936,
+    "dur": 0.035772900097072124
+  },
+  {
+    "kind": "run",
+    "label": "Grover_q11_d8",
+    "start": 11.162909100065008,
+    "dur": 9.04090159968473
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q5_d4",
+    "start": 20.203810699749738,
+    "dur": 0.048731500050053
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d4",
+    "start": 20.25254219979979,
+    "dur": 0.06332409987226129
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 20.315866299672052,
+    "dur": 12.361132200108841
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d4",
+    "start": 32.67699849978089,
+    "dur": 0.024465000024065375
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d8",
+    "start": 32.70146349980496,
+    "dur": 0.1020208999980241
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q11_d8",
+    "start": 32.80348439980298,
+    "dur": 0.058773000026121736
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 32.862257399829105,
+    "dur": 12.40210790000856
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q5_d4",
+    "start": 45.264365299837664,
+    "dur": 0.004114700015634298
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q5_d4",
+    "start": 45.2684799998533,
+    "dur": 0.002038300037384033
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q5_d4",
+    "start": 45.27051829989068,
+    "dur": 0.0020261998288333416
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 45.272544499719515,
+    "dur": 12.23690399993211
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d4",
+    "start": 57.509448499651626,
+    "dur": 0.0029062998946756124
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d4",
+    "start": 57.5123547995463,
+    "dur": 0.001991699915379286
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q11_d4",
+    "start": 57.51434649946168,
+    "dur": 0.04080529999919236
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 57.55515179946087,
+    "dur": 12.067071299999952
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q5_d4",
+    "start": 69.62222309946083,
+    "dur": 0.002242600079625845
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d8",
+    "start": 69.62446569954045,
+    "dur": 0.04817389976233244
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q11_d8",
+    "start": 69.67263959930278,
+    "dur": 0.05833160015754402
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 69.73097119946033,
+    "dur": 12.62497889995575
+  },
+  {
+    "kind": "run",
+    "label": "Grover_q11_d8",
+    "start": 82.35595009941608,
+    "dur": 9.976326399948448
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q5_d8",
+    "start": 92.33227649936453,
+    "dur": 0.06516200001351535
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q5_d4",
+    "start": 92.39743849937804,
+    "dur": 0.0029889000579714775
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 92.40042739943601,
+    "dur": 11.959435400087386
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q11_d8",
+    "start": 104.3598627995234,
+    "dur": 0.026884099934250116
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d8",
+    "start": 104.38674689945765,
+    "dur": 0.011652600020170212
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q5_d8",
+    "start": 104.39839949947782,
+    "dur": 0.03307650005444884
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 104.43147599953227,
+    "dur": 12.460345700150356
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q11_d4",
+    "start": 116.89182169968262,
+    "dur": 0.03771789977326989
+  },
+  {
+    "kind": "run",
+    "label": "Grover_q11_d8",
+    "start": 116.9295395994559,
+    "dur": 10.29780190018937
+  },
+  {
+    "kind": "run",
+    "label": "Grover_q11_d8",
+    "start": 127.22734149964526,
+    "dur": 11.528009599773213
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 138.75535109941848,
+    "dur": 12.357923900010064
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q5_d4",
+    "start": 151.11327499942854,
+    "dur": 0.002350799972191453
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q5_d8",
+    "start": 151.11562579940073,
+    "dur": 0.0023123000282794237
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d4",
+    "start": 151.117938099429,
+    "dur": 0.0018893000669777393
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 151.119827399496,
+    "dur": 12.322450999869034
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q5_d4",
+    "start": 163.44227839936502,
+    "dur": 0.0030719998758286238
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d4",
+    "start": 163.44535039924085,
+    "dur": 0.0022273000795394182
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d4",
+    "start": 163.4475776993204,
+    "dur": 0.0019261999987065792
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 163.4495038993191,
+    "dur": 13.627840500092134
+  },
+  {
+    "kind": "run",
+    "label": "Grover_q11_d8",
+    "start": 177.07734439941123,
+    "dur": 10.756588999880478
+  },
+  {
+    "kind": "run",
+    "label": "Grover_q11_d8",
+    "start": 187.8339333992917,
+    "dur": 8.701954900054261
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d8",
+    "start": 196.53588829934597,
+    "dur": 0.012319999979808927
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 196.54820829932578,
+    "dur": 13.093368500005454
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q5_d4",
+    "start": 209.64157679933123,
+    "dur": 0.0024715999606996775
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q5_d8",
+    "start": 209.64404839929193,
+    "dur": 0.0019395998679101467
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q5_d4",
+    "start": 209.64598799915984,
+    "dur": 0.0018919999711215496
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 209.64787999913096,
+    "dur": 12.707005199976265
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d4",
+    "start": 222.35488519910723,
+    "dur": 0.0030987998470664024
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d4",
+    "start": 222.3579839989543,
+    "dur": 0.0027399000246077776
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q11_d4",
+    "start": 222.3607238989789,
+    "dur": 0.0047293000388890505
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 222.3654531990178,
+    "dur": 12.485500500071794
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q5_d8",
+    "start": 234.8509536990896,
+    "dur": 0.055208600126206875
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q5_d8",
+    "start": 234.9061622992158,
+    "dur": 0.0024441999848932028
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q5_d8",
+    "start": 234.9086064992007,
+    "dur": 0.0025457001756876707
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 234.91115219937637,
+    "dur": 12.551010699942708
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q11_d8",
+    "start": 247.46216289931908,
+    "dur": 0.005627900129184127
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q5_d8",
+    "start": 247.46779079944827,
+    "dur": 0.001626600045710802
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q5_d4",
+    "start": 247.46941739949398,
+    "dur": 0.0030002000275999308
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 247.47241759952158,
+    "dur": 12.474317299900576
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q11_d8",
+    "start": 259.94673489942215,
+    "dur": 0.10189249995164573
+  },
+  {
+    "kind": "run",
+    "label": "Grover_q11_d4",
+    "start": 260.0486273993738,
+    "dur": 5.7975241001695395
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q5_d4",
+    "start": 265.84615149954334,
+    "dur": 0.043367299949750304
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 265.8895187994931,
+    "dur": 13.578233999898657
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q5_d8",
+    "start": 279.46775279939175,
+    "dur": 0.0021267998963594437
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q5_d8",
+    "start": 279.4698795992881,
+    "dur": 0.050614200066775084
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q5_d8",
+    "start": 279.5204937993549,
+    "dur": 0.0024277002085000277
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 279.5229214995634,
+    "dur": 9.983625400112942
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q11_d8",
+    "start": 289.5065468996763,
+    "dur": 0.0026724000927060843
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d8",
+    "start": 289.50921929976903,
+    "dur": 0.01420300011523068
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q5_d4",
+    "start": 289.52342229988426,
+    "dur": 0.002937000012025237
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 289.5263592998963,
+    "dur": 13.1342268998269
+  },
+  {
+    "kind": "run",
+    "label": "Grover_q5_d4",
+    "start": 302.6605861997232,
+    "dur": 0.056383999763056636
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q5_d8",
+    "start": 302.71697019948624,
+    "dur": 0.0015797000378370285
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d4",
+    "start": 302.7185498995241,
+    "dur": 0.006574299884960055
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 302.72512419940904,
+    "dur": 13.075049600098282
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d4",
+    "start": 315.8001737995073,
+    "dur": 0.006847799988463521
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q5_d4",
+    "start": 315.8070215994958,
+    "dur": 0.0019914000295102596
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q11_d8",
+    "start": 315.8090129995253,
+    "dur": 0.002443299861624837
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 315.8114562993869,
+    "dur": 13.277858800021932
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q11_d8",
+    "start": 329.08931509940885,
+    "dur": 0.0024751999881118536
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d8",
+    "start": 329.09179029939696,
+    "dur": 0.01111049996688962
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q5_d4",
+    "start": 329.10290079936385,
+    "dur": 0.0026567999739199877
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 329.10555759933777,
+    "dur": 13.782607099972665
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d4",
+    "start": 342.88816469931044,
+    "dur": 0.0023477000650018454
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d4",
+    "start": 342.89051239937544,
+    "dur": 0.0021748000290244818
+  },
+  {
+    "kind": "run",
+    "label": "Grover_q11_d8",
+    "start": 342.89268719940446,
+    "dur": 10.100469199940562
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 352.993156399345,
+    "dur": 16.834218400064856
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q5_d8",
+    "start": 369.8273747994099,
+    "dur": 0.0032709999941289425
+  },
+  {
+    "kind": "run",
+    "label": "Grover_q11_d8",
+    "start": 369.830645799404,
+    "dur": 12.086113499943167
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d8",
+    "start": 381.9167592993472,
+    "dur": 0.0035755999851971865
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 381.9203348993324,
+    "dur": 18.34679410001263
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q11_d8",
+    "start": 400.267128999345,
+    "dur": 0.0023264000192284584
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q11_d4",
+    "start": 400.26945539936423,
+    "dur": 0.04313080012798309
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q5_d8",
+    "start": 400.3125861994922,
+    "dur": 0.0024908999912440777
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 400.31507709948346,
+    "dur": 12.426704799989238
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d4",
+    "start": 412.7417818994727,
+    "dur": 0.0034298000391572714
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q5_d8",
+    "start": 412.74521169951186,
+    "dur": 0.004136900184676051
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q5_d4",
+    "start": 412.74934859969653,
+    "dur": 0.0073160999454557896
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 412.756664699642,
+    "dur": 17.51188539993018
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d8",
+    "start": 430.26855009957217,
+    "dur": 0.01653449982404709
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q11_d8",
+    "start": 430.2850845993962,
+    "dur": 0.0021573000121861696
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d4",
+    "start": 430.2872418994084,
+    "dur": 0.0020905998535454273
+  },
+  {
+    "kind": "predict",
+    "label": "__predictor__",
+    "start": 430.28933249926195,
+    "dur": 17.33620709995739
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d8",
+    "start": 447.62553959921934,
+    "dur": 0.01823409995995462
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d8",
+    "start": 447.6437736991793,
+    "dur": 0.01143199997022748
+  }
+]

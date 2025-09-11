@@ -1,0 +1,27 @@
+{
+  "laps": {
+    "01_setup": 1.381646,
+    "02_cache_search": 0.000116,
+    "03_transpile": 0.068243,
+    "07_cache_write": 0.155939,
+    "04_submit": 0.000782,
+    "05_run": 0.569492,
+    "06_collect": 0.000138,
+    "total": 2.176356
+  },
+  "meta": {
+    "backend": "fake_sherbrooke",
+    "n_qubits": 3,
+    "depth_in": 13,
+    "depth_transpiled": 29,
+    "size_transpiled": 35,
+    "quasi_dist": {
+      "0": 0.947265625,
+      "2": 0.0166015625,
+      "4": 0.0078125,
+      "1": 0.025390625,
+      "6": 0.0009765625,
+      "3": 0.001953125
+    }
+  }
+}

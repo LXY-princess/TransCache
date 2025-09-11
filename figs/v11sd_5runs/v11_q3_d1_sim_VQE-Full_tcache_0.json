@@ -1,0 +1,27 @@
+{
+  "laps": {
+    "01_setup": 6.4e-05,
+    "02_cache_search": 0.180405,
+    "03_transpile": 0.019658,
+    "07_cache_write": 0.139204,
+    "04_submit": 0.001179,
+    "05_run": 0.001533,
+    "06_collect": 4.7e-05,
+    "total": 0.34209
+  },
+  "meta": {
+    "backend": "AerSV",
+    "n_qubits": 3,
+    "depth_in": 5,
+    "depth_transpiled": 5,
+    "size_transpiled": 9,
+    "quasi_dist": {
+      "5": 0.03515625,
+      "0": 0.876953125,
+      "7": 0.0400390625,
+      "6": 0.0380859375,
+      "3": 0.005859375,
+      "2": 0.00390625
+    }
+  }
+}

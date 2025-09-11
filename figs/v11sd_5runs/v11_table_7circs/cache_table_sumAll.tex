@@ -1,0 +1,16 @@
+\begin{table*}[t]
+\centering
+\caption{Cumulative latency and cache breakdown across all circuit–qubit–depth configurations.}
+\label{tab:cache_all}
+\resizebox{\textwidth}{!}{
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{| l || r r c || r r r r r c |}
+\hline
+Circuit & E2E (Base) & E2E (TC) & \textbf{E2E Speedup} & Transpile (B) & Cache Search (TC) & Transpile (TC) & Cache Write (TC) & TC Sum $^\dagger$ & \textbf{Compile Speedup} \\
+\hline
+\hline
+sumAll & $578.775$ & $409.987$ & $\textbf{1.41}$$\times$ & $251.213$ & $4.102$ & $49.674$ & $21.906$ & $75.681$ & $\textbf{3.32}$$\times$ \\
+\hline
+\end{tabular}
+}
+\end{table*}

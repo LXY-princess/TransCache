@@ -1,0 +1,27 @@
+\begin{table*}[t]
+\centering
+\caption{Cumulative latency and cache breakdown across all circuit–qubit–depth configurations.}
+\label{tab:cache_all}
+\resizebox{\textwidth}{!}{
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{| l || r r c || r r r r r c |}
+\hline
+Circuit & E2E(Base) & E2E(TC) & \textbf{E2E Speedup} & Transpile (B) & Cache Search (TC) & Transpile (TC) & Cache Write (TC) & TC Sum $^\dagger$ & \textbf{Compile Speedup} \\
+\hline
+\hline
+GHZ-Chain\_q3\_allD & $3.227$ & $1.757$ & $\textbf{1.84}$$\times$ & $1.478$ & $0.008$ & $0.146$ & $0.265$ & $0.419$ & $\textbf{3.53}$$\times$ \\
+GHZ-Chain\_q5\_allD & $2.880$ & $1.875$ & $\textbf{1.54}$$\times$ & $1.467$ & $0.009$ & $0.149$ & $0.165$ & $0.323$ & $\textbf{4.54}$$\times$ \\
+GHZ-Chain\_q6\_allD & $3.477$ & $1.837$ & $\textbf{1.89}$$\times$ & $1.954$ & $0.010$ & $0.204$ & $0.107$ & $0.322$ & $\textbf{6.07}$$\times$ \\
+GHZ-Chain\_q7\_allD & $4.786$ & $2.213$ & $\textbf{2.16}$$\times$ & $2.765$ & $0.012$ & $0.293$ & $0.326$ & $0.632$ & $\textbf{4.38}$$\times$ \\
+LinearEnt\_q3\_allD & $4.401$ & $2.496$ & $\textbf{1.76}$$\times$ & $2.725$ & $0.019$ & $0.383$ & $0.088$ & $0.490$ & $\textbf{5.56}$$\times$ \\
+LinearEnt\_q5\_allD & $5.676$ & $2.603$ & $\textbf{2.18}$$\times$ & $3.683$ & $0.034$ & $0.356$ & $0.254$ & $0.643$ & $\textbf{5.73}$$\times$ \\
+LinearEnt\_q6\_allD & $7.357$ & $3.000$ & $\textbf{2.45}$$\times$ & $5.183$ & $0.036$ & $0.563$ & $0.111$ & $0.710$ & $\textbf{7.30}$$\times$ \\
+LinearEnt\_q7\_allD & $8.459$ & $3.547$ & $\textbf{2.38}$$\times$ & $5.970$ & $0.040$ & $0.744$ & $0.227$ & $1.011$ & $\textbf{5.91}$$\times$ \\
+QFT-Like\_q3\_allD & $8.230$ & $2.787$ & $\textbf{2.95}$$\times$ & $5.723$ & $0.019$ & $0.526$ & $0.092$ & $0.637$ & $\textbf{8.99}$$\times$ \\
+QFT-Like\_q5\_allD & $22.140$ & $5.831$ & $\textbf{3.80}$$\times$ & $17.682$ & $0.046$ & $1.700$ & $0.217$ & $1.963$ & $\textbf{9.01}$$\times$ \\
+QFT-Like\_q6\_allD & $27.084$ & $8.390$ & $\textbf{3.23}$$\times$ & $21.745$ & $0.070$ & $2.592$ & $0.152$ & $2.814$ & $\textbf{7.73}$$\times$ \\
+QFT-Like\_q7\_allD & $48.288$ & $11.632$ & $\textbf{4.15}$$\times$ & $41.717$ & $0.094$ & $3.810$ & $0.273$ & $4.177$ & $\textbf{9.99}$$\times$ \\
+\hline
+\end{tabular}
+}
+\end{table*}

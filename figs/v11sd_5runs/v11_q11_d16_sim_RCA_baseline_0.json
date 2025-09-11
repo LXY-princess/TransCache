@@ -1,0 +1,20 @@
+{
+  "laps": {
+    "01_setup": 0.000101,
+    "03_transpile": 0.063621,
+    "04_submit": 0.003037,
+    "05_run": 0.004562,
+    "06_collect": 0.000746,
+    "total": 0.072067
+  },
+  "meta": {
+    "backend": "AerSV",
+    "n_qubits": 11,
+    "depth_in": 225,
+    "depth_transpiled": 225,
+    "size_transpiled": 235,
+    "quasi_dist": {
+      "0": 1.0
+    }
+  }
+}

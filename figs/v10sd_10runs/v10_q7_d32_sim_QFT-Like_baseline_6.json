@@ -1,0 +1,20 @@
+{
+  "laps": {
+    "01_setup": 9e-05,
+    "03_transpile": 2.235378,
+    "04_submit": 0.041691,
+    "05_run": 0.254336,
+    "06_collect": 0.006048,
+    "total": 2.537543
+  },
+  "meta": {
+    "backend": "fake_jakarta",
+    "n_qubits": 7,
+    "depth_in": 231,
+    "depth_transpiled": 2888,
+    "size_transpiled": 5641,
+    "quasi_dist": {
+      "0": 1.0
+    }
+  }
+}

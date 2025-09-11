@@ -1,0 +1,20 @@
+\begin{table*}[t]
+\centering
+\caption{Cumulative latency and cache breakdown across all circuit–qubit–depth configurations.}
+\label{tab:cache_all}
+\resizebox{\textwidth}{!}{
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{| l || r r c || r r r r r c |}
+\hline
+Circuit & E2E (Base) & E2E (TC) & \textbf{E2E Speedup} & Transpile (B) & Cache Search (TC) & Transpile (TC) & Cache Write (TC) & TC Sum $^\dagger$ & \textbf{Compile Speedup} \\
+\hline
+\hline
+GHZ-Chain\_all\_QD & $12.727$ & $7.358$ & $\textbf{1.73}$$\times$ & $8.876$ & $0.067$ & $1.869$ & $1.458$ & $3.394$ & $\textbf{2.62}$$\times$ \\
+LinearEnt\_all\_QD & $54.886$ & $40.922$ & $\textbf{1.34}$$\times$ & $26.183$ & $0.459$ & $5.405$ & $5.609$ & $11.473$ & $\textbf{2.28}$$\times$ \\
+QFT-Like\_all\_QD & $342.168$ & $221.148$ & $\textbf{1.55}$$\times$ & $168.260$ & $1.985$ & $33.610$ & $5.723$ & $41.318$ & $\textbf{4.07}$$\times$ \\
+RCA\_all\_QD & $42.694$ & $29.217$ & $\textbf{1.46}$$\times$ & $19.726$ & $0.291$ & $4.074$ & $1.097$ & $5.463$ & $\textbf{3.61}$$\times$ \\
+QSIM-XXZ\_all\_QD & $62.640$ & $30.654$ & $\textbf{2.04}$$\times$ & $44.184$ & $1.048$ & $8.038$ & $3.199$ & $12.285$ & $\textbf{3.60}$$\times$ \\
+\hline
+\end{tabular}
+}
+\end{table*}

@@ -1,0 +1,24 @@
+{
+  "laps": {
+    "01_setup": 1.473138,
+    "03_transpile": 0.067509,
+    "04_submit": 0.00069,
+    "05_run": 0.588022,
+    "06_collect": 0.000145,
+    "total": 2.129504
+  },
+  "meta": {
+    "backend": "fake_sherbrooke",
+    "n_qubits": 3,
+    "depth_in": 13,
+    "depth_transpiled": 29,
+    "size_transpiled": 35,
+    "quasi_dist": {
+      "0": 0.9482421875,
+      "4": 0.0126953125,
+      "1": 0.017578125,
+      "2": 0.0205078125,
+      "6": 0.0009765625
+    }
+  }
+}

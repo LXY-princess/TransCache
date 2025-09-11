@@ -1,0 +1,33 @@
+\begin{table*}[t]
+\centering
+\caption{Cumulative latency and cache breakdown across all circuit–qubit–depth configurations.}
+\label{tab:cache_all}
+\resizebox{\textwidth}{!}{
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{| l || r r c || r r r r r c |}
+\hline
+Circuit & E2E(Base) & E2E(TC) & \textbf{E2E Speedup} & Transpile (B) & Cache Search (TC) & Transpile (TC) & Cache Write (TC) & TC Sum $^\dagger$ & \textbf{Compile Speedup} \\
+\hline
+\hline
+GHZ-Chain\_d1\_allQ & $2.144$ & $1.122$ & $\textbf{1.91}$$\times$ & $1.145$ & $0.005$ & $0.119$ & $0.006$ & $0.129$ & $\textbf{8.85}$$\times$ \\
+GHZ-Chain\_d2\_allQ & $2.639$ & $1.321$ & $\textbf{2.00}$$\times$ & $1.440$ & $0.006$ & $0.155$ & $0.020$ & $0.181$ & $\textbf{7.94}$$\times$ \\
+GHZ-Chain\_d4\_allQ & $2.170$ & $1.100$ & $\textbf{1.97}$$\times$ & $1.194$ & $0.005$ & $0.115$ & $0.089$ & $0.209$ & $\textbf{5.72}$$\times$ \\
+GHZ-Chain\_d8\_allQ & $2.016$ & $1.202$ & $\textbf{1.68}$$\times$ & $1.118$ & $0.006$ & $0.117$ & $0.194$ & $0.316$ & $\textbf{3.54}$$\times$ \\
+GHZ-Chain\_d16\_allQ & $2.600$ & $1.243$ & $\textbf{2.09}$$\times$ & $1.285$ & $0.007$ & $0.129$ & $0.180$ & $0.315$ & $\textbf{4.07}$$\times$ \\
+GHZ-Chain\_d32\_allQ & $2.802$ & $1.695$ & $\textbf{1.65}$$\times$ & $1.481$ & $0.012$ & $0.159$ & $0.374$ & $0.545$ & $\textbf{2.72}$$\times$ \\
+LinearEnt\_d1\_allQ & $2.578$ & $1.531$ & $\textbf{1.68}$$\times$ & $1.421$ & $0.005$ & $0.129$ & $0.006$ & $0.140$ & $\textbf{10.15}$$\times$ \\
+LinearEnt\_d2\_allQ & $2.820$ & $1.447$ & $\textbf{1.95}$$\times$ & $1.608$ & $0.007$ & $0.176$ & $0.019$ & $0.202$ & $\textbf{7.97}$$\times$ \\
+LinearEnt\_d4\_allQ & $2.778$ & $1.276$ & $\textbf{2.18}$$\times$ & $1.707$ & $0.010$ & $0.169$ & $0.030$ & $0.209$ & $\textbf{8.17}$$\times$ \\
+LinearEnt\_d8\_allQ & $3.608$ & $1.597$ & $\textbf{2.26}$$\times$ & $2.312$ & $0.016$ & $0.223$ & $0.147$ & $0.387$ & $\textbf{5.98}$$\times$ \\
+LinearEnt\_d16\_allQ & $5.299$ & $2.172$ & $\textbf{2.44}$$\times$ & $3.822$ & $0.031$ & $0.441$ & $0.179$ & $0.650$ & $\textbf{5.88}$$\times$ \\
+LinearEnt\_d32\_allQ & $8.810$ & $3.623$ & $\textbf{2.43}$$\times$ & $6.691$ & $0.060$ & $0.908$ & $0.298$ & $1.267$ & $\textbf{5.28}$$\times$ \\
+QFT-Like\_d1\_allQ & $3.937$ & $1.445$ & $\textbf{2.72}$$\times$ & $2.648$ & $0.007$ & $0.265$ & $0.007$ & $0.278$ & $\textbf{9.52}$$\times$ \\
+QFT-Like\_d2\_allQ & $5.562$ & $2.210$ & $\textbf{2.52}$$\times$ & $4.013$ & $0.011$ & $0.498$ & $0.020$ & $0.529$ & $\textbf{7.58}$$\times$ \\
+QFT-Like\_d4\_allQ & $7.464$ & $2.382$ & $\textbf{3.13}$$\times$ & $5.682$ & $0.016$ & $0.628$ & $0.041$ & $0.684$ & $\textbf{8.31}$$\times$ \\
+QFT-Like\_d8\_allQ & $12.680$ & $3.434$ & $\textbf{3.69}$$\times$ & $10.317$ & $0.028$ & $0.992$ & $0.064$ & $1.084$ & $\textbf{9.52}$$\times$ \\
+QFT-Like\_d16\_allQ & $24.251$ & $6.376$ & $\textbf{3.80}$$\times$ & $20.473$ & $0.055$ & $2.147$ & $0.135$ & $2.337$ & $\textbf{8.76}$$\times$ \\
+QFT-Like\_d32\_allQ & $51.848$ & $12.793$ & $\textbf{4.05}$$\times$ & $43.734$ & $0.112$ & $4.099$ & $0.468$ & $4.678$ & $\textbf{9.35}$$\times$ \\
+\hline
+\end{tabular}
+}
+\end{table*}

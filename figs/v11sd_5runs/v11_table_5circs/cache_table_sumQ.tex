@@ -1,0 +1,40 @@
+\begin{table*}[t]
+\centering
+\caption{Cumulative latency and cache breakdown across all circuit–qubit–depth configurations.}
+\label{tab:cache_all}
+\resizebox{\textwidth}{!}{
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{| l || r r c || r r r r r c |}
+\hline
+Circuit & E2E (Base) & E2E (TC) & \textbf{E2E Speedup} & Transpile (B) & Cache Search (TC) & Transpile (TC) & Cache Write (TC) & TC Sum $^\dagger$ & \textbf{Compile Speedup} \\
+\hline
+\hline
+GHZ-Chain\_d1\_allQ & $2.162$ & $1.294$ & $\textbf{1.67}$$\times$ & $1.444$ & $0.008$ & $0.296$ & $0.275$ & $0.579$ & $\textbf{2.49}$$\times$ \\
+GHZ-Chain\_d4\_allQ & $2.286$ & $1.395$ & $\textbf{1.64}$$\times$ & $1.553$ & $0.011$ & $0.330$ & $0.276$ & $0.616$ & $\textbf{2.52}$$\times$ \\
+GHZ-Chain\_d8\_allQ & $2.599$ & $1.493$ & $\textbf{1.74}$$\times$ & $1.824$ & $0.014$ & $0.384$ & $0.293$ & $0.691$ & $\textbf{2.64}$$\times$ \\
+GHZ-Chain\_d16\_allQ & $2.667$ & $1.571$ & $\textbf{1.70}$$\times$ & $1.867$ & $0.016$ & $0.405$ & $0.313$ & $0.734$ & $\textbf{2.54}$$\times$ \\
+GHZ-Chain\_d25\_allQ & $3.014$ & $1.605$ & $\textbf{1.88}$$\times$ & $2.187$ & $0.019$ & $0.454$ & $0.301$ & $0.774$ & $\textbf{2.83}$$\times$ \\
+LinearEnt\_d1\_allQ & $2.594$ & $2.173$ & $\textbf{1.19}$$\times$ & $1.708$ & $0.013$ & $0.351$ & $0.947$ & $1.312$ & $\textbf{1.30}$$\times$ \\
+LinearEnt\_d4\_allQ & $5.004$ & $3.996$ & $\textbf{1.25}$$\times$ & $2.938$ & $0.036$ & $0.590$ & $1.246$ & $1.872$ & $\textbf{1.57}$$\times$ \\
+LinearEnt\_d8\_allQ & $8.246$ & $6.169$ & $\textbf{1.34}$$\times$ & $4.311$ & $0.071$ & $0.867$ & $1.174$ & $2.111$ & $\textbf{2.04}$$\times$ \\
+LinearEnt\_d16\_allQ & $16.140$ & $11.176$ & $\textbf{1.44}$$\times$ & $7.299$ & $0.134$ & $1.498$ & $1.212$ & $2.845$ & $\textbf{2.57}$$\times$ \\
+LinearEnt\_d25\_allQ & $22.902$ & $17.408$ & $\textbf{1.32}$$\times$ & $9.926$ & $0.204$ & $2.099$ & $1.030$ & $3.334$ & $\textbf{2.98}$$\times$ \\
+QFT-Like\_d1\_allQ & $8.280$ & $5.505$ & $\textbf{1.50}$$\times$ & $5.205$ & $0.051$ & $1.059$ & $1.225$ & $2.335$ & $\textbf{2.23}$$\times$ \\
+QFT-Like\_d4\_allQ & $26.685$ & $17.415$ & $\textbf{1.53}$$\times$ & $14.396$ & $0.178$ & $3.149$ & $0.968$ & $4.295$ & $\textbf{3.35}$$\times$ \\
+QFT-Like\_d8\_allQ & $53.736$ & $33.018$ & $\textbf{1.63}$$\times$ & $27.299$ & $0.298$ & $5.239$ & $0.924$ & $6.461$ & $\textbf{4.22}$$\times$ \\
+QFT-Like\_d16\_allQ & $99.066$ & $63.724$ & $\textbf{1.55}$$\times$ & $48.070$ & $0.558$ & $9.547$ & $1.183$ & $11.288$ & $\textbf{4.26}$$\times$ \\
+QFT-Like\_d25\_allQ & $154.402$ & $101.487$ & $\textbf{1.52}$$\times$ & $73.290$ & $0.899$ & $14.616$ & $1.423$ & $16.938$ & $\textbf{4.33}$$\times$ \\
+RCA\_d1\_allQ & $2.176$ & $1.148$ & $\textbf{1.90}$$\times$ & $1.504$ & $0.010$ & $0.300$ & $0.159$ & $0.468$ & $\textbf{3.21}$$\times$ \\
+RCA\_d4\_allQ & $4.351$ & $2.982$ & $\textbf{1.46}$$\times$ & $2.381$ & $0.026$ & $0.496$ & $0.429$ & $0.951$ & $\textbf{2.50}$$\times$ \\
+RCA\_d8\_allQ & $6.998$ & $4.521$ & $\textbf{1.55}$$\times$ & $3.440$ & $0.045$ & $0.682$ & $0.130$ & $0.857$ & $\textbf{4.01}$$\times$ \\
+RCA\_d16\_allQ & $12.152$ & $8.508$ & $\textbf{1.43}$$\times$ & $5.363$ & $0.083$ & $0.964$ & $0.233$ & $1.280$ & $\textbf{4.19}$$\times$ \\
+RCA\_d25\_allQ & $17.017$ & $12.058$ & $\textbf{1.41}$$\times$ & $7.038$ & $0.127$ & $1.632$ & $0.147$ & $1.906$ & $\textbf{3.69}$$\times$ \\
+QSIM-XXZ\_d1\_allQ & $2.792$ & $1.617$ & $\textbf{1.73}$$\times$ & $2.049$ & $0.029$ & $0.466$ & $0.470$ & $0.966$ & $\textbf{2.12}$$\times$ \\
+QSIM-XXZ\_d4\_allQ & $5.947$ & $2.901$ & $\textbf{2.05}$$\times$ & $4.390$ & $0.083$ & $0.817$ & $0.479$ & $1.379$ & $\textbf{3.18}$$\times$ \\
+QSIM-XXZ\_d8\_allQ & $9.756$ & $5.010$ & $\textbf{1.95}$$\times$ & $7.205$ & $0.158$ & $1.281$ & $0.734$ & $2.174$ & $\textbf{3.32}$$\times$ \\
+QSIM-XXZ\_d16\_allQ & $17.586$ & $8.551$ & $\textbf{2.06}$$\times$ & $12.342$ & $0.303$ & $2.345$ & $0.662$ & $3.311$ & $\textbf{3.73}$$\times$ \\
+QSIM-XXZ\_d25\_allQ & $26.560$ & $12.575$ & $\textbf{2.11}$$\times$ & $18.198$ & $0.474$ & $3.129$ & $0.854$ & $4.457$ & $\textbf{4.08}$$\times$ \\
+\hline
+\end{tabular}
+}
+\end{table*}

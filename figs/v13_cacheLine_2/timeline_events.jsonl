@@ -1,0 +1,12 @@
+{"type": "prewarm", "ts": 1755807453.660026, "seq": 1, "key": "AerSV:86accc314da76e73a6846dce084cd1b3", "circ": "LinearEnt", "q": 9, "d": 4, "n_qubits": 9, "depth": 23, "compile_sec": 0.35468379966914654}
+{"type": "prewarm", "ts": 1755807454.019377, "seq": 1, "key": "AerSV:b7e0f3c6130a80d818e7fdd3c8a091a2", "circ": "QAOA-3reg", "q": 9, "d": 4, "n_qubits": 9, "depth": 57, "compile_sec": 0.05013869982212782}
+{"type": "run", "ts": 1755807454.0744588, "key": "AerSV:86accc314da76e73a6846dce084cd1b3", "hit": true}
+{"type": "run", "ts": 1755807454.0822868, "key": "AerSV:86accc314da76e73a6846dce084cd1b3", "hit": true}
+{"type": "OFFLOAD", "ts": 1755807454.0922418, "seq": 2, "key": "AerSV:b7e0f3c6130a80d818e7fdd3c8a091a2", "reason": "toff", "circ": "QAOA-3reg", "q": 9, "d": 4, "n_qubits": 9, "depth": 57}
+{"type": "prewarm", "ts": 1755807454.0952485, "seq": 2, "key": "AerSV:e1bd165963254efc936845cac8230ba0", "circ": "QSIM-XXZ", "q": 9, "d": 4, "n_qubits": 9, "depth": 193, "compile_sec": 0.046710599679499865}
+{"type": "run", "ts": 1755807454.1451015, "key": "AerSV:b7e0f3c6130a80d818e7fdd3c8a091a2", "hit": false}
+{"type": "run", "ts": 1755807454.2068093, "key": "AerSV:b7e0f3c6130a80d818e7fdd3c8a091a2", "hit": true}
+{"type": "OFFLOAD", "ts": 1755807454.2143326, "seq": 3, "key": "AerSV:86accc314da76e73a6846dce084cd1b3", "reason": "toff", "circ": "LinearEnt", "q": 9, "d": 4, "n_qubits": 9, "depth": 23}
+{"type": "OFFLOAD", "ts": 1755807454.220335, "seq": 3, "key": "AerSV:e1bd165963254efc936845cac8230ba0", "reason": "toff", "circ": "QSIM-XXZ", "q": 9, "d": 4, "n_qubits": 9, "depth": 193}
+{"type": "run", "ts": 1755807454.22284, "key": "AerSV:e1bd165963254efc936845cac8230ba0", "hit": false}
+{"type": "run", "ts": 1755807454.2788308, "key": "AerSV:e1bd165963254efc936845cac8230ba0", "hit": true}

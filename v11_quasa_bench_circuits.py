@@ -160,12 +160,12 @@ CIRCUITS_QUASA: Dict[str, Callable] = {
     # 你已有
     "GHZ-Chain": make_ghz_chain,
     "LinearEnt": make_linear_ent,
-    # "QFT-Like":  make_qft_like,
+    "QFT-Like":  make_qft_like,
     # # 论文 NISQ
     "QAOA-3reg": make_qaoa_3regular,
-    "RCA":       make_rca,
-    # "VQE-Full":  make_vqe_fullent,
+    # "RCA":       make_rca,
+    "VQE-Full":  make_vqe_fullent,
     # # 论文 FT
-    # "Grover":    make_grover,
+    "Grover":    make_grover,
     "QSIM-XXZ":  make_qsim_xxz,
 }

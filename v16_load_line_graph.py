@@ -33,13 +33,13 @@ PHASE_07 = "07_cache_write"
 #     "GHZ-Chain", "LinearEnt", "QFT-Like",
 #     "RCA", "QSIM-XXZ", "QAOA-3reg", "VQE-Full",
 # ]
-# DEFAULT_CIRCS = [
-#     "GHZ-Chain", "LinearEnt", "QFT-Like",
-#     "QSIM-XXZ", "QAOA-3reg", "VQE-Full",
-# ]
 DEFAULT_CIRCS = [
-    "LinearEnt",
+    "GHZ-Chain", "LinearEnt", "QFT-Like",
+    "QSIM-XXZ", "QAOA-3reg", "VQE-Full",
 ]
+# DEFAULT_CIRCS = [
+#     "QFT-Like",
+# ]
 # DEFAULT_CIRCS = [
 #     "GHZ-Chain", "LinearEnt",
 #     "RCA", "QSIM-XXZ", "QAOA-3reg", "VQE-Full",

@@ -29,25 +29,31 @@ PHASE_02 = "02_cache_search"
 PHASE_03 = "03_transpile"
 PHASE_07 = "07_cache_write"
 
-# DEFAULT_CIRCS = [
-#     "GHZ-Chain", "LinearEnt", "QFT-Like",
-#     "RCA", "QSIM-XXZ", "QAOA-3reg", "VQE-Full",
-# ]
 DEFAULT_CIRCS = [
     "GHZ-Chain", "LinearEnt", "QFT-Like",
     "QSIM-XXZ", "QAOA-3reg", "VQE-Full",
 ]
-# DEFAULT_CIRCS = [
-#     "QFT-Like",
-# ]
+
 # DEFAULT_CIRCS = [
 #     "GHZ-Chain", "LinearEnt",
-#     "RCA", "QSIM-XXZ", "QAOA-3reg", "VQE-Full",
+#     "QSIM-XXZ", "QAOA-3reg", "VQE-Full",
 # ]
+
 DEFAULT_DEPTHS = [1, 4]
 DEFAULT_QUBITS = [8, 16, 32, 64, 96, 112, 127] #[8, 16, 32, 64, 96, 112, 127]
 
 MODES = ["baseline", "tcache"]  # 两种方法
+BASELINE_COLOR = "#BA55D3"   # 默认 baseline 颜色（蓝）
+TCACHE_COLOR   = "#FFA500"   # 默认 tcache 颜色（橙）
+
+LABEL_MAP = {
+    "LinearEnt": "Linear",
+    "QFT-Like": "QFT",
+    "GHZ-Chain": "GHZ",
+    "QSIM-XXZ": "QSIM",
+    "QAOA-3reg": "QAOA",
+    "VQE-Full": "VQE",
+}
 
 
 def load_sum(figdir: Path, code_tag: str, q: int, d: int, circ: str, mode: str) -> Dict[str, float]:
@@ -160,8 +166,6 @@ def aggregate_sum_total_over_qubits(
                 agg[circ][mode][d] = total if found else float("nan")
     return agg
 
-
-
 def build_style_maps(circs: List[str]) -> Tuple[Dict[str, str], Dict[str, Tuple[float, float, float, float]]]:
     """
     为每个 circuit 生成 marker 和颜色：
@@ -178,7 +182,6 @@ def build_style_maps(circs: List[str]) -> Tuple[Dict[str, str], Dict[str, Tuple[
         marker_map[circ] = markers_cycle[i % len(markers_cycle)]
         color_map[circ] = cmap(i % 10)
     return marker_map, color_map
-
 
 def plot_lines_sumD(
     agg: Dict[str, Dict[str, Dict[int, float]]],
@@ -438,6 +441,136 @@ def plot_single_circuit(
     # fig.savefig(outdir / f"{fname}.pdf")
     print("✓ Figure saved:", outdir / f"{fname}.png")
 
+# ========== 绘图：横向面板（每个子图独立坐标轴） ==========
+def _finite_xy(xs: List[int], ys: List[float]):
+    """从 (xs, ys) 中筛出 y 非 NaN 的点"""
+    x2, y2 = [], []
+    for x, y in zip(xs, ys):
+        if not (y is None or (isinstance(y, float) and np.isnan(y))):
+            x2.append(x); y2.append(y)
+    return x2, y2
+
+def plot_all_circuits_row(
+    agg_all: Dict[str, Dict[str, Dict[int, float]]],
+    circs: List[str],
+    qubits: List[int],
+    ylog: bool,
+    outdir: Path,
+    fig_name: str = "qubits_vs_latency_row_ind_axes.png",
+):
+    """
+    每个电路一列子图，横向排布在同一张图上；
+    每个子图拥有独立的 x/y 轴范围（不共享尺度）。
+    """
+    plt.rcParams.update({"font.family": "Times New Roman", "font.size": 16})
+
+    n = len(circs)
+    # 依据面板数自适应画布宽度
+    fig_w = max(4.3 * n, 6.0)
+    fig_h = 3.6
+
+    fig, axes = plt.subplots(1, n, figsize=(fig_w, fig_h), sharex=False, sharey=False)
+    if n == 1:
+        axes = [axes]
+
+    legend_lines, legend_labels = None, None
+
+    for i, circ in enumerate(circs):
+        ax = axes[i]
+
+        # 仅用该电路有数据的 x 值，以保证每个子图的 x 轴范围“按需”设置
+        xs_all = list(qubits)
+        y_base_all = [agg_all[circ]["baseline"].get(q, float("nan")) for q in xs_all]
+        y_tc_all   = [agg_all[circ]["tcache"  ].get(q, float("nan")) for q in xs_all]
+
+        xs_b, y_b = _finite_xy(xs_all, y_base_all)
+        xs_t, y_t = _finite_xy(xs_all, y_tc_all)
+        xs = sorted(set(xs_b) | set(xs_t), key=lambda x: xs_all.index(x))
+        # 若两条线都没点，跳过绘制
+        if len(xs) == 0:
+            ax.text(0.5, 0.5, f"No data: {circ}", transform=ax.transAxes,
+                    ha="center", va="center")
+            continue
+
+        line_base, = ax.plot(
+            xs_b, y_b,
+            linestyle="-", linewidth=2.0,
+            marker="o", markersize=6, markerfacecolor="none", markeredgewidth=1.5,
+            color=BASELINE_COLOR,
+            label="Baseline"
+        )
+        line_tc, = ax.plot(
+            xs_t, y_t,
+            linestyle="--", linewidth=2.0,
+            marker="v", markersize=6, markerfacecolor="none", markeredgewidth=1.5,
+            color=TCACHE_COLOR,
+            label="TransCache"
+        )
+
+        # 轴标签：只在最左侧画 ylabel，避免拥挤
+        ax.set_xlabel("Qubits")
+        if i == 0:
+            ax.set_ylabel("Compilation Latency (s)")
+
+        # 该子图的独立刻度与范围
+        ax.set_xticks(xs)
+        if ylog:
+            ax.set_yscale("log")
+
+        # --- 独立自适应 x/y 范围 ---
+        # xlim
+        x_min, x_max = min(xs), max(xs)
+        if x_min == x_max:
+            pad_x = 0.5 if isinstance(x_min, (int, float)) else 0.5
+        else:
+            pad_x = 0.05 * (x_max - x_min)
+        ax.set_xlim(x_min - pad_x, x_max + pad_x)
+
+        # ylim
+        y_vals = np.array((y_b or []) + (y_t or []), dtype=float)
+        y_vals = y_vals[~np.isnan(y_vals)]
+        if y_vals.size > 0:
+            y_min, y_max = float(np.min(y_vals)), float(np.max(y_vals))
+            if ylog:
+                # 避免 log(<=0)
+                y_min = max(y_min, 1e-12)
+                ax.set_ylim(y_min / 1.5, y_max * 1.5)
+            else:
+                if y_min == y_max:
+                    pad_y = max(0.1 * (y_max if y_max > 0 else 1.0), 1e-9)
+                else:
+                    pad_y = 0.10 * (y_max - y_min)
+                ax.set_ylim(max(0.0, y_min - pad_y), y_max + pad_y)
+
+        ax.grid(True, linestyle="--", alpha=0.45)
+        for spine in ax.spines.values():
+            spine.set_linewidth(1.5)
+
+        # 子图下方标签（（a） linear）
+        letter = chr(ord('a') + i)
+        label_text = f"({letter}) {LABEL_MAP.get(circ, circ)}"
+        ax.text(0.5, -0.35, label_text, transform=ax.transAxes,
+                ha="center", va="top", fontsize=18, fontweight="bold")
+
+        # 保留用于全局共享图例的线对象
+        if legend_lines is None:
+            legend_lines = [line_base, line_tc]
+            legend_labels = ["Baseline", "TransCache"]
+
+    # 全局共享图例（顶部居中）
+    if legend_lines is not None:
+        fig.legend(
+            legend_lines, legend_labels,
+            loc="upper center", ncol=2, frameon=False, bbox_to_anchor=(0.5, 1.02)
+        )
+
+    # 留出上下边距给顶部图例与底部标签
+    plt.subplots_adjust(left=0.07, right=0.98, top=0.83, bottom=0.30, wspace=0.28)
+
+    out_png = outdir / fig_name
+    fig.savefig(out_png, dpi=600)
+    print(f"✓ Figure saved: {out_png}")
+
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(
         description="Plot latency vs qubits (sum over depths) for each circuit; baseline solid, tcache dashed."
@@ -449,6 +582,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--qubits", nargs="*", type=int, default=DEFAULT_QUBITS, help="List of qubits to include.")
     p.add_argument("--depths", nargs="*", type=int, default=DEFAULT_DEPTHS, help="List of depths to sum over.")
     p.add_argument("--ylog", action="store_true", help="Use log scale for Y axis.")
+    p.add_argument("--name", type=str, default="qubits_vs_latency_rowpanels.png",
+                   help="Output file name.")
     return p.parse_args()
 
 
@@ -463,21 +598,6 @@ def main():
     qubits = sorted(set(args.qubits), key=lambda x: args.qubits.index(x))  # 保持用户给定顺序
     depths = list(dict.fromkeys(args.depths))
 
-    agg_depth = aggregate_sum_total_over_depths(
-        figdir=args.figdir,
-        code_tag=args.code_tag,
-        circs=circs,
-        qubits=qubits,
-        depths=depths,
-    )
-    agg_qubits = aggregate_sum_total_over_qubits(
-        figdir=args.figdir,
-        code_tag=args.code_tag,
-        circs=circs,
-        qubits=qubits,
-        depths=depths,
-    )
-
     agg_depth_tTime = aggregate_sum_total_over_depths_tTime(
         figdir=args.figdir,
         code_tag=args.code_tag,
@@ -486,20 +606,14 @@ def main():
         depths=depths,
     )
 
-    # plot_lines_sumD(agg_depth, qubits=qubits, ylog=True, outdir=args.outdir)
-    # plot_lines_sunQ(agg_qubits, depths=depths, ylog=True, outdir=args.outdir)
-    # plot_lines_sumD(agg_depth_tTime, qubits=qubits, ylog=False, outdir=args.outdir)
-
-    # === 每电路各自作图 ===
-    for circ in circs:
-        plot_single_circuit(
-            agg_one=agg_depth_tTime[circ],
-            #
-            circ=circ,
-            qubits=qubits,
-            ylog=False,
-            outdir=args.outdir,
-        )
+    plot_all_circuits_row(
+        agg_all=agg_depth_tTime,
+        circs=circs,
+        qubits=qubits,
+        ylog=args.ylog,
+        outdir=args.outdir,
+        fig_name=args.name,
+    )
 
 
 if __name__ == "__main__":

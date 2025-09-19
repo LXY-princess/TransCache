@@ -22,8 +22,8 @@ from sympy import false
 
 # ===== 与原代码保持一致的默认配置（可用命令行覆盖） =====
 CODE_TAG = "v16"
-DEFAULT_FIGDIR = Path("./figs/v16")  # 读取 JSON 的目录
-DEFAULT_OUTDIR = Path("./figs/v16_lineplots");DEFAULT_OUTDIR.mkdir(exist_ok=True)
+DEFAULT_FIGDIR = Path("figs/v16")  # 读取 JSON 的目录
+DEFAULT_OUTDIR = Path("figs/v16/v16_lineplots");DEFAULT_OUTDIR.mkdir(exist_ok=True)
 
 PHASE_02 = "02_cache_search"
 PHASE_03 = "03_transpile"
@@ -33,6 +33,10 @@ PHASE_07 = "07_cache_write"
 #     "GHZ-Chain", "LinearEnt", "QFT-Like",
 #     "RCA", "QSIM-XXZ", "QAOA-3reg", "VQE-Full",
 # ]
+# DEFAULT_CIRCS = [
+#     "GHZ-Chain", "LinearEnt", "QFT-Like",
+#     "QSIM-XXZ", "QAOA-3reg", "VQE-Full",
+# ]
 DEFAULT_CIRCS = [
     "LinearEnt",
 ]
@@ -40,8 +44,8 @@ DEFAULT_CIRCS = [
 #     "GHZ-Chain", "LinearEnt",
 #     "RCA", "QSIM-XXZ", "QAOA-3reg", "VQE-Full",
 # ]
-DEFAULT_DEPTHS = [4]
-DEFAULT_QUBITS = [8, 16, 32, 64, 96, 112, 127] #[3, 7, 11, 15, 19, 21, 23]
+DEFAULT_DEPTHS = [1, 4]
+DEFAULT_QUBITS = [8, 16, 32, 64, 96, 112, 127] #[8, 16, 32, 64, 96, 112, 127]
 
 MODES = ["baseline", "tcache"]  # 两种方法
 
@@ -481,7 +485,6 @@ def main():
         qubits=qubits,
         depths=depths,
     )
-    print(agg_depth_tTime)
 
     # plot_lines_sumD(agg_depth, qubits=qubits, ylog=True, outdir=args.outdir)
     # plot_lines_sunQ(agg_qubits, depths=depths, ylog=True, outdir=args.outdir)

@@ -19,8 +19,8 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # ================= Figure & cache =================
 plt.rcParams.update({"font.family": "Times New Roman", "font.size": 15})
-FIGDIR  = pathlib.Path("./figs/v16/"); FIGDIR.mkdir(exist_ok=True)
-CACHE_P = pathlib.Path("./figs/v16/v16_sim_transpile_cache.pkl")   # {key: qc_transpiled}
+FIGDIR  = pathlib.Path("figs/v16/"); FIGDIR.mkdir(exist_ok=True)
+CACHE_P = pathlib.Path("figs/v16/v16_sim_transpile_cache.pkl")   # {key: qc_transpiled}
 code_tag = "v16"
 CIRCUITS = CIRCUITS_QUASA
 CACHE_MEM = None
@@ -362,9 +362,8 @@ if __name__ == "__main__":
     # DEPTHS = [1, 4, 8, 16] # 1, 4, 8, 16, 25
     # QUBITS = [3, 7, 11, 15, 21] # 3, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25
 
-    DEPTHS = [1, 4, 8, 16] # 1, 4, 8, 16, 25
-    QUBITS = [8, 16, 32, 64, 96, 112, 127] # 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25
-    # QUBITS = [64] # 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25
+    DEPTHS = [1, 4] # 1, 4, 8, 16, 25
+    QUBITS = [8, 16, 32, 64, 96, 112, 127] # 8, 16, 32, 64, 96, 112, 127
     for q in QUBITS:
         for d in DEPTHS:
             run_circuits(args.runs, backend, args.shots, q, d)

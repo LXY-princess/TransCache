@@ -298,7 +298,45 @@ def draw_timeline_multi(method_events: Dict[str, List[Dict[str,Any]]],
     handles += [patches.Patch(facecolor="white", edgecolor="k", hatch="//", label="prewarm compile"),
                 patches.Patch(facecolor="white", edgecolor="k", hatch="xx", label="predictor scoring"),
                 patches.Patch(facecolor="none", edgecolor="k", linestyle="--", label="queue wait")]
-    ax.legend(handles=handles, loc="lower right", ncol=2, fontsize=12, frameon=True)
+    ax.legend(handles=handles, loc="lower right", ncol=2, fontsize=12, frameon=False)
     plt.tight_layout()
-    plt.savefig(out_png, dpi=240, bbox_inches="tight")
+    plt.savefig(out_png, dpi=600, bbox_inches="tight")
     print(f"[save] timeline -> {out_png}")
+
+
+def plot_cache_size_change(cache_size_cahnges: Dict[str, List[Dict[str,Any]]],):
+    # 画图
+    plt.rcParams.update({"font.family": "Times New Roman", "font.size": 18})
+
+    def _to_xy(series):
+        if not series: return [], []
+        ts = [float(p["t"]) for p in series]
+        sz = [int(p["size"]) for p in series]
+        # 为了阶梯图效果，插入前一点
+        return ts, sz
+
+    fig, ax = plt.subplots(figsize=(10, 4))
+    for label, series in cache_size_cahnges.items():
+        ts, sz = _to_xy(series)
+        ax.step(ts, sz, where="post", label=label)
+
+    # ts4, sz4 = _to_xy(s4_series)
+    # ts5, sz5 = _to_xy(s5_series)
+    # ts3, sz3 = _to_xy(s3_series)
+    #
+    #
+    # # 用阶梯图表现“事件后大小变更”的感觉
+    # ax.step(ts4, sz4, where="post", label="TransCache_no_cache_management")
+    # ax.step(ts5, sz5, where="post", label="TransCache")
+    # ax.step(ts3, sz3, where="post", label="FirstSeen")
+
+    ax.set_xlabel("Timeline (s)")
+    ax.set_ylabel("Cache size (#circuits)")
+    ax.set_title("Cache size over time")
+    ax.grid(True, linestyle="--", alpha=0.5)
+    ax.legend(frameon=False)
+
+    out_png = PLOT_DIR / "cache_size.png"
+    fig.tight_layout()
+    fig.savefig(out_png, dpi=600)
+    print(f"[save] cache-size lines -> {out_png}")

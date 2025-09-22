@@ -3,11 +3,13 @@ import argparse, pathlib
 from typing import Dict, Any
 from collections import Counter
 
+from oqpy import frame
+
 from v15_core import LOAD_EVENTS_DIR
 from v15_core import (ROOT, EVENTS_DIR, PLOT_DIR, draw_timeline_multi,
                       build_catalog, build_workload_poisson_superposition,
                       compute_freq_and_hits, plot_freq_hitrate_bars,
-                      save_events_json, clear_recent, load_events_json)
+                      save_events_json, clear_recent, load_events_json, plot_cache_size_change)
 
 
 def load_and_draw_timeline(methods=None, outfile=None, title=None, legend_topk=16):
@@ -55,15 +57,21 @@ def load_and_draw_timeline(methods=None, outfile=None, title=None, legend_topk=1
 
 import v15_strategy_baseline as S0
 import v15_strategy_tcache_series as S1
-import v15_strategy_tcache_idle_gap as S2
-import v15_strategy_cache_first_seen as S3
-import v15_strategy_tcache_series_idle as S4
+# import v15_strategy_tcache_idle_gap as S2
+# import v15_strategy_cache_first_seen as S3
+# import v15_strategy_tcache_series_idle as S4
+
+import v15_strategy_cache_first_seen_cache_tracking as S3
+import v15_strategy_tcache_no_cacheM_cache_tracking as S4   # 监测版 S4（语义同 S4）
+import v15_strategy_tcache as S5     # 新策略：有上限+评分淘汰
+
+
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--q_list", type=str, default="5,11")
+    ap.add_argument("--q_list", type=str, default="5,7, 11, 13")
     ap.add_argument("--d_list", type=str, default="4,8")
-    ap.add_argument("--workload_len", type=int, default=80)
+    ap.add_argument("--workload_len", type=int, default=100)
     ap.add_argument("--shots", type=int, default=256)
     # predictor / prewarm
     ap.add_argument("--lookahead", type=float, default=8.0)
@@ -106,34 +114,34 @@ def main():
     method_events["Baseline"] = out0["events"]
     metrics_all["Baseline"] = out0["metrics"]
 
-    # Tcache (Series)
+    # Tcache (cache when first seen)
+    clear_recent()
+    out3 = S3.run_strategy(workload, makers_all, predictor_cfg,
+                           prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
+                           max_compile=args.max_compile, shots=args.shots)
+    save_events_json("FirstSeen", out3["events"])
+    method_events["FirstSeen"] = out3["events"]
+    metrics_all["FirstSeen"] = out3["metrics"]
+
+    # Tcache (Series) prewarm time plotted in the workload timeline
     clear_recent()
     out1 = S1.run_strategy(workload, makers_all, predictor_cfg,
                            prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
                            max_compile=args.max_compile, shots=args.shots)
-    save_events_json("tcache_series", out1["events"])
-    method_events["Tcache-Series"] = out1["events"]
-    metrics_all["Tcache-Series"] = out1["metrics"]
+    save_events_json("TransCache-Series", out1["events"])
+    method_events["TransCache-Series"] = out1["events"]
+    metrics_all["TransCache-Series"] = out1["metrics"]
 
-    # # Tcache (cache when first seen)
-    # clear_recent()
-    # out1 = S3.run_strategy(workload, makers_all, predictor_cfg,
-    #                        prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
-    #                        max_compile=args.max_compile, shots=args.shots)
-    # save_events_json("tcache_firstSeen", out1["events"])
-    # method_events["tcache_firstSeen"] = out1["events"]
-    # metrics_all["tcache_firstSeen"] = out1["metrics"]
+    # Tcache (remove prewarm time from results)
+    clear_recent()
+    out4 = S4.run_strategy(workload, makers_all, predictor_cfg,
+                           prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
+                           max_compile=args.max_compile, shots=args.shots)
+    save_events_json("TransCache_no_cache_management", out4["events"])
+    method_events["TransCache_no_cache_management"] = out4["events"]
+    metrics_all["TransCache_no_cache_management"] = out4["metrics"]
 
-    # # Tcache (remove prewarm time from results)
-    # clear_recent()
-    # out1 = S4.run_strategy(workload, makers_all, predictor_cfg,
-    #                        prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
-    #                        max_compile=args.max_compile, shots=args.shots)
-    # save_events_json("tcache_preCompile_on_idle", out1["events"])
-    # method_events["tcache_preCompile_on_idle"] = out1["events"]
-    # metrics_all["tcache_preCompile_on_idle"] = out1["metrics"]
-    #
-    # # Tcache (Idle-gap)
+    # # Tcache (Idle-gap) this manually add wait time between circuits in workload
     # clear_recent()
     # out2 = S2.run_strategy(workload, makers_all, predictor_cfg,
     #                        lookahead_sec=args.lookahead, prob_th=args.prob_th,
@@ -142,6 +150,15 @@ def main():
     # save_events_json("tcache_idle", out2["events"])
     # method_events["Tcache-IdleGap"] = out2["events"]
     # metrics_all["Tcache-IdleGap"] = out2["metrics"]
+
+    # Tcache cache management
+    clear_recent()
+    out5 = S5.run_strategy(workload, makers_all, predictor_cfg,
+                           prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
+                           max_compile=args.max_compile, shots=args.shots)
+    save_events_json("TransCache", out5["events"])
+    method_events["TransCache"] = out5["events"]
+    metrics_all["TransCache"] = out5["metrics"]
 
     # 3) timeline (multi-track)
     title = (f"Timeline — q={q_list}, d={d_list}, N={args.workload_len}; lookahead={args.lookahead}s,"
@@ -157,6 +174,17 @@ def main():
     #     out_bar = PLOT_DIR/f"bars_{tag}.png"
     #     plot_freq_hitrate_bars(freq_by_label, hitrate_by_label, overall, out_bar,
     #                            title=f"{tag}: Frequency & Hit Rate", top_k=(args.top_k or None))
+
+
+    s4_series = out4["metrics"].get("cache_size_series", [])
+    s5_series = out5["metrics"].get("cache_size_series", [])
+    s3_series = out3["metrics"].get("cache_size_series", [])
+    cache_size_cahnges = {}
+    cache_size_cahnges["TransCache_no_cache_management"] = s4_series
+    cache_size_cahnges["TransCache"] = s5_series
+    cache_size_cahnges["FirstSeen"] = s3_series
+
+    plot_cache_size_change(cache_size_cahnges)
 
 
 

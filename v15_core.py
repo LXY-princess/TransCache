@@ -23,7 +23,7 @@ EVENTS_DIR = ROOT/"events"
 PLOT_DIR = ROOT/"plots"
 EVENTS_DIR.mkdir(parents=True, exist_ok=True)
 PLOT_DIR.mkdir(parents=True, exist_ok=True)
-LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}_baseline_tseries_tseriesFirstSeen_tseriesIdle"
+LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}"
 LOAD_EVENTS_DIR = LOAD_ROOT/"events"
 
 def md5_qasm(circ: QuantumCircuit) -> str:
@@ -298,7 +298,15 @@ def draw_timeline_multi(method_events: Dict[str, List[Dict[str,Any]]],
     handles += [patches.Patch(facecolor="white", edgecolor="k", hatch="//", label="prewarm compile"),
                 patches.Patch(facecolor="white", edgecolor="k", hatch="xx", label="predictor scoring"),
                 patches.Patch(facecolor="none", edgecolor="k", linestyle="--", label="queue wait")]
-    ax.legend(handles=handles, loc="lower right", ncol=2, fontsize=12, frameon=False)
+    # ax.legend(handles=handles, loc="lower right", ncol=2, fontsize=12, frameon=False)
+    ax.legend(
+        handles=handles,
+        loc="upper center",
+        bbox_to_anchor=(0.5, 1.3),  # (横向, 纵向) 偏移
+        ncol=4,
+        fontsize=12,
+        frameon=False
+    )
     plt.tight_layout()
     plt.savefig(out_png, dpi=600, bbox_inches="tight")
     print(f"[save] timeline -> {out_png}")

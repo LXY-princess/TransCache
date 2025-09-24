@@ -20,14 +20,21 @@ def load_and_draw_timeline(methods=None, outfile=None, title=None, legend_topk=1
     # 方法名 -> JSON 文件名 的映射（按你保存时的命名来）
     name2file = {
         "Baseline": "baseline.json",
-        "Tcache-Series": "tcache_series.json",
-        "tcache_firstSeen": "tcache_firstSeen.json",
-        "tcache_preCompile_on_idle": "tcache_preCompile_on_idle.json",
-        "Tcache-IdleGap": "tcache_idle.json",   # 如有
+        "FirstSeen": "FirstSeen.json",
+        "TransCache-Series": "TransCache-Series.json",
+        "TransCache-Series-cacheM": "TransCache-Series-cacheM.json",
+        "TransCache": "TransCache.json",
+        "TransCache-no-cache-management": "TransCache_no_cache_management.json",   # 如有
     }
 
     if methods is None:
-        methods = ["Baseline", "Tcache-Series", "tcache_firstSeen", "tcache_preCompile_on_idle"]
+        methods = ["Baseline",
+                   "FirstSeen",
+                   "TransCache-Series",
+                   "TransCache-Series-cacheM",
+                   "TransCache-no-cache-management",
+                   "TransCache",
+                   ]
 
     # 逐个加载
     method_events = {}
@@ -64,6 +71,7 @@ import v15_strategy_tcache_series as S1
 import v15_strategy_cache_first_seen_cache_tracking as S3
 import v15_strategy_tcache_no_cacheM_cache_tracking as S4   # 监测版 S4（语义同 S4）
 import v15_strategy_tcache as S5     # 新策略：有上限+评分淘汰
+import v15_strategy_tcache_series_cacheM as S1M
 
 
 
@@ -131,6 +139,15 @@ def main():
     save_events_json("TransCache-Series", out1["events"])
     method_events["TransCache-Series"] = out1["events"]
     metrics_all["TransCache-Series"] = out1["metrics"]
+
+    # Tcache (Series) prewarm time plotted in the workload timeline
+    clear_recent()
+    out1M = S1M.run_strategy(workload, makers_all, predictor_cfg,
+                           prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
+                           max_compile=args.max_compile, shots=args.shots)
+    save_events_json("TransCache-Series-cacheM", out1M["events"])
+    method_events["TransCache-Series-cacheM"] = out1M["events"]
+    metrics_all["TransCache-Series-cacheM"] = out1M["metrics"]
 
     # Tcache (remove prewarm time from results)
     clear_recent()

@@ -112,70 +112,43 @@ def main():
     # 2) run strategies on the SAME workload
     predictor_cfg = {"sliding_window_sec": args.sliding_window_sec, "min_samples": args.min_samples}
 
+    # 通用 kwargs（所有非 Baseline 策略共用）
+    common_kwargs = dict(
+        workload=workload,
+        makers_all=makers_all,
+        predictor_cfg=predictor_cfg,
+        prewarm_every=5,
+        lookahead_sec=args.lookahead,
+        prob_th=args.prob_th,
+        max_compile=args.max_compile,
+        shots=args.shots,
+    )
+
+    # Baseline 特殊 kwargs
+    baseline_kwargs = dict(
+        workload=workload,
+        shots=args.shots,
+    )
+
+    # 策略映射
+    strategies = {
+        "Baseline": (S0.run_strategy, baseline_kwargs),
+        "FirstSeen": (S3.run_strategy, common_kwargs),
+        "TransCache-Series": (S1.run_strategy, common_kwargs),
+        "TransCache-Series-cacheM": (S1M.run_strategy, common_kwargs),
+        "TransCache-no-cache-management": (S4.run_strategy, common_kwargs),
+        "TransCache": (S5.run_strategy, common_kwargs),
+    }
+
     method_events = {}
     metrics_all = {}
 
-    # Baseline
-    clear_recent()
-    out0 = S0.run_strategy(workload, shots=args.shots)
-    save_events_json("baseline", out0["events"])
-    method_events["Baseline"] = out0["events"]
-    metrics_all["Baseline"] = out0["metrics"]
-
-    # Tcache (cache when first seen)
-    clear_recent()
-    out3 = S3.run_strategy(workload, makers_all, predictor_cfg,
-                           prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
-                           max_compile=args.max_compile, shots=args.shots)
-    save_events_json("FirstSeen", out3["events"])
-    method_events["FirstSeen"] = out3["events"]
-    metrics_all["FirstSeen"] = out3["metrics"]
-
-    # Tcache (Series) prewarm time plotted in the workload timeline
-    clear_recent()
-    out1 = S1.run_strategy(workload, makers_all, predictor_cfg,
-                           prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
-                           max_compile=args.max_compile, shots=args.shots)
-    save_events_json("TransCache-Series", out1["events"])
-    method_events["TransCache-Series"] = out1["events"]
-    metrics_all["TransCache-Series"] = out1["metrics"]
-
-    # Tcache (Series) prewarm time plotted in the workload timeline
-    clear_recent()
-    out1M = S1M.run_strategy(workload, makers_all, predictor_cfg,
-                           prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
-                           max_compile=args.max_compile, shots=args.shots)
-    save_events_json("TransCache-Series-cacheM", out1M["events"])
-    method_events["TransCache-Series-cacheM"] = out1M["events"]
-    metrics_all["TransCache-Series-cacheM"] = out1M["metrics"]
-
-    # Tcache (remove prewarm time from results)
-    clear_recent()
-    out4 = S4.run_strategy(workload, makers_all, predictor_cfg,
-                           prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
-                           max_compile=args.max_compile, shots=args.shots)
-    save_events_json("TransCache_no_cache_management", out4["events"])
-    method_events["TransCache_no_cache_management"] = out4["events"]
-    metrics_all["TransCache_no_cache_management"] = out4["metrics"]
-
-    # # Tcache (Idle-gap) this manually add wait time between circuits in workload
-    # clear_recent()
-    # out2 = S2.run_strategy(workload, makers_all, predictor_cfg,
-    #                        lookahead_sec=args.lookahead, prob_th=args.prob_th,
-    #                        max_compile=args.max_compile, gap_usage_ratio=args.gap_usage_ratio,
-    #                        default_compile_est=args.default_compile_est, shots=args.shots)
-    # save_events_json("tcache_idle", out2["events"])
-    # method_events["Tcache-IdleGap"] = out2["events"]
-    # metrics_all["Tcache-IdleGap"] = out2["metrics"]
-
-    # Tcache cache management
-    clear_recent()
-    out5 = S5.run_strategy(workload, makers_all, predictor_cfg,
-                           prewarm_every=5, lookahead_sec=args.lookahead, prob_th=args.prob_th,
-                           max_compile=args.max_compile, shots=args.shots)
-    save_events_json("TransCache", out5["events"])
-    method_events["TransCache"] = out5["events"]
-    metrics_all["TransCache"] = out5["metrics"]
+    for name, (fn, kwargs) in strategies.items():
+        clear_recent()
+        out = fn(**kwargs)
+        save_events_json(name, out["events"])
+        method_events[name] = out["events"]
+        metrics_all[name] = out["metrics"]
 
     # 3) timeline (multi-track)
     title = (f"Timeline — q={q_list}, d={d_list}, N={args.workload_len}; lookahead={args.lookahead}s,"
@@ -183,24 +156,22 @@ def main():
     out_tl = PLOT_DIR/"timeline_multi.png"
     draw_timeline_multi(method_events, out_tl, title)
 
-    # # 4) bars（针对 Tcache 方法）
-    # #   基于同一 workload 的频次，分别计算两种 Tcache 的命中率并作图
-    # for tag in ["Tcache-Series", "Tcache-IdleGap"]:
-    #     hit_by_label = metrics_all[tag].get("hit_by_label", {})
-    #     freq_by_label, hitrate_by_label, overall = compute_freq_and_hits(workload, hit_by_label)
-    #     out_bar = PLOT_DIR/f"bars_{tag}.png"
-    #     plot_freq_hitrate_bars(freq_by_label, hitrate_by_label, overall, out_bar,
-    #                            title=f"{tag}: Frequency & Hit Rate", top_k=(args.top_k or None))
+    # 4) bars（针对 Tcache 方法）
+    #   基于同一 workload 的频次，分别计算两种 Tcache 的命中率并作图
+    hitrate_compare_method_tags = ["FirstSeen", "TransCache-Series", "TransCache-Series-cacheM",
+                                   "TransCache-no-cache-management","TransCache"]
+    for tag in hitrate_compare_method_tags:
+        hit_by_label = metrics_all[tag].get("hit_by_label", {})
+        freq_by_label, hitrate_by_label, overall = compute_freq_and_hits(workload, hit_by_label)
+        out_bar = PLOT_DIR/f"bars_{tag}.png"
+        plot_freq_hitrate_bars(freq_by_label, hitrate_by_label, overall, out_bar,
+                               title=f"{tag}: Frequency & Hit Rate", top_k=(args.top_k or None))
 
-
-    s4_series = out4["metrics"].get("cache_size_series", [])
-    s5_series = out5["metrics"].get("cache_size_series", [])
-    s3_series = out3["metrics"].get("cache_size_series", [])
+    # 4) cache changes compare
     cache_size_cahnges = {}
-    cache_size_cahnges["TransCache_no_cache_management"] = s4_series
-    cache_size_cahnges["TransCache"] = s5_series
-    cache_size_cahnges["FirstSeen"] = s3_series
-
+    cache_compare_method_tags = ["TransCache-no-cache-management", "TransCache", "FirstSeen"]
+    for tag in cache_compare_method_tags:
+        cache_size_cahnges[tag] = metrics_all[tag].get("cache_size_series", [])
     plot_cache_size_change(cache_size_cahnges)
 
 

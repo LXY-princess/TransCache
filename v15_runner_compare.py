@@ -71,6 +71,7 @@ import v15_strategy_tcache_series as S1
 import v15_strategy_cache_first_seen_cache_tracking as S3
 import v15_strategy_tcache_no_cacheM_cache_tracking as S4   # 监测版 S4（语义同 S4）
 import v15_strategy_tcache as S5     # 新策略：有上限+评分淘汰
+import v15_strategy_tcache_optimize as S6     # 新策略：有上限+评分淘汰
 import v15_strategy_tcache_series_cacheM as S1M
 
 
@@ -79,7 +80,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--q_list", type=str, default="5,7, 11, 13")
     ap.add_argument("--d_list", type=str, default="4,8")
-    ap.add_argument("--workload_len", type=int, default=100)
+    ap.add_argument("--workload_len", type=int, default=1000)
     ap.add_argument("--shots", type=int, default=256)
     # predictor / prewarm
     ap.add_argument("--lookahead", type=float, default=8.0)
@@ -138,6 +139,7 @@ def main():
         "TransCache-Series-cacheM": (S1M.run_strategy, common_kwargs),
         "TransCache-no-cache-management": (S4.run_strategy, common_kwargs),
         "TransCache": (S5.run_strategy, common_kwargs),
+        "TransCache_optimize": (S6.run_strategy, common_kwargs),
     }
 
     method_events = {}
@@ -159,7 +161,7 @@ def main():
     # 4) bars（针对 Tcache 方法）
     #   基于同一 workload 的频次，分别计算两种 Tcache 的命中率并作图
     hitrate_compare_method_tags = ["FirstSeen", "TransCache-Series", "TransCache-Series-cacheM",
-                                   "TransCache-no-cache-management","TransCache"]
+                                   "TransCache-no-cache-management","TransCache", "TransCache_optimize"]
     for tag in hitrate_compare_method_tags:
         hit_by_label = metrics_all[tag].get("hit_by_label", {})
         freq_by_label, hitrate_by_label, overall = compute_freq_and_hits(workload, hit_by_label)
@@ -169,7 +171,7 @@ def main():
 
     # 4) cache changes compare
     cache_size_cahnges = {}
-    cache_compare_method_tags = ["TransCache-no-cache-management", "TransCache", "FirstSeen"]
+    cache_compare_method_tags = ["TransCache-no-cache-management", "TransCache", "FirstSeen", "TransCache_optimize"]
     for tag in cache_compare_method_tags:
         cache_size_cahnges[tag] = metrics_all[tag].get("cache_size_series", [])
     plot_cache_size_change(cache_size_cahnges)

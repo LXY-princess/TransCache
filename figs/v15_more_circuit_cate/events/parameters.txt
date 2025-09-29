@@ -1,0 +1,22 @@
+    ap.add_argument("--q_list", type=str, default="5, 7, 11, 13, 15")
+    ap.add_argument("--d_list", type=str, default="4,8")
+    ap.add_argument("--workload_len", type=int, default=100)
+    ap.add_argument("--shots", type=int, default=256)
+    # predictor / prewarm
+    ap.add_argument("--lookahead", type=float, default=8.0)
+    ap.add_argument("--prob_th", type=float, default=0.45)
+    ap.add_argument("--max_compile", type=int, default=3)
+    ap.add_argument("--sliding_window_sec", type=float, default=60.0)
+    ap.add_argument("--min_samples", type=int, default=2)
+    # workload shape
+    ap.add_argument("--hot_fraction", type=float, default=0.25)
+    ap.add_argument("--hot_boost", type=float, default=8.0)
+    ap.add_argument("--rps", type=float, default=1.0)
+    ap.add_argument("--rng_seed", type=int, default=123)
+    # idle-gap params
+    ap.add_argument("--gap_usage_ratio", type=float, default=0.7)
+    ap.add_argument("--default_compile_est", type=float, default=0.08)
+    # output
+    ap.add_argument("--top_k", type=int, default=0)
+
+    prewarm_every=5,

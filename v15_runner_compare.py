@@ -74,14 +74,14 @@ import v15_strategy_tcache_no_cacheM_cache_tracking as S4   # 监测版 S4（语
 import v15_strategy_tcache as S5     # 新策略：有上限+评分淘汰
 import v15_strategy_tcache_optimize as S6     # 新策略：有上限+评分淘汰
 import v15_strategy_tcache_optimize_score_log as S6S     # 新策略
+import v15_strategy_param_reuse_missFirstSeen as SPR0
 import v15_strategy_param_reuse as SPR
-
 
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--q_list", type=str, default="5, 7, 13")
+    ap.add_argument("--q_list", type=str, default="5, 7, 11, 13")
     ap.add_argument("--d_list", type=str, default="4,8")
     ap.add_argument("--workload_len", type=int, default=100)
     ap.add_argument("--shots", type=int, default=256)
@@ -138,6 +138,7 @@ def main():
     strategies = {
         "Baseline": (S0.run_strategy, baseline_kwargs),
         "ParamReuse": (SPR.run_strategy, baseline_kwargs),
+        "ParamReuse_missFirstSeen": (SPR0.run_strategy, baseline_kwargs),
         "FirstSeen": (S3.run_strategy, common_kwargs),
         "TransCache-Series": (S1.run_strategy, common_kwargs),
         "TransCache-Series-cacheM": (S1M.run_strategy, common_kwargs),
@@ -165,7 +166,7 @@ def main():
 
     # 4) bars（针对 Tcache 方法）
     #   基于同一 workload 的频次，分别计算两种 Tcache 的命中率并作图
-    hitrate_compare_method_tags = ["FirstSeen", "ParamReuse", "TransCache-Series", "TransCache-Series-cacheM",
+    hitrate_compare_method_tags = ["FirstSeen", "ParamReuse", "ParamReuse_missFirstSeen", "TransCache-Series", "TransCache-Series-cacheM",
                                    "TransCache-no-cache-management","TransCache", "TransCache_optimize",
                                    "TransCache_optimize_score_log"]
     for tag in hitrate_compare_method_tags:
@@ -179,7 +180,7 @@ def main():
     cache_size_cahnges = {}
     cache_compare_method_tags = ["TransCache-no-cache-management", "TransCache", "FirstSeen",
                                  "TransCache_optimize", "TransCache_optimize_score_log",
-                                 "ParamReuse"]
+                                 "ParamReuse", "ParamReuse_missFirstSeen"]
     for tag in cache_compare_method_tags:
         cache_size_cahnges[tag] = metrics_all[tag].get("cache_size_series", [])
     plot_cache_size_change(cache_size_cahnges)

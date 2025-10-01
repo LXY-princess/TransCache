@@ -156,7 +156,7 @@ def run_strategy(
     lookahead_sec: float = 8.0, prob_th: float = 0.45,
     max_compile: int = 3, shots: int = 256,
     # 新增：cache 容量与评分参数
-    cache_capacity: int = 20,
+    cache_capacity: int = 25,
     default_compile_est: float = 0.08
 ):
     """

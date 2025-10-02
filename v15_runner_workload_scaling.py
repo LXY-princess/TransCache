@@ -339,7 +339,7 @@ def build_argparser():
                     help="run: 运行仿真并绘图；load: 仅从summary加载并重绘图")
 
     # workload shape
-    ap.add_argument("--sizes", type=str, default="50,100,150,200,300",
+    ap.add_argument("--sizes", type=str, default="50,100,150,200,300,350,400,450,500",
                     help="Comma-separated workload lengths to test.")
     ap.add_argument("--q_list", type=str, default="5,7,11,13")
     ap.add_argument("--d_list", type=str, default="4,8")

@@ -23,7 +23,7 @@ EVENTS_DIR = ROOT/"events"
 PLOT_DIR = ROOT/"plots"
 EVENTS_DIR.mkdir(parents=True, exist_ok=True)
 PLOT_DIR.mkdir(parents=True, exist_ok=True)
-LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}"
+LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}_7_scale_on_workloads"
 LOAD_EVENTS_DIR = LOAD_ROOT/"events"
 
 def md5_qasm(circ: QuantumCircuit) -> str:

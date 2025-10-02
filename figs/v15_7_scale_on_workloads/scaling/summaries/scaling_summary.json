@@ -1,0 +1,102 @@
+{
+  "sizes": [
+    50,
+    100,
+    150,
+    200,
+    300
+  ],
+  "methods": [
+    "TransCache(Proposed)",
+    "FirstSeen",
+    "ParamReuse",
+    "FullCompilation"
+  ],
+  "e2e_latency": {
+    "TransCache(Proposed)": [
+      1.1709380995016545,
+      2.0280325000640005,
+      3.4067613016813993,
+      4.725152302067727,
+      6.421435298398137
+    ],
+    "FirstSeen": [
+      1.3338123997673392,
+      2.1431949997786433,
+      3.3740923977456987,
+      3.691827999195084,
+      5.33832369861193
+    ],
+    "ParamReuse": [
+      2.2026515007019043,
+      5.363953499821946,
+      8.104997098445892,
+      9.411531399702653,
+      19.294219395844266
+    ],
+    "FullCompilation": [
+      3.2961792999412864,
+      6.329942299518734,
+      11.726955499500036,
+      13.503294300287962,
+      27.70913680223748
+    ]
+  },
+  "final_cache_size": {
+    "TransCache(Proposed)": [
+      21,
+      25,
+      25,
+      25,
+      25
+    ],
+    "FirstSeen": [
+      21,
+      28,
+      41,
+      45,
+      46
+    ],
+    "ParamReuse": [
+      13,
+      16,
+      24,
+      25,
+      24
+    ],
+    "FullCompilation": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "config": {
+    "q_list": [
+      5,
+      7,
+      11,
+      13
+    ],
+    "d_list": [
+      4,
+      8
+    ],
+    "shots": 256,
+    "hot_fraction": 0.25,
+    "hot_boost": 8.0,
+    "rps": 1.0,
+    "rng_seed_base": 123,
+    "lookahead": 8.0,
+    "prob_th": 0.45,
+    "max_compile": 3,
+    "sliding_window_sec": 60.0,
+    "min_samples": 2,
+    "prewarm_every": 5
+  },
+  "plots": {
+    "latency_png": "figs\\v15\\plots\\scaling_e2e_latency.png",
+    "cache_png": "figs\\v15\\plots\\scaling_final_cache_size.png"
+  }
+}

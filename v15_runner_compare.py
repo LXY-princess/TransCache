@@ -21,19 +21,15 @@ def load_and_draw_timeline(methods=None, outfile=None, title=None, legend_topk=1
     name2file = {
         "Baseline": "baseline.json",
         "FirstSeen": "FirstSeen.json",
-        "TransCache-Series": "TransCache-Series.json",
-        "TransCache-Series-cacheM": "TransCache-Series-cacheM.json",
-        "TransCache": "TransCache.json",
-        "TransCache-no-cache-management": "TransCache_no_cache_management.json",   # 如有
+        "TransCache": "TransCache_optimize_score_log.json",
+        "ParamReuse": "ParamReuse.json",   # 如有
     }
 
     if methods is None:
-        methods = ["Baseline",
+        methods = ["TransCache",
                    "FirstSeen",
-                   "TransCache-Series",
-                   "TransCache-Series-cacheM",
-                   "TransCache-no-cache-management",
-                   "TransCache",
+                   "ParamReuse",
+                   "Baseline",
                    ]
 
     # 逐个加载
@@ -136,16 +132,16 @@ def main():
 
     # 策略映射
     strategies = {
-        "Baseline": (S0.run_strategy, baseline_kwargs),
-        "ParamReuse": (SPR.run_strategy, baseline_kwargs),
-        "ParamReuse_missFirstSeen": (SPR0.run_strategy, baseline_kwargs),
+        "TransCache(Proposed)": (S6S.run_strategy, common_kwargs),
         "FirstSeen": (S3.run_strategy, common_kwargs),
-        "TransCache-Series": (S1.run_strategy, common_kwargs),
-        "TransCache-Series-cacheM": (S1M.run_strategy, common_kwargs),
-        "TransCache-no-cache-management": (S4.run_strategy, common_kwargs),
-        "TransCache": (S5.run_strategy, common_kwargs),
-        "TransCache_optimize": (S6.run_strategy, common_kwargs),
-        "TransCache_optimize_score_log": (S6S.run_strategy, common_kwargs),
+        "ParamReuse": (SPR.run_strategy, baseline_kwargs),
+        "FullCompilation": (S0.run_strategy, baseline_kwargs),
+        # "ParamReuse_missFirstSeen": (SPR0.run_strategy, baseline_kwargs),
+        # "TransCache-Series": (S1.run_strategy, common_kwargs),
+        # "TransCache-Series-cacheM": (S1M.run_strategy, common_kwargs),
+        # "TransCache-no-cache-management": (S4.run_strategy, common_kwargs),
+        # "TransCache": (S5.run_strategy, common_kwargs),
+        # "TransCache_optimize": (S6.run_strategy, common_kwargs),
     }
 
     method_events = {}
@@ -166,9 +162,7 @@ def main():
 
     # 4) bars（针对 Tcache 方法）
     #   基于同一 workload 的频次，分别计算两种 Tcache 的命中率并作图
-    hitrate_compare_method_tags = ["FirstSeen", "ParamReuse", "ParamReuse_missFirstSeen", "TransCache-Series", "TransCache-Series-cacheM",
-                                   "TransCache-no-cache-management","TransCache", "TransCache_optimize",
-                                   "TransCache_optimize_score_log"]
+    hitrate_compare_method_tags = ["TransCache(Proposed)", "FirstSeen", "ParamReuse", "FullCompilation"]
     for tag in hitrate_compare_method_tags:
         hit_by_label = metrics_all[tag].get("hit_by_label", {})
         freq_by_label, hitrate_by_label, overall = compute_freq_and_hits(workload, hit_by_label)
@@ -178,9 +172,7 @@ def main():
 
     # 4) cache changes compare
     cache_size_cahnges = {}
-    cache_compare_method_tags = ["TransCache-no-cache-management", "TransCache", "FirstSeen",
-                                 "TransCache_optimize", "TransCache_optimize_score_log",
-                                 "ParamReuse", "ParamReuse_missFirstSeen"]
+    cache_compare_method_tags = ["TransCache(Proposed)", "FirstSeen", "ParamReuse", "FullCompilation"]
     for tag in cache_compare_method_tags:
         cache_size_cahnges[tag] = metrics_all[tag].get("cache_size_series", [])
     plot_cache_size_change(cache_size_cahnges)

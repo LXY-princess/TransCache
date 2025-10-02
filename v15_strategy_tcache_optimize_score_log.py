@@ -142,7 +142,7 @@ def _evict_if_needed(
         if worst_key is None:
             break
         # 执行淘汰
-        print(f"Evicted {worst_key} from {worst_score}")
+        # print(f"Evicted {worst_key} from {worst_score}")
         cache.pop(worst_key, None)
         key2label.pop(worst_key, None)
         last_used_t.pop(worst_key, None)

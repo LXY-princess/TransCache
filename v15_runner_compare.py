@@ -72,6 +72,7 @@ import v15_strategy_tcache_optimize as S6     # 新策略：有上限+评分淘�
 import v15_strategy_tcache_optimize_score_log as S6S     # 新策略
 import v15_strategy_param_reuse_missFirstSeen as SPR0
 import v15_strategy_param_reuse as SPR
+import v15_strategy_tcache_adaptive as SA
 
 
 
@@ -133,6 +134,7 @@ def main():
     # 策略映射
     strategies = {
         "TransCache(Proposed)": (S6S.run_strategy, common_kwargs),
+        "TransCache(Adaptive)": (SA.run_strategy, common_kwargs),
         "FirstSeen": (S3.run_strategy, common_kwargs),
         "ParamReuse": (SPR.run_strategy, baseline_kwargs),
         "FullCompilation": (S0.run_strategy, baseline_kwargs),
@@ -162,7 +164,7 @@ def main():
 
     # 4) bars（针对 Tcache 方法）
     #   基于同一 workload 的频次，分别计算两种 Tcache 的命中率并作图
-    hitrate_compare_method_tags = ["TransCache(Proposed)", "FirstSeen", "ParamReuse", "FullCompilation"]
+    hitrate_compare_method_tags = ["TransCache(Proposed)", "TransCache(Adaptive)", "FirstSeen", "ParamReuse", "FullCompilation"]
     for tag in hitrate_compare_method_tags:
         hit_by_label = metrics_all[tag].get("hit_by_label", {})
         freq_by_label, hitrate_by_label, overall = compute_freq_and_hits(workload, hit_by_label)
@@ -172,7 +174,7 @@ def main():
 
     # 4) cache changes compare
     cache_size_cahnges = {}
-    cache_compare_method_tags = ["TransCache(Proposed)", "FirstSeen", "ParamReuse", "FullCompilation"]
+    cache_compare_method_tags = ["TransCache(Proposed)", "TransCache(Adaptive)", "FirstSeen", "ParamReuse", "FullCompilation"]
     for tag in cache_compare_method_tags:
         cache_size_cahnges[tag] = metrics_all[tag].get("cache_size_series", [])
     plot_cache_size_change(cache_size_cahnges)

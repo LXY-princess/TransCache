@@ -16,9 +16,9 @@ from v15_core import (
 # strategies
 import v15_strategy_baseline as S0          # FullCompilation (Baseline)
 import v15_strategy_cache_first_seen_cache_tracking as S3  # FirstSeen w/ cache tracking
-# import v15_strategy_tcache_optimize_score_log as S6S       # TransCache(Proposed)
-import v15_strategy_tcache_adaptive as S6S       # TransCache(Proposed)
+import v15_strategy_tcache_optimize_score_log as S6S       # TransCache(Proposed)
 import v15_strategy_param_reuse as SPR      # ParamReuse (Braket-like)
+import v15_strategy_tcache_adaptive as SA
 
 # ---------------- JSON utilities (safe for numpy & callables) ----------------
 def _json_default(o):
@@ -106,7 +106,7 @@ def plot_e2e_latency(methods: List[str],
                 markeredgewidth=2.0,)
     ax.set_xlabel("Workload size (requests)")
     ax.set_ylabel("E2E latency (s)")
-    ax.set_title("E2E latency vs. workload size")
+    # ax.set_title("E2E latency vs. workload size")
     ax.grid(True, linestyle="--", alpha=0.5)
     ax.legend(frameon=False)
     fig.tight_layout()
@@ -133,7 +133,7 @@ def plot_final_cache_size(methods: List[str],
                 markeredgewidth=2.0,)
     ax.set_xlabel("Workload size (requests)")
     ax.set_ylabel("Final cache size (#circuits)")
-    ax.set_title("Final cache size vs. workload size")
+    # ax.set_title("Final cache size vs. workload size")
     ax.grid(True, linestyle="--", alpha=0.5)
     ax.legend(frameon=False)
     fig.tight_layout()
@@ -172,6 +172,7 @@ def main_run(args):
 
     STRATS = [
         ("TransCache(Proposed)", S6S.run_strategy, _common_kwargs),
+        ("TransCache(Adaptive)", SA.run_strategy, _common_kwargs),
         ("FirstSeen",            S3.run_strategy,  _common_kwargs),
         ("ParamReuse",           SPR.run_strategy, _baseline_kwargs),
         ("FullCompilation",      S0.run_strategy,  _baseline_kwargs),
@@ -357,9 +358,11 @@ def build_argparser():
     ap.add_argument("--prewarm_every", type=int, default=5)
 
     # IO
-    ap.add_argument("--out_latency", type=str, default="scaling_e2e_latency_replot.png")
-    ap.add_argument("--out_cache", type=str, default="scaling_final_cache_size_replot.png")
+    ap.add_argument("--out_latency", type=str, default="scaling_e2e_latency.png")
+    ap.add_argument("--out_cache", type=str, default="scaling_final_cache_size.png")
     ap.add_argument("--load_dir", type=str, default=str((LOAD_ROOT/"scaling").resolve()),
+                    help="Directory to load summaries.")
+    ap.add_argument("--save_dir", type=str, default=str((ROOT / "scaling").resolve()),
                     help="Directory to store workloads, per-run events/metrics, and summaries.")
     return ap
 

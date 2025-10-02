@@ -1,0 +1,117 @@
+{
+  "sizes": [
+    50,
+    100,
+    150,
+    200,
+    300
+  ],
+  "methods": [
+    "TransCache(Proposed)",
+    "TransCache(Adaptive)",
+    "FirstSeen",
+    "ParamReuse",
+    "FullCompilation"
+  ],
+  "e2e_latency": {
+    "TransCache(Proposed)": [
+      1.168890001019463,
+      2.0715828989632428,
+      3.3772416992578655,
+      4.1914089997299016,
+      5.929912999738008
+    ],
+    "TransCache(Adaptive)": [
+      1.5388164999894798,
+      3.0920135979540646,
+      4.505742201348767,
+      4.83887880272232,
+      6.836292002582923
+    ],
+    "FirstSeen": [
+      1.3553379997611046,
+      2.1438979995436966,
+      3.2994512009900063,
+      3.400479899952188,
+      4.8746079984121025
+    ],
+    "ParamReuse": [
+      2.0825913997832686,
+      5.028752698330209,
+      7.9369659966323525,
+      8.518753699027002,
+      16.84470929647796
+    ],
+    "FullCompilation": [
+      2.8772568001877517,
+      6.231118900235742,
+      11.48939999891445,
+      12.433387001045048,
+      24.59858210128732
+    ]
+  },
+  "final_cache_size": {
+    "TransCache(Proposed)": [
+      21,
+      25,
+      25,
+      25,
+      25
+    ],
+    "TransCache(Adaptive)": [
+      10,
+      19,
+      22,
+      27,
+      37
+    ],
+    "FirstSeen": [
+      21,
+      28,
+      41,
+      45,
+      46
+    ],
+    "ParamReuse": [
+      13,
+      16,
+      24,
+      25,
+      24
+    ],
+    "FullCompilation": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "config": {
+    "q_list": [
+      5,
+      7,
+      11,
+      13
+    ],
+    "d_list": [
+      4,
+      8
+    ],
+    "shots": 256,
+    "hot_fraction": 0.25,
+    "hot_boost": 8.0,
+    "rps": 1.0,
+    "rng_seed_base": 123,
+    "lookahead": 8.0,
+    "prob_th": 0.45,
+    "max_compile": 3,
+    "sliding_window_sec": 60.0,
+    "min_samples": 2,
+    "prewarm_every": 5
+  },
+  "plots": {
+    "latency_png": "figs\\v15\\plots\\scaling_e2e_latency.png",
+    "cache_png": "figs\\v15\\plots\\scaling_final_cache_size.png"
+  }
+}

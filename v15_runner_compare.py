@@ -80,7 +80,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--q_list", type=str, default="5, 7, 11, 13")
     ap.add_argument("--d_list", type=str, default="4,8")
-    ap.add_argument("--workload_len", type=int, default=300)
+    ap.add_argument("--workload_len", type=int, default=100)
     ap.add_argument("--shots", type=int, default=256)
     # predictor / prewarm
     ap.add_argument("--lookahead", type=float, default=8.0)

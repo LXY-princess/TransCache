@@ -1,4 +1,4 @@
-# v15_core.py
+# v15_core.py (sim-time ready)
 import time, math, hashlib, json, pickle, pathlib, warnings, random
 from typing import Any, Callable, Dict, List, Tuple, Optional
 from collections import defaultdict, deque, Counter
@@ -23,7 +23,7 @@ EVENTS_DIR = ROOT/"events"
 PLOT_DIR = ROOT/"plots"
 EVENTS_DIR.mkdir(parents=True, exist_ok=True)
 PLOT_DIR.mkdir(parents=True, exist_ok=True)
-LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}_8_sweep_wl_to500"
+LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}"
 LOAD_EVENTS_DIR = LOAD_ROOT/"events"
 
 def md5_qasm(circ: QuantumCircuit) -> str:
@@ -45,12 +45,17 @@ def _prepare_kwargs():
 SLIDING_MAXLEN = 256
 RECENT_CALLS: Dict[str, deque] = defaultdict(lambda: deque(maxlen=SLIDING_MAXLEN))
 def record_arrival(key: str, ts: Optional[float] = None) -> None:
+    """Append an arrival timestamp for `key` into RECENT_CALLS.
+
+    If `ts` is provided, it is taken as the timestamp **in the caller's time base**
+    (e.g., the simulated timeline `t`). Otherwise, wall clock (`time.time()`) is used.
+    """
     RECENT_CALLS[key].append(float(ts) if ts is not None else time.time())
 def clear_recent(): RECENT_CALLS.clear()
 
 # --------- predictor ----------
 class PoissonPredictor:
-    """ λ MLE on sliding window;  p(≤τ)=1-exp(-λτ) """
+    """λ MLE on sliding window;  p(≤τ)=1-exp(-λτ)"""
     def __init__(self, sliding_window_sec: float = 60.0, min_samples: int = 2):
         self.sliding_window_sec = float(sliding_window_sec)
         self.min_samples = int(min_samples)
@@ -73,8 +78,11 @@ class PoissonPredictor:
         if lam <= 0 or tau <= 0: return 0.0
         return 1.0 - math.exp(-lam * tau)
 
-    def score_candidates(self, candidates, lookahead_sec: float, prob_threshold: float = 0.5):
-        now = time.time(); out = []
+    def score_candidates(self, candidates, lookahead_sec: float,
+                         prob_threshold: float = 0.5, now: Optional[float] = None):
+        """IMPORTANT: pass `now` in the **same time base** as `record_arrival`."""
+        now = float(now) if now is not None else time.time()
+        out = []
         for maker in candidates:
             qc, key, info = maker()
             lam = self.est_lambda(key, now)
@@ -144,13 +152,16 @@ def build_workload_poisson_superposition(meta, workload_len: int,
 
 # --------- seeding predictor ----------
 def seed_recent_calls_for_predictor(predictor_window_sec: float, makers_all, workload,
-                                    seed_keys: int = 4, per_key_samples: int = 2, spacing_sec: float = 3.0):
+                                    seed_keys: int = 4, per_key_samples: int = 2, spacing_sec: float = 3.0,
+                                    use_sim_time: bool = False, base_now: Optional[float] = None):
+    """Seed RECENT_CALLS for most popular circuits. Set use_sim_time=True to seed on sim-time."""
     prefix = workload[:max(1, min(64, len(workload)//2))]
     counts: Dict[Tuple[str,int,int], int] = defaultdict(int)
     for it in prefix:
         counts[(it["name"], it["q"], it["d"])] += 1
     popular = sorted(counts.items(), key=lambda kv: kv[1], reverse=True)[:seed_keys]
-    now = time.time(); horizon_lo = now - predictor_window_sec * 0.8
+    now = float(base_now if (use_sim_time and base_now is not None) else (0.0 if use_sim_time else time.time()))
+    horizon_lo = now - predictor_window_sec * 0.8
     for (name, q, d), _ in popular:
         hit_key = None
         for mk in makers_all:
@@ -175,7 +186,8 @@ def compile_with_idle_cache(qc_raw: QuantumCircuit, bk_name: str,
     return qc_exec, key, hit, compile_sec
 
 def run_once_with_cache(qc_func: Callable[[], QuantumCircuit], cache: Dict[str, QuantumCircuit],
-                        shots: int = 256) -> Dict[str, Any]:
+                        shots: int = 256, ts: Optional[float] = None) -> Dict[str, Any]:
+    """Compile & run once. `ts` lets you record arrival in **sim-time** if provided."""
     qc_raw = qc_func()
     method = "statevector" if qc_raw.num_qubits <= 25 else "matrix_product_state"
     sampler = AerSampler(skip_transpilation=True, backend_options={"method": method})
@@ -184,7 +196,7 @@ def run_once_with_cache(qc_func: Callable[[], QuantumCircuit], cache: Dict[str, 
     t0 = time.perf_counter()
     _ = sampler.run([qc_exec], shots=shots).result()
     exec_sec = time.perf_counter() - t0
-    record_arrival(key)
+    record_arrival(key, ts=ts)
     return {"key": key, "cache_hit": hit, "compile_sec": compile_sec, "exec_sec": exec_sec,
             "n_qubits": qc_raw.num_qubits, "depth_in": qc_raw.depth(), "depthT": qc_exec.depth()}
 
@@ -207,7 +219,6 @@ def save_events_json(method_name: str, events: List[Dict[str, Any]]) -> pathlib.
 
 def load_events_json(path: pathlib.Path) -> List[Dict[str, Any]]:
     return json.loads(path.read_text())
-
 
 # ---------- labels / bars ----------
 def label_of(name: str, q: int, d: int) -> str:
@@ -259,7 +270,6 @@ def draw_timeline_multi(method_events: Dict[str, List[Dict[str,Any]]],
 
     # size
     n = len(method_events)
-    # fig, ax = plt.subplots(figsize=(14, 2.2*n + 1.2))
     fig, ax = plt.subplots(figsize=(14, 7))
     T = 0.0
     for evs in method_events.values():
@@ -269,7 +279,6 @@ def draw_timeline_multi(method_events: Dict[str, List[Dict[str,Any]]],
     ax.set_yticks(range(n))
     ax.set_yticklabels(list(method_events.keys())[::-1], fontweight="bold")
     ax.set_xlabel("Time (seconds)", fontweight="bold")
-    # ax.set_title(title, loc="left")
     ax.grid(axis="x", linestyle="--", linewidth=0.8, alpha=0.5, zorder=0)
     for spine in ax.spines.values(): spine.set_linewidth(2)
 
@@ -298,11 +307,10 @@ def draw_timeline_multi(method_events: Dict[str, List[Dict[str,Any]]],
     handles += [patches.Patch(facecolor="white", edgecolor="k", hatch="//", label="prewarm compile"),
                 patches.Patch(facecolor="white", edgecolor="k", hatch="xx", label="predictor scoring"),
                 patches.Patch(facecolor="none", edgecolor="k", linestyle="--", label="queue wait")]
-    # ax.legend(handles=handles, loc="lower right", ncol=2, fontsize=12, frameon=False)
     ax.legend(
         handles=handles,
         loc="upper center",
-        bbox_to_anchor=(0.5, 1.3),  # (横向, 纵向) 偏移
+        bbox_to_anchor=(0.5, 1.3),
         ncol=4,
         fontsize=12,
         frameon=False
@@ -311,32 +319,19 @@ def draw_timeline_multi(method_events: Dict[str, List[Dict[str,Any]]],
     plt.savefig(out_png, dpi=600, bbox_inches="tight")
     print(f"[save] timeline -> {out_png}")
 
-
 def plot_cache_size_change(cache_size_cahnges: Dict[str, List[Dict[str,Any]]],):
-    # 画图
     plt.rcParams.update({"font.family": "Times New Roman", "font.size": 18})
 
     def _to_xy(series):
         if not series: return [], []
         ts = [float(p["t"]) for p in series]
         sz = [int(p["size"]) for p in series]
-        # 为了阶梯图效果，插入前一点
         return ts, sz
 
     fig, ax = plt.subplots(figsize=(10, 4))
     for label, series in cache_size_cahnges.items():
         ts, sz = _to_xy(series)
         ax.step(ts, sz, where="post", label=label)
-
-    # ts4, sz4 = _to_xy(s4_series)
-    # ts5, sz5 = _to_xy(s5_series)
-    # ts3, sz3 = _to_xy(s3_series)
-    #
-    #
-    # # 用阶梯图表现“事件后大小变更”的感觉
-    # ax.step(ts4, sz4, where="post", label="TransCache_no_cache_management")
-    # ax.step(ts5, sz5, where="post", label="TransCache")
-    # ax.step(ts3, sz3, where="post", label="FirstSeen")
 
     ax.set_xlabel("Timeline (s)")
     ax.set_ylabel("Cache size (#circuits)")

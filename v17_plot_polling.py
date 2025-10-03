@@ -240,7 +240,7 @@ def main():
     ap.add_argument("--dir", "-d", default=BACKEBND_SERIES_DIR, help="Directory containing per-backend CSVs")
     ap.add_argument("--backend", "-b", nargs="*", default=None, help="Backend names (file stems) to plot; default=all")
     ap.add_argument("--metrics", "-m", nargs="*", default=None, help="Columns to plot (default common set)")
-    ap.add_argument("--window", "-w", default="48h", help="Time window like 48h, 7d, all")
+    ap.add_argument("--window", "-w", default="4d", help="Time window like 48h, 7d, all")
     ap.add_argument("--save", "-s", default=DEFAULT_PLOT_DIR, help="If provided, save PNGs to this folder instead of showing")
     ap.add_argument("--size", type=float, nargs=2, metavar=("W","H"), default=(10,4.5), help="Figure size in inches")
     args = ap.parse_args()

@@ -6,6 +6,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 from dataclasses import asdict, dataclass
+from matplotlib.lines import Line2D
+from matplotlib.colors import Normalize
+import matplotlib.cm as cm
 
 # core helpers & paths
 from v15_core import (
@@ -141,6 +144,83 @@ def plot_final_cache_size(methods: List[str],
     fig.savefig(out_path, dpi=600)
     print(f"[save] {out_path}")
 
+# ---------- NEW: Scatter plot of latency vs cache size (color=workload, marker=method) ----------
+def plot_latency_vs_cache_scatter(methods: List[str],
+                                  sizes: List[int],
+                                  method2lat: Dict[str, List[float]],
+                                  method2csz: Dict[str, List[int]],
+                                  out_path: Path,
+                                  cmap_name: str = "plasma") -> None:
+    """
+    从 summary 中的 {sizes, methods, e2e_latency, final_cache_size} 生成一张散点图：
+      - x: final cache size
+      - y: E2E latency
+      - marker 形状：方法(method)
+      - 颜色深浅：workload size（越深越大）
+      - 侧边 colorbar 表示 workload 数值
+    """
+    _set_plot_style()
+    fig, ax = plt.subplots(figsize=(8.5, 6))
+
+    # 不同方法使用不同 marker；保证方法数>markers数时循环使用
+    markers = ["o", "s", "^", "P", "*", "X", "D", "v",]
+    # cmap = plt.cm.get_cmap(cmap_name)
+    cmap = plt.colormaps[cmap_name].reversed()
+    if len(sizes) == 0:
+        raise ValueError("sizes is empty; nothing to plot.")
+    norm = Normalize(vmin=min(sizes), vmax=max(sizes))
+
+    # 逐方法绘制散点；每个方法的一组点在不同 workload 下有不同颜色
+    for idx, name in enumerate(methods):
+        ys = method2lat.get(name, [])
+        xs = method2csz.get(name, [])
+        k = min(len(xs), len(ys), len(sizes))
+        if k == 0:
+            continue
+        nvals = np.array(sizes[:k])
+        colors = cmap(norm(nvals))
+        ax.scatter(
+            np.array(xs[:k]),
+            np.array(ys[:k]),
+            s=70,
+            marker=markers[idx % len(markers)],
+            facecolors=colors,
+            edgecolors="black",
+            linewidths=0.6,
+            alpha=0.95,
+            label=name,  # 用于构造 legend（我们会自定义以只体现形状）
+        )
+
+    # 形状图例：仅编码“方法”，不受颜色影响，便于阅读
+    legend_handles = [
+        Line2D([0], [0],
+               marker=markers[i % len(markers)],
+               linestyle="None",
+               markerfacecolor="white",
+               markeredgecolor="black",
+               markersize=8,
+               label=methods[i])
+        for i in range(len(methods))
+    ]
+    ax.legend(handles=legend_handles, title="Method", frameon=False, loc="best")
+
+    # 颜色条：编码 workload size，颜色越深数值越大（Greys: 高值更黑）
+    sm = cm.ScalarMappable(norm=norm, cmap=cmap)
+    sm.set_array([])
+    cbar = fig.colorbar(sm, ax=ax, pad=0.012)
+    cbar.set_label("Workload size (requests)")
+
+    ax.set_xlabel("Final cache size (#circuits)")
+    ax.set_ylabel("E2E latency (s)")
+    ax.grid(True, linestyle="--", alpha=0.5)
+    ax.set_xlim(left=0)
+    ax.set_ylim(bottom=0)
+
+    fig.tight_layout()
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(out_path, dpi=600)
+    print(f"[save] {out_path}")
+
 # ---------------- run-mode core (was original main body) ----------------
 def main_run(args):
     sizes = [int(x) for x in args.sizes.split(",") if x]
@@ -233,6 +313,7 @@ def main_run(args):
     methods = [name for (name, _, _) in STRATS]
     out_latency = PLOT_DIR / args.out_latency
     out_cache = PLOT_DIR / args.out_cache
+    out_scatter_path = PLOT_DIR / args.out_scatter  # NEW
 
     # 注意：x 轴 sizes 共用，method2xs 仅用于一致性校验
     for m in methods:
@@ -241,6 +322,7 @@ def main_run(args):
 
     plot_e2e_latency(methods, sizes, method2lat, out_latency)
     plot_final_cache_size(methods, sizes, method2csz, out_cache)
+    plot_latency_vs_cache_scatter(methods, sizes, method2lat, method2csz, out_scatter_path)
 
     # ---------------- persist summary ----------------
     SAVE_DIR = Path(args.save_dir)
@@ -300,7 +382,8 @@ def main_run(args):
 # ---------------- load-mode: read summary json and redraw ----------------
 def load_and_redraw(load_dir: str,
                     out_latency: str = "scaling_e2e_latency.png",
-                    out_cache: str = "scaling_final_cache_size.png") -> None:
+                    out_cache: str = "scaling_final_cache_size.png",
+                    out_scatter: str = "scaling_latency_vs_cache_scatter.png") -> None:
     """
     从 SAVE_DIR/'summaries'/'scaling_summary.json' 载入结果，并用与 run 相同的逻辑重绘两张图。
     仅依赖 summary，不重新运行任何策略。
@@ -319,10 +402,13 @@ def load_and_redraw(load_dir: str,
     # 输出路径（保持与 run 模式一致，默认写到 PLOT_DIR 下）
     out_latency_path = PLOT_DIR / out_latency
     out_cache_path = PLOT_DIR / out_cache
+    out_scatter_path = PLOT_DIR / out_scatter  # NEW
 
     # 调用与 run 相同的绘图函数
     plot_e2e_latency(methods, sizes, method2lat, out_latency_path)
     plot_final_cache_size(methods, sizes, method2csz, out_cache_path)
+    # NEW: 使用 summary 数据绘制散点图
+    plot_latency_vs_cache_scatter(methods, sizes, method2lat, method2csz, out_scatter_path)
 
     # 控制台提示
     print("-"*80)
@@ -360,6 +446,7 @@ def build_argparser():
     # IO
     ap.add_argument("--out_latency", type=str, default="scaling_e2e_latency.png")
     ap.add_argument("--out_cache", type=str, default="scaling_final_cache_size.png")
+    ap.add_argument("--out_scatter", type=str, default="scaling_latency_vs_cache_scatter.png")
     ap.add_argument("--load_dir", type=str, default=str((LOAD_ROOT/"scaling").resolve()),
                     help="Directory to load summaries.")
     ap.add_argument("--save_dir", type=str, default=str((ROOT / "scaling").resolve()),
@@ -374,7 +461,8 @@ def main():
     else:
         load_and_redraw(load_dir=args.load_dir,
                         out_latency=args.out_latency,
-                        out_cache=args.out_cache)
+                        out_cache=args.out_cache,
+                        out_scatter=args.out_scatter)
 
 if __name__ == "__main__":
     main()

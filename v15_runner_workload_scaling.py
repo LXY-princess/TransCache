@@ -275,11 +275,11 @@ def main_run(args):
         # workload = build_workload_poisson_superposition(
         #     meta, N, args.hot_fraction, args.hot_boost,
         #     args.rps, rng_seed, return_timestamps=True
-        # )
+        # # )
         # 2) 生成 workload（保留 expovariate 语义）
         workload, info = build_workload_poisson_superposition_exact(
-            meta, workload_len=500, hot_fraction=0.25, hot_boost=8.0,
-            rps=1.0, rng_seed=123, return_timestamps=True
+            meta, N, args.hot_fraction, args.hot_boost,
+            args.rps, rng_seed, return_timestamps=True
         )
         # 3) 可视化自检
         visualize_superposed_poisson_exact(workload, info, meta, bins=40, topk_classes=12)
@@ -435,7 +435,7 @@ def build_argparser():
                     help="run: 运行仿真并绘图；load: 仅从summary加载并重绘图")
 
     # workload shape
-    ap.add_argument("--sizes", type=str, default="50", #100,150,200,300,350,400,450,500
+    ap.add_argument("--sizes", type=str, default="100, 500", #50, 100,150,200,300,350,400,450,500
                     help="Comma-separated workload lengths to test.")
     # ap.add_argument("--q_list", type=str, default="5,7,11,13")
     # ap.add_argument("--d_list", type=str, default="4,8")

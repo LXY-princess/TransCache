@@ -72,7 +72,7 @@ import v15_strategy_tcache_optimize as S6     # 新策略：有上限+评分淘�
 import v15_strategy_tcache_optimize_score_log as S6S     # 新策略
 import v15_strategy_param_reuse_missFirstSeen as SPR0
 import v15_strategy_param_reuse as SPR
-import v15_strategy_tcache_adaptive as SA
+import v15_strategy_tcache_adaptive_2 as SA
 
 
 
@@ -80,6 +80,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--q_list", type=str, default="5, 7, 11, 13")
     ap.add_argument("--d_list", type=str, default="4,8")
+    # ap.add_argument("--q_list", type=str, default="5, 7, 11, 13, 15, 17, 19, 21")
+    # ap.add_argument("--d_list", type=str, default="2,4,6,8, 12")
     ap.add_argument("--workload_len", type=int, default=100)
     ap.add_argument("--shots", type=int, default=256)
     # predictor / prewarm
@@ -123,19 +125,21 @@ def main():
         prob_th=args.prob_th,
         max_compile=args.max_compile,
         shots=args.shots,
+        include_exec=False,
     )
 
     # Baseline 特殊 kwargs
     baseline_kwargs = dict(
         workload=workload,
         shots=args.shots,
+        include_exec=False,
     )
 
     # 策略映射
     strategies = {
-        "TransCache(Proposed)": (S6S.run_strategy, common_kwargs),
         "TransCache(Adaptive)": (SA.run_strategy, common_kwargs),
-        "FirstSeen": (S3.run_strategy, common_kwargs),
+        "TransCache(Proposed)": (S6S.run_strategy, common_kwargs),
+        "FirstSeen": (S3.run_strategy, baseline_kwargs),
         "ParamReuse": (SPR.run_strategy, baseline_kwargs),
         "FullCompilation": (S0.run_strategy, baseline_kwargs),
         # "ParamReuse_missFirstSeen": (SPR0.run_strategy, baseline_kwargs),

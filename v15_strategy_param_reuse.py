@@ -69,7 +69,7 @@ def _build_param_template_and_bindings(
 
 
 def run_once_param_reuse(
-    qc_func, template_cache: Dict[str, QuantumCircuit], shots: int = 256
+    qc_func, template_cache: Dict[str, QuantumCircuit], shots: int = 256, include_exec: bool = True
 ) -> Dict[str, Any]:
     """
     仅对白名单门得到的“带参模板”做缓存复用；其余电路常规编译（不缓存）。
@@ -92,9 +92,12 @@ def run_once_param_reuse(
         qc_exec = transpile(qc_raw, **_prepare_kwargs())
         compile_sec = time.perf_counter() - t0
 
-        t1 = time.perf_counter()
-        _ = sampler.run([qc_exec], shots=shots).result()
-        exec_sec = time.perf_counter() - t1
+        if include_exec:
+            t1 = time.perf_counter()
+            _ = sampler.run([qc_exec], shots=shots).result()
+            exec_sec = time.perf_counter() - t1
+        else:
+            exec_sec = 0
 
         return {
             "key": None,
@@ -115,9 +118,12 @@ def run_once_param_reuse(
         qc_exec = transpile(qc_raw, **_prepare_kwargs())
         compile_sec = time.perf_counter() - t0
 
-        t1 = time.perf_counter()
-        _ = sampler.run([qc_exec], shots=shots).result()
-        exec_sec = time.perf_counter() - t1
+        if include_exec:
+            t1 = time.perf_counter()
+            _ = sampler.run([qc_exec], shots=shots).result()
+            exec_sec = time.perf_counter() - t1
+        else:
+            exec_sec = 0.0
 
         return {
             "key": None,
@@ -151,17 +157,20 @@ def run_once_param_reuse(
         if p_in_exec is not None:
             binding[p_in_exec] = val
 
-    if binding:
-        t1 = time.perf_counter()
-        qc_exec = qc_exec_templ.assign_parameters(binding, inplace=False)
-        bind_sec = time.perf_counter() - t1
-    else:
-        qc_exec = qc_exec_templ  # 理论上很少发生
+    if include_exec:
+        if binding:
+            t1 = time.perf_counter()
+            qc_exec = qc_exec_templ.assign_parameters(binding, inplace=False)
+            bind_sec = time.perf_counter() - t1
+        else:
+            qc_exec = qc_exec_templ  # 理论上很少发生
 
-    # 执行
-    t2 = time.perf_counter()
-    _ = sampler.run([qc_exec], shots=shots).result()
-    exec_sec = time.perf_counter() - t2
+        # 执行
+        t2 = time.perf_counter()
+        _ = sampler.run([qc_exec], shots=shots).result()
+        exec_sec = time.perf_counter() - t2
+    else:
+        exec_sec = 0.0
 
     record_arrival(key)  # 仅对“带参模板”记录
 
@@ -173,7 +182,7 @@ def run_once_param_reuse(
         "exec_sec": float(exec_sec),
         "n_qubits": qc_raw.num_qubits,
         "depth_in": qc_raw.depth(),
-        "depthT": qc_exec.depth(),
+        # "depthT": qc_exec.depth(),
         "parametric": True,
     }
 
@@ -181,6 +190,7 @@ def run_once_param_reuse(
 def run_strategy(
     workload: List[Dict[str, Any]],
     shots: int = 256,
+    include_exec: bool = True
 ):
     """
     ParamReuse（Braket-like, param-only caching）：
@@ -197,7 +207,7 @@ def run_strategy(
     cache_size_series: List[Tuple[float, int]] = []
 
     for it in workload:
-        meta = run_once_param_reuse(it["maker_run"], template_cache, shots=shots)
+        meta = run_once_param_reuse(it["maker_run"], template_cache, shots=shots, include_exec=include_exec)
 
         run_dur = float(meta.get("compile_sec", 0.0)) + float(meta.get("bind_sec", 0.0)) + float(meta.get("exec_sec", 0.0))
         lab = label_of(it["name"], it["q"], it["d"])

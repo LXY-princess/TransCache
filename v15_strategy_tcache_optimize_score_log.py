@@ -115,7 +115,8 @@ def run_strategy(
     lookahead_sec: float = 8.0, prob_th: float = 0.45,
     max_compile: int = 3, shots: int = 256,
     cache_capacity: int = 25,
-    default_compile_est: float = 0.08
+    default_compile_est: float = 0.08,
+    include_exec: bool = True
 ):
     """
     TransCache（simulate-time consistent）：
@@ -165,7 +166,7 @@ def run_strategy(
 
         # ---- 到达并执行 ----
         # ★ 关键修复：把模拟时间 t 作为 ts 传递给 record_arrival
-        meta = run_once_with_cache(it["maker_run"], cache, shots=shots, ts=t)
+        meta = run_once_with_cache(it["maker_run"], cache, shots=shots, ts=t, include_exec=include_exec)
         run_dur = float(meta["compile_sec"]) + float(meta["exec_sec"])
         lab = label_of(it["name"], it["q"], it["d"])
         events.append({"kind": "run", "label": lab, "start": t, "dur": run_dur})

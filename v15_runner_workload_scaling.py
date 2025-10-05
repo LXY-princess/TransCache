@@ -13,7 +13,9 @@ import matplotlib.cm as cm
 # core helpers & paths
 from v15_core import (
     ROOT, PLOT_DIR, build_catalog, build_workload_poisson_superposition,
-    clear_recent, LOAD_ROOT
+    clear_recent, LOAD_ROOT,
+    build_workload_poisson_superposition_exact,
+    visualize_superposed_poisson_exact
 )
 
 # strategies
@@ -21,7 +23,7 @@ import v15_strategy_baseline as S0          # FullCompilation (Baseline)
 import v15_strategy_cache_first_seen_cache_tracking as S3  # FirstSeen w/ cache tracking
 import v15_strategy_tcache_optimize_score_log as S6S       # TransCache(Proposed)
 import v15_strategy_param_reuse as SPR      # ParamReuse (Braket-like)
-import v15_strategy_tcache_adaptive as SA
+import v15_strategy_tcache_adaptive_2 as SA
 
 # ---------------- JSON utilities (safe for numpy & callables) ----------------
 def _json_default(o):
@@ -246,14 +248,15 @@ def main_run(args):
             predictor_cfg=predictor_cfg, prewarm_every=args.prewarm_every,
             lookahead_sec=args.lookahead, prob_th=args.prob_th,
             max_compile=args.max_compile, shots=args.shots,
+            include_exec = False,
         )
     def _baseline_kwargs(workload):
-        return dict(workload=workload, shots=args.shots)
+        return dict(workload=workload, shots=args.shots, include_exec = False,)
 
     STRATS = [
-        ("TransCache(Proposed)", S6S.run_strategy, _common_kwargs),
         ("TransCache(Adaptive)", SA.run_strategy, _common_kwargs),
-        ("FirstSeen",            S3.run_strategy,  _common_kwargs),
+        ("TransCache(Proposed)", S6S.run_strategy, _common_kwargs),
+        ("FirstSeen",            S3.run_strategy,  _baseline_kwargs),
         ("ParamReuse",           SPR.run_strategy, _baseline_kwargs),
         ("FullCompilation",      S0.run_strategy,  _baseline_kwargs),
     ]
@@ -269,10 +272,17 @@ def main_run(args):
     # iterate over workload sizes
     for i, N in enumerate(sizes):
         rng_seed = args.rng_seed_base + i * 1009  # deterministic but varies with size
-        workload = build_workload_poisson_superposition(
-            meta, N, args.hot_fraction, args.hot_boost,
-            args.rps, rng_seed, return_timestamps=True
+        # workload = build_workload_poisson_superposition(
+        #     meta, N, args.hot_fraction, args.hot_boost,
+        #     args.rps, rng_seed, return_timestamps=True
+        # )
+        # 2) 生成 workload（保留 expovariate 语义）
+        workload, info = build_workload_poisson_superposition_exact(
+            meta, workload_len=500, hot_fraction=0.25, hot_boost=8.0,
+            rps=1.0, rng_seed=123, return_timestamps=True
         )
+        # 3) 可视化自检
+        visualize_superposed_poisson_exact(workload, info, meta, bins=40, topk_classes=12)
 
         # persist a SLIM version of workload (no callables)
         SAVE_DIR = Path(args.save_dir)
@@ -283,100 +293,100 @@ def main_run(args):
         print(f"\n[run] workload size = {N} (saved {wl_path.name})")
         print("-"*80)
 
-        # create a per-size folder for events/metrics
-        perN_dir = SAVE_DIR/f"N{N}"
-        (perN_dir/"events").mkdir(parents=True, exist_ok=True)
-        (perN_dir/"metrics").mkdir(parents=True, exist_ok=True)
-
-        for name, fn, kw_builder in STRATS:
-            clear_recent()  # reset predictor stats for fairness
-            kwargs = kw_builder(workload)
-            out = fn(**kwargs)
-            events = out["events"]
-            metrics = out.get("metrics", {})
-
-            # save events and metrics for this (N, method) using safe dumper
-            (perN_dir/"events"/f"{name}.json").write_text(json_dump(events))
-            (perN_dir/"metrics"/f"{name}.json").write_text(json_dump(metrics))
-
-            e2e = e2e_latency_from_events(events)
-            csz = final_cache_size_from_metrics(metrics)
-
-            method2xs[name].append(N)
-            method2lat[name].append(e2e)
-            method2csz[name].append(csz)
-
-            rows.append(Row(size=N, method=name, e2e_latency=e2e, final_cache_size=csz))
-            print(f"{name:>20s} | E2E latency = {e2e:8.3f} s | final cache size = {csz:4d}")
-
-    # ---------------- plotting via shared functions ----------------
-    methods = [name for (name, _, _) in STRATS]
-    out_latency = PLOT_DIR / args.out_latency
-    out_cache = PLOT_DIR / args.out_cache
-    out_scatter_path = PLOT_DIR / args.out_scatter  # NEW
-
-    # 注意：x 轴 sizes 共用，method2xs 仅用于一致性校验
-    for m in methods:
-        if method2xs[m] != sizes:
-            print(f"[warn] sizes mismatch for method {m}: {method2xs[m]} vs {sizes}")
-
-    plot_e2e_latency(methods, sizes, method2lat, out_latency)
-    plot_final_cache_size(methods, sizes, method2csz, out_cache)
-    plot_latency_vs_cache_scatter(methods, sizes, method2lat, method2csz, out_scatter_path)
-
-    # ---------------- persist summary ----------------
-    SAVE_DIR = Path(args.save_dir)
-    (SAVE_DIR/"summaries").mkdir(parents=True, exist_ok=True)
-
-    # 1) long-form CSV
-    csv_path = SAVE_DIR/"summaries"/"scaling_summary_long.csv"
-    with csv_path.open("w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=["size", "method", "e2e_latency", "final_cache_size"])
-        w.writeheader()
-        for r in rows:
-            w.writerow(asdict(r))
-    print(f"[save] {csv_path}")
-
-    # 2) JSON summary (wide)
-    summary = {
-        "sizes": sizes,
-        "methods": methods,
-        "e2e_latency": {name: method2lat[name] for name in methods},
-        "final_cache_size": {name: method2csz[name] for name in methods},
-        "config": {
-            "q_list": [int(x) for x in args.q_list.split(",") if x],
-            "d_list": [int(x) for x in args.d_list.split(",") if x],
-            "shots": args.shots, "hot_fraction": args.hot_fraction,
-            "hot_boost": args.hot_boost, "rps": args.rps,
-            "rng_seed_base": args.rng_seed_base,
-            "lookahead": args.lookahead, "prob_th": args.prob_th,
-            "max_compile": args.max_compile, "sliding_window_sec": args.sliding_window_sec,
-            "min_samples": args.min_samples, "prewarm_every": args.prewarm_every,
-        },
-        "plots": {
-            "latency_png": str(out_latency),
-            "cache_png": str(out_cache),
-        },
-    }
-    json_path = SAVE_DIR/"summaries"/"scaling_summary.json"
-    json_path.write_text(json_dump(summary))
-    print(f"[save] {json_path}")
-
-    # pretty console tables
-    print("-"*80)
-    print("Summary (rows = workload size)")
-    header = ["N"] + methods
-    print(" | ".join(f"{h:>20s}" for h in header))
-    for row_i, N in enumerate(sizes):
-        cells_lat = [f"{summary['e2e_latency'][name][row_i]:8.3f}s" for name in methods]
-        print(" | ".join([f"{N:>20d}"] + [f"{c:>20s}" for c in cells_lat]))
-
-    print("-"*80)
-    print("Final cache size")
-    print(" | ".join(f"{h:>20s}" for h in header))
-    for row_i, N in enumerate(sizes):
-        cells_sz = [f"{summary['final_cache_size'][name][row_i]:>8d}" for name in methods]
-        print(" | ".join([f"{N:>20d}"] + [f"{c:>20s}" for c in cells_sz]))
+    #     # create a per-size folder for events/metrics
+    #     perN_dir = SAVE_DIR/f"N{N}"
+    #     (perN_dir/"events").mkdir(parents=True, exist_ok=True)
+    #     (perN_dir/"metrics").mkdir(parents=True, exist_ok=True)
+    #
+    #     for name, fn, kw_builder in STRATS:
+    #         clear_recent()  # reset predictor stats for fairness
+    #         kwargs = kw_builder(workload)
+    #         out = fn(**kwargs)
+    #         events = out["events"]
+    #         metrics = out.get("metrics", {})
+    #
+    #         # save events and metrics for this (N, method) using safe dumper
+    #         (perN_dir/"events"/f"{name}.json").write_text(json_dump(events))
+    #         (perN_dir/"metrics"/f"{name}.json").write_text(json_dump(metrics))
+    #
+    #         e2e = e2e_latency_from_events(events)
+    #         csz = final_cache_size_from_metrics(metrics)
+    #
+    #         method2xs[name].append(N)
+    #         method2lat[name].append(e2e)
+    #         method2csz[name].append(csz)
+    #
+    #         rows.append(Row(size=N, method=name, e2e_latency=e2e, final_cache_size=csz))
+    #         print(f"{name:>20s} | E2E latency = {e2e:8.3f} s | final cache size = {csz:4d}")
+    #
+    # # ---------------- plotting via shared functions ----------------
+    # methods = [name for (name, _, _) in STRATS]
+    # out_latency = PLOT_DIR / args.out_latency
+    # out_cache = PLOT_DIR / args.out_cache
+    # out_scatter_path = PLOT_DIR / args.out_scatter  # NEW
+    #
+    # # 注意：x 轴 sizes 共用，method2xs 仅用于一致性校验
+    # for m in methods:
+    #     if method2xs[m] != sizes:
+    #         print(f"[warn] sizes mismatch for method {m}: {method2xs[m]} vs {sizes}")
+    #
+    # plot_e2e_latency(methods, sizes, method2lat, out_latency)
+    # plot_final_cache_size(methods, sizes, method2csz, out_cache)
+    # plot_latency_vs_cache_scatter(methods, sizes, method2lat, method2csz, out_scatter_path)
+    #
+    # # ---------------- persist summary ----------------
+    # SAVE_DIR = Path(args.save_dir)
+    # (SAVE_DIR/"summaries").mkdir(parents=True, exist_ok=True)
+    #
+    # # 1) long-form CSV
+    # csv_path = SAVE_DIR/"summaries"/"scaling_summary_long.csv"
+    # with csv_path.open("w", newline="", encoding="utf-8") as f:
+    #     w = csv.DictWriter(f, fieldnames=["size", "method", "e2e_latency", "final_cache_size"])
+    #     w.writeheader()
+    #     for r in rows:
+    #         w.writerow(asdict(r))
+    # print(f"[save] {csv_path}")
+    #
+    # # 2) JSON summary (wide)
+    # summary = {
+    #     "sizes": sizes,
+    #     "methods": methods,
+    #     "e2e_latency": {name: method2lat[name] for name in methods},
+    #     "final_cache_size": {name: method2csz[name] for name in methods},
+    #     "config": {
+    #         "q_list": [int(x) for x in args.q_list.split(",") if x],
+    #         "d_list": [int(x) for x in args.d_list.split(",") if x],
+    #         "shots": args.shots, "hot_fraction": args.hot_fraction,
+    #         "hot_boost": args.hot_boost, "rps": args.rps,
+    #         "rng_seed_base": args.rng_seed_base,
+    #         "lookahead": args.lookahead, "prob_th": args.prob_th,
+    #         "max_compile": args.max_compile, "sliding_window_sec": args.sliding_window_sec,
+    #         "min_samples": args.min_samples, "prewarm_every": args.prewarm_every,
+    #     },
+    #     "plots": {
+    #         "latency_png": str(out_latency),
+    #         "cache_png": str(out_cache),
+    #     },
+    # }
+    # json_path = SAVE_DIR/"summaries"/"scaling_summary.json"
+    # json_path.write_text(json_dump(summary))
+    # print(f"[save] {json_path}")
+    #
+    # # pretty console tables
+    # print("-"*80)
+    # print("Summary (rows = workload size)")
+    # header = ["N"] + methods
+    # print(" | ".join(f"{h:>20s}" for h in header))
+    # for row_i, N in enumerate(sizes):
+    #     cells_lat = [f"{summary['e2e_latency'][name][row_i]:8.3f}s" for name in methods]
+    #     print(" | ".join([f"{N:>20d}"] + [f"{c:>20s}" for c in cells_lat]))
+    #
+    # print("-"*80)
+    # print("Final cache size")
+    # print(" | ".join(f"{h:>20s}" for h in header))
+    # for row_i, N in enumerate(sizes):
+    #     cells_sz = [f"{summary['final_cache_size'][name][row_i]:>8d}" for name in methods]
+    #     print(" | ".join([f"{N:>20d}"] + [f"{c:>20s}" for c in cells_sz]))
 
 
 # ---------------- load-mode: read summary json and redraw ----------------
@@ -425,10 +435,12 @@ def build_argparser():
                     help="run: 运行仿真并绘图；load: 仅从summary加载并重绘图")
 
     # workload shape
-    ap.add_argument("--sizes", type=str, default="50,100,150,200,300,350,400,450,500",
+    ap.add_argument("--sizes", type=str, default="50", #100,150,200,300,350,400,450,500
                     help="Comma-separated workload lengths to test.")
-    ap.add_argument("--q_list", type=str, default="5,7,11,13")
-    ap.add_argument("--d_list", type=str, default="4,8")
+    # ap.add_argument("--q_list", type=str, default="5,7,11,13")
+    # ap.add_argument("--d_list", type=str, default="4,8")
+    ap.add_argument("--q_list", type=str, default="5, 7, 11, 13, 15, 17, 19, 21")
+    ap.add_argument("--d_list", type=str, default="2,4,6,8, 12")
     ap.add_argument("--shots", type=int, default=256)
     ap.add_argument("--hot_fraction", type=float, default=0.25)
     ap.add_argument("--hot_boost", type=float, default=8.0)

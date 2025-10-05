@@ -10,7 +10,7 @@ ROOT.mkdir(parents=True, exist_ok=True)
 # —— 固定轮询参数（可用环境变量覆盖）——
 # 每 5 分钟采一次；若 RUN_HOURS>0 则持续该时长（小时），=0 表示一直跑
 INTERVAL_SEC = int(os.environ.get("INTERVAL_SEC", "300"))   # 默认 5 min
-RUN_HOURS    = float(os.environ.get("RUN_HOURS", "48"))     # 默认 48h；设为 0 则无限
+RUN_HOURS    = float(os.environ.get("RUN_HOURS", "0"))     # 默认 48h；设为 0 则无限
 
 # 后端筛选 & 2Q 门优先级（用于挑选“代表性两比特门”统计）
 INCLUDE   = {s.strip() for s in os.environ.get("BACKEND_INCLUDE","").split(",") if s.strip()}

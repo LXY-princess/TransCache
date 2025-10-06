@@ -129,7 +129,10 @@ def _prewarm_with_predictor_and_insert(
     cache: Dict[str, Any], segQ: Set[str], segP: Set[str],
     capQ: int, cap_total: int,
     key2label: Dict[str, str], est_compile_ema: Dict[str, float], last_used_t: Dict[str, float],
-    default_compile_est: float, max_compile: int,
+
+    # usued for the search in est_compile_ema, if a key does not exist, create one with value default_compile_est
+    default_compile_est: float,
+    max_compile: int,
     pre_kappa: float = 0.25, p_within_compile_th: float = 0.35
 ) -> List[str]:
     """只用 Probation 的空余预算做预热；候选按 EV 排序并过可调度性门槛。"""
@@ -290,6 +293,7 @@ def run_strategy(
     # stale vacuum
     ttl_factor: float = 8.0,
 
+    # when the search for est compile time for a key, if a key does not exist, create one with default est
     default_compile_est: float = 0.08
 ):
     """

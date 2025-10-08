@@ -381,7 +381,7 @@ def main_run(args):
     # 线图（带区间）
     plot_with_interval(methods, sizes, agg_lat, "E2E latency (s)", out_latency, interval_kind=interval_kind)
     plot_with_interval(methods, sizes, agg_csz, "Final cache size (#circuits)", out_cache, interval_kind=interval_kind)
-    plot_with_interval(methods, sizes, agg_hit, "Final hitrate (%)", out_hitrate, interval_kind=interval_kind)
+    plot_with_interval(methods, sizes, agg_hit, "Final hitrate", out_hitrate, interval_kind=interval_kind)
 
     # 散点：按回合把所有点都画上
     plot_latency_vs_cache_scatter_multi(methods, sizes, lat_all, csz_all, out_scatter,
@@ -478,7 +478,7 @@ def load_and_redraw(load_dir: str,
 
     plot_with_interval(methods, sizes, agg_lat, "E2E latency (s)", out_latency_path, interval_kind=interval_kind)
     plot_with_interval(methods, sizes, agg_csz, "Final cache size (#circuits)", out_cache_path, interval_kind=interval_kind)
-    plot_with_interval(methods, sizes, agg_hit, "Final hitrate (%)", out_hitrate_path, interval_kind=interval_kind)
+    plot_with_interval(methods, sizes, agg_hit, "Final hitrate", out_hitrate_path, interval_kind=interval_kind)
     plot_latency_vs_cache_scatter_multi(methods, sizes, raw_lat, raw_csz, out_scatter_path, cmap_name="plasma", jitter=0.0)
 
     print("-"*80)

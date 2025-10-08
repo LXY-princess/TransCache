@@ -57,7 +57,13 @@ def run_strategy(workload, makers_all,
                 lookahead_sec=lookahead_sec, prob_th=prob_th,
                 cache=cache, max_compile=max_compile,
             )
-        meta = run_once_with_cache(it["maker_run"], cache, shots=shots, include_exec=include_exec)
+            # last_used_t is used for freshness of cache, not wl history
+            # wl history can be traced in RECENT_CALLS, no need to record another copy
+            # every time an item is called, last_used_t will also update t
+            for k in inserted:
+                last_used_t[k] = t
+
+        meta = run_once_with_cache(it["maker_run"], cache, shots=shots, ts=t, include_exec=include_exec)
         cache_size_series.append((t, len(cache)))
         dur = float(meta["compile_sec"]) + float(meta["exec_sec"])
         lab = label_of(it["name"], it["q"], it["d"])
@@ -70,7 +76,7 @@ def run_strategy(workload, makers_all,
         # ttl
         # 只要用到了某个 key（命中或 miss 后加入），就刷新其 last_used
         k = meta.get("key", None)
-        if k:
+        if k and k in cache:
             last_used_t[k] = t + dur
         # TTL 去陈 —— 最小侵入、只这一小块
         if ttl_sec > 0:

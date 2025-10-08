@@ -49,7 +49,7 @@ def run_strategy(workload, makers_all,
                 lookahead_sec=lookahead_sec, prob_th=prob_th,
                 cache=cache, max_compile=max_compile,
             )
-        meta = run_once_with_cache(it["maker_run"], cache, shots=shots, include_exec=include_exec)
+        meta = run_once_with_cache(it["maker_run"], cache, shots=shots, ts=t, include_exec=include_exec)
         cache_size_series.append((t, len(cache)))
         dur = float(meta["compile_sec"]) + float(meta["exec_sec"])
         lab = label_of(it["name"], it["q"], it["d"])

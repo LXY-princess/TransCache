@@ -23,7 +23,7 @@ def run_strategy(workload, shots=256, include_exec: bool = True):
 
     """ run over workloads"""
     for idx, it in enumerate(workload):
-        meta = run_once_with_cache(it["maker_run"], cache, shots=shots, include_exec=include_exec)
+        meta = run_once_with_cache(it["maker_run"], cache, shots=shots, ts=t, include_exec=include_exec)
         cache_size_series.append((t, len(cache)))
         dur = float(meta["compile_sec"]) + float(meta["exec_sec"])
         lab = label_of(it["name"], it["q"], it["d"])

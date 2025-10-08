@@ -27,6 +27,7 @@ import v18_strat_FS as S_FS                     # FirstSeen
 import v18_strat_FS_Pre as S_FS_Pre             # FirstSeen + predictor prewarm
 import v18_strat_PR as S_PR
 import v18_strat_FS_Pre_ttl as S_FS_Pre_ttl
+import v18_strat_FS_Pre_ttl_SE as S_FS_Pre_ttl_SE
 
 # ---------------- JSON utilities (safe for numpy) ----------------
 def _json_default(o):
@@ -280,6 +281,7 @@ def main_run(args):
         return dict(workload=workload, shots=args.shots, include_exec=False)
 
     STRATS = [
+        ("FS+Pre+ttl+SE", S_FS_Pre_ttl_SE.run_strategy, _common_kwargs),
         ("FS+Pre+ttl", S_FS_Pre_ttl.run_strategy, _common_kwargs),
         ("FS+Pre", S_FS_Pre.run_strategy, _common_kwargs),
         ("FS",     S_FS.run_strategy,     _baseline_kwargs),

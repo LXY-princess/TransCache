@@ -26,6 +26,7 @@ from v18_core import (
 import v18_strat_FS as S_FS  # FirstSeen
 import v18_strat_FS_Pre as S_FS_Pre  # FirstSeen + predictor prewarm
 import v18_strat_PR as S_PR
+import v18_strat_FS_Pre_ttl as S_FS_Pre_ttl
 # import v18_strategy_tcache_optimize_score_log as S6S       # TransCache(Proposed)
 # import v18_strategy_param_reuse as SPR      # ParamReuse (Braket-like)
 import v18_strat_FS_Pre as SA
@@ -292,6 +293,7 @@ def main_run(args):
 
     STRATS = [
         # ("TransCache(Adaptive)", SA.run_strategy, _common_kwargs),
+        ("FS+Pre+ttl", S_FS_Pre_ttl.run_strategy, _common_kwargs),
         ("FS+Pre", S_FS_Pre.run_strategy, _common_kwargs),
         ("FS",S_FS.run_strategy,  _baseline_kwargs),
         ("PR",S_PR.run_strategy,  _baseline_kwargs),
@@ -495,7 +497,7 @@ def build_argparser():
                     help="run: 运行仿真并绘图；load: 仅从summary加载并重绘图")
 
     # workload shape
-    ap.add_argument("--sizes", type=str, default="50,100,150,200,300,350,400,450,500", #50,100,150,200,300,350,400,450,500
+    ap.add_argument("--sizes", type=str, default="500", #50,100,150,200,300,350,400,450,500
                     help="Comma-separated workload lengths to test.")
     # ap.add_argument("--q_list", type=str, default="5,7,11,13")
     # ap.add_argument("--d_list", type=str, default="4,8")

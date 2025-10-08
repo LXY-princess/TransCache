@@ -57,7 +57,9 @@ def clear_recent(): RECENT_CALLS.clear()
 class PoissonPredictor:
     """λ MLE on sliding window;  p(≤τ)=1-exp(-λτ)"""
     def __init__(self, sliding_window_sec: float = 60.0, min_samples: int = 2):
+        # the sliding window length of RECENT_CALLS base on which to predict
         self.sliding_window_sec = float(sliding_window_sec)
+        # the minimal number of samples neede to calculate lamda and prob
         self.min_samples = int(min_samples)
 
     def _recent(self, key: str, now: Optional[float] = None) -> List[float]:

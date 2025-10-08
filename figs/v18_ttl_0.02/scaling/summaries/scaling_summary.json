@@ -1,0 +1,69 @@
+{
+  "sizes": [
+    500
+  ],
+  "methods": [
+    "FS+Pre+ttl",
+    "FS+Pre",
+    "FS",
+    "PR"
+  ],
+  "e2e_latency": {
+    "FS+Pre+ttl": [
+      12.755019003991038
+    ],
+    "FS+Pre": [
+      6.193569801282138
+    ],
+    "FS": [
+      6.514428099151701
+    ],
+    "PR": [
+      20.395153001416475
+    ]
+  },
+  "final_cache_size": {
+    "FS+Pre+ttl": [
+      60
+    ],
+    "FS+Pre": [
+      103
+    ],
+    "FS": [
+      103
+    ],
+    "PR": [
+      61
+    ]
+  },
+  "config": {
+    "q_list": [
+      5,
+      7,
+      11,
+      13,
+      15,
+      17
+    ],
+    "d_list": [
+      2,
+      4,
+      6
+    ],
+    "shots": 256,
+    "hot_fraction": 0.25,
+    "hot_boost": 8.0,
+    "rps": 1.0,
+    "rng_seed_base": 123,
+    "lookahead": 8.0,
+    "prob_th": 0.45,
+    "max_compile": 3,
+    "sliding_window_sec": 60.0,
+    "min_samples": 2,
+    "prewarm_every": 5
+  },
+  "plots": {
+    "latency_png": "figs\\v18\\plots\\scaling_e2e_latency.png",
+    "cache_png": "figs\\v18\\plots\\scaling_final_cache_size.png"
+  }
+}

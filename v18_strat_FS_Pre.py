@@ -42,6 +42,7 @@ def run_strategy(workload, makers_all,
 
     """ run over workloads"""
     for idx, it in enumerate(workload):
+        # Predictor prewarm
         if (idx % prewarm_every) == 0:
             inserted = prewarm_simple_topk(
                 predictor=predictor, makers_all=makers_all, now_t=t,

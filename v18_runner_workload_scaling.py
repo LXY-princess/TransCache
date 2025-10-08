@@ -15,13 +15,17 @@ from v18_core import (
     ROOT, PLOT_DIR, build_catalog,
     clear_recent, LOAD_ROOT,
     build_workload_poisson_superposition_exact,
-    visualize_superposed_poisson_exact
+    visualize_superposed_poisson_exact,
+    draw_timeline_multi,
+    plot_cache_size_change,
+    compute_freq_and_hits
 )
 
 # strategies
 # import v18_strategy_baseline as S0          # FullCompilation (Baseline)
 import v18_strat_FS as S_FS  # FirstSeen
 import v18_strat_FS_Pre as S_FS_Pre  # FirstSeen + predictor prewarm
+import v18_strat_PR as S_PR
 # import v18_strategy_tcache_optimize_score_log as S6S       # TransCache(Proposed)
 # import v18_strategy_param_reuse as SPR      # ParamReuse (Braket-like)
 import v18_strat_FS_Pre as SA
@@ -78,6 +82,11 @@ def final_cache_size_from_metrics(metrics: Dict[str, Any]) -> int:
     if isinstance(last, (list, tuple)) and len(last) >= 2:
         return int(last[1])
     return 0
+
+def final_hitrate_from_metrics(workload, metrics: Dict[str, Any]):
+    hit_by_label = metrics.get("hit_by_label", {})
+    _, _, overall = compute_freq_and_hits(workload, hit_by_label)
+    return overall
 
 @dataclass
 class Row:
@@ -139,6 +148,33 @@ def plot_final_cache_size(methods: List[str],
                 markeredgewidth=2.0,)
     ax.set_xlabel("Workload size (requests)")
     ax.set_ylabel("Final cache size (#circuits)")
+    # ax.set_title("Final cache size vs. workload size")
+    ax.grid(True, linestyle="--", alpha=0.5)
+    ax.legend(frameon=False)
+    fig.tight_layout()
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(out_path, dpi=600)
+    print(f"[save] {out_path}")
+
+def plot_final_hitrate(methods: List[str],
+                          sizes: List[int],
+                          method2hits: Dict[str, List[int]],
+                          out_path: Path) -> None:
+    """
+    绘制 Final cache size vs workload size 并保存到 out_path。
+    """
+    _set_plot_style()
+    fig, ax = plt.subplots(figsize=(9, 5))
+    markers = ["o", "s", "^", "D", "v", "P"]
+    for idx, name in enumerate(methods):
+        ys = method2hits.get(name, [])
+        ax.plot(sizes, ys, marker=markers[idx % len(markers)], label=name,
+                markerfacecolor='none',  # 空心
+                # markeredgecolor=color,  # 用线条颜色做描边
+                markersize=8,  # 缩小
+                markeredgewidth=2.0,)
+    ax.set_xlabel("Workload size (requests)")
+    ax.set_ylabel("Final hitrate (%)")
     # ax.set_title("Final cache size vs. workload size")
     ax.grid(True, linestyle="--", alpha=0.5)
     ax.legend(frameon=False)
@@ -257,7 +293,8 @@ def main_run(args):
     STRATS = [
         # ("TransCache(Adaptive)", SA.run_strategy, _common_kwargs),
         ("FS+Pre", S_FS_Pre.run_strategy, _common_kwargs),
-        ("FS",            S_FS.run_strategy,  _baseline_kwargs),
+        ("FS",S_FS.run_strategy,  _baseline_kwargs),
+        ("PR",S_PR.run_strategy,  _baseline_kwargs),
         # ("ParamReuse",           SPR.run_strategy, _baseline_kwargs),
         # ("FullCompilation",      S0.run_strategy,  _baseline_kwargs),
     ]
@@ -266,6 +303,7 @@ def main_run(args):
     method2xs: Dict[str, List[int]] = {name: [] for (name, _, _) in STRATS}
     method2lat: Dict[str, List[float]] = {name: [] for (name, _, _) in STRATS}
     method2csz: Dict[str, List[int]]   = {name: [] for (name, _, _) in STRATS}
+    method2hits: Dict[str, List[int]]   = {name: [] for (name, _, _) in STRATS}
 
     # Also collect a long-form table for CSV and a JSON-friendly summary
     rows: List[Row] = []
@@ -299,6 +337,8 @@ def main_run(args):
         (perN_dir/"events").mkdir(parents=True, exist_ok=True)
         (perN_dir/"metrics").mkdir(parents=True, exist_ok=True)
 
+        events_series = {}
+        metrics_series = {}
         for name, fn, kw_builder in STRATS:
             clear_recent()  # reset predictor stats for fairness
             kwargs = kw_builder(workload)
@@ -310,21 +350,39 @@ def main_run(args):
             (perN_dir/"events"/f"{name}.json").write_text(json_dump(events))
             (perN_dir/"metrics"/f"{name}.json").write_text(json_dump(metrics))
 
+            events_series[name] = events
+            metrics_series[name] = metrics
+
             e2e = e2e_latency_from_events(events)
             csz = final_cache_size_from_metrics(metrics)
+            hits = final_hitrate_from_metrics(workload, metrics)
 
             method2xs[name].append(N)
             method2lat[name].append(e2e)
             method2csz[name].append(csz)
+            method2hits[name].append(hits)
 
             rows.append(Row(size=N, method=name, e2e_latency=e2e, final_cache_size=csz))
             print(f"{name:>20s} | E2E latency = {e2e:8.3f} s | final cache size = {csz:4d}")
+
+        # draw timeline & cache size change for each wl
+        # timeline
+        out_tl = PLOT_DIR / f"timeline_wl_{N}.png"
+        draw_timeline_multi(events_series, out_tl)
+
+        # cache changes compare
+        cache_size_cahnges = {}
+        for name, _, _ in STRATS:
+            cache_size_cahnges[name] = metrics_series[name].get("cache_size_series", [])
+        out_png = PLOT_DIR / f"cache_change_wl_{N}.png"
+        plot_cache_size_change(cache_size_cahnges, out_png)
 
     # ---------------- plotting via shared functions ----------------
     methods = [name for (name, _, _) in STRATS]
     out_latency = PLOT_DIR / args.out_latency
     out_cache = PLOT_DIR / args.out_cache
     out_scatter_path = PLOT_DIR / args.out_scatter  # NEW
+    out_hitrate_path = PLOT_DIR / args.out_hitrate  # NEW
 
     # 注意：x 轴 sizes 共用，method2xs 仅用于一致性校验
     for m in methods:
@@ -333,6 +391,7 @@ def main_run(args):
 
     plot_e2e_latency(methods, sizes, method2lat, out_latency)
     plot_final_cache_size(methods, sizes, method2csz, out_cache)
+    plot_final_hitrate(methods, sizes, method2hits, out_hitrate_path)
     plot_latency_vs_cache_scatter(methods, sizes, method2lat, method2csz, out_scatter_path)
 
     # ---------------- persist summary ----------------
@@ -436,12 +495,12 @@ def build_argparser():
                     help="run: 运行仿真并绘图；load: 仅从summary加载并重绘图")
 
     # workload shape
-    ap.add_argument("--sizes", type=str, default="50,100,150,200,300,350", #50,100,150,200,300,350,400,450,500
+    ap.add_argument("--sizes", type=str, default="50,100,150,200,300,350,400,450,500", #50,100,150,200,300,350,400,450,500
                     help="Comma-separated workload lengths to test.")
     # ap.add_argument("--q_list", type=str, default="5,7,11,13")
     # ap.add_argument("--d_list", type=str, default="4,8")
-    ap.add_argument("--q_list", type=str, default="5, 7, 11, 13") #5, 7, 11, 13, 15, 17, 19, 21
-    ap.add_argument("--d_list", type=str, default="2,4") # 2,4, 6,8, 12
+    ap.add_argument("--q_list", type=str, default="5, 7, 11, 13, 15, 17") #5, 7, 11, 13, 15, 17, 19, 21
+    ap.add_argument("--d_list", type=str, default="2,4,6") # 2,4,6,8, 12
     ap.add_argument("--shots", type=int, default=256)
     ap.add_argument("--hot_fraction", type=float, default=0.25)
     ap.add_argument("--hot_boost", type=float, default=8.0)
@@ -460,6 +519,7 @@ def build_argparser():
     ap.add_argument("--out_latency", type=str, default="scaling_e2e_latency.png")
     ap.add_argument("--out_cache", type=str, default="scaling_final_cache_size.png")
     ap.add_argument("--out_scatter", type=str, default="scaling_latency_vs_cache_scatter.png")
+    ap.add_argument("--out_hitrate", type=str, default="scaling_hirtrate.png")
     ap.add_argument("--load_dir", type=str, default=str((LOAD_ROOT/"scaling").resolve()),
                     help="Directory to load summaries.")
     ap.add_argument("--save_dir", type=str, default=str((ROOT / "scaling").resolve()),

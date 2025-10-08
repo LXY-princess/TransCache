@@ -1,0 +1,30 @@
+# workload shape
+    ap.add_argument("--sizes", type=str, default="50,100,150,200,300,350,400,450,500", #50,100,150,200,300,350,400,450,500
+                    help="Comma-separated workload lengths to test.")
+    # ap.add_argument("--q_list", type=str, default="5,7,11,13")
+    # ap.add_argument("--d_list", type=str, default="4,8")
+    ap.add_argument("--q_list", type=str, default="5, 7, 11, 13, 15, 17") #5, 7, 11, 13, 15, 17, 19, 21
+    ap.add_argument("--d_list", type=str, default="2,4,6") # 2,4,6,8, 12
+    ap.add_argument("--shots", type=int, default=256)
+    ap.add_argument("--hot_fraction", type=float, default=0.25)
+    ap.add_argument("--hot_boost", type=float, default=8.0)
+    ap.add_argument("--rps", type=float, default=1.0)
+    ap.add_argument("--rng_seed_base", type=int, default=123)
+
+    # predictor / prewarm (for TransCache/FirstSeen family)
+    ap.add_argument("--lookahead", type=float, default=8.0) # FS_Pre
+    ap.add_argument("--prob_th", type=float, default=0.45) # FS_Pre
+    ap.add_argument("--max_compile", type=int, default=3) # FS_Pre
+    ap.add_argument("--sliding_window_sec", type=float, default=60.0)
+    ap.add_argument("--min_samples", type=int, default=2)
+    ap.add_argument("--prewarm_every", type=int, default=5) # FS_Pre
+
+    # IO
+    ap.add_argument("--out_latency", type=str, default="scaling_e2e_latency.png")
+    ap.add_argument("--out_cache", type=str, default="scaling_final_cache_size.png")
+    ap.add_argument("--out_scatter", type=str, default="scaling_latency_vs_cache_scatter.png")
+    ap.add_argument("--out_hitrate", type=str, default="scaling_hirtrate.png")
+    ap.add_argument("--load_dir", type=str, default=str((LOAD_ROOT/"scaling").resolve()),
+                    help="Directory to load summaries.")
+    ap.add_argument("--save_dir", type=str, default=str((ROOT / "scaling").resolve()),
+                    help="Directory to store workloads, per-run events/metrics, and summaries.")

@@ -60,6 +60,7 @@ def load_and_draw_timeline(methods=None, outfile=None, title=None, legend_topk=1
 
 import v18_strat_FS as S_FS
 import v18_strat_FS_Pre as S_FS_Pre
+import v18_strat_PR as S_PR
 
 
 def main():
@@ -128,6 +129,7 @@ def main():
         # "TransCache(Proposed)": (S6S.run_strategy, common_kwargs),
         "FS+Pre": (S_FS_Pre.run_strategy, common_kwargs),
         "FS": (S_FS.run_strategy,  baseline_kwargs),
+        "PR": (S_PR.run_strategy,  baseline_kwargs),
         # "ParamReuse": (SPR.run_strategy, baseline_kwargs),
         # "FullCompilation": (S0.run_strategy, baseline_kwargs),
     }
@@ -143,29 +145,28 @@ def main():
         metrics_all[name] = out["metrics"]
 
     # 3) timeline (multi-track)
-    title = (f"Timeline — q={q_list}, d={d_list}, N={args.workload_len}; lookahead={args.lookahead}s,"
-             f" prob_th={args.prob_th}, max_compile={args.max_compile}, window={args.sliding_window_sec}s")
     out_tl = PLOT_DIR/"timeline_multi.png"
-    draw_timeline_multi(method_events, out_tl, title)
+    draw_timeline_multi(method_events, out_tl)
 
     # 4) bars（针对 Tcache 方法）
     #   基于同一 workload 的频次，分别计算两种 Tcache 的命中率并作图
     # hitrate_compare_method_tags = ["TransCache(Proposed)", "TransCache(Adaptive)", "FirstSeen", "ParamReuse", "FullCompilation"]
-    hitrate_compare_method_tags = ["FS", "FS+Pre"]
+    hitrate_compare_method_tags = ["FS", "FS+Pre", "PR"]
     for tag in hitrate_compare_method_tags:
         hit_by_label = metrics_all[tag].get("hit_by_label", {})
         freq_by_label, hitrate_by_label, overall = compute_freq_and_hits(workload, hit_by_label)
-        out_bar = PLOT_DIR/f"bars_{tag}.png"
-        plot_freq_hitrate_bars(freq_by_label, hitrate_by_label, overall, out_bar,
-                               title=f"{tag}: Frequency & Hit Rate", top_k=(args.top_k or None))
+        out_png = PLOT_DIR/f"bars_{tag}.png"
+        plot_freq_hitrate_bars(freq_by_label, hitrate_by_label, overall, out_png,
+                               top_k=(args.top_k or None))
 
     # 4) cache changes compare
     cache_size_cahnges = {}
-    cache_compare_method_tags = ["FS", "FS+Pre"]
+    cache_compare_method_tags = ["FS", "FS+Pre", "PR"]
     # cache_compare_method_tags = ["TransCache(Proposed)", "TransCache(Adaptive)", "FirstSeen", "ParamReuse", "FullCompilation"]
     for tag in cache_compare_method_tags:
         cache_size_cahnges[tag] = metrics_all[tag].get("cache_size_series", [])
-    plot_cache_size_change(cache_size_cahnges)
+    out_png = PLOT_DIR / "cache_size.png"
+    plot_cache_size_change(cache_size_cahnges, out_png)
 
 
 

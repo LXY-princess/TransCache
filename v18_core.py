@@ -365,7 +365,7 @@ def compute_freq_and_hits(workload, hit_keys: Dict[str,int]) -> Tuple[Dict[str,i
     return freq_by_label, hitrate_by_label, overall
 
 def plot_freq_hitrate_bars(freq_by_label, hitrate_by_label, overall_hit_rate,
-                           out_png: pathlib.Path, title: str, top_k: Optional[int] = None):
+                           out_png: pathlib.Path, top_k: Optional[int] = None):
     labels = list(freq_by_label.keys())
     labels.sort(key=lambda L: freq_by_label[L], reverse=True)
     if top_k and len(labels) > top_k: labels = labels[:top_k]
@@ -381,12 +381,12 @@ def plot_freq_hitrate_bars(freq_by_label, hitrate_by_label, overall_hit_rate,
     ax1.legend(handles=[b1,b2], labels=["Frequency (count)","Hit rate (%)"], loc="upper right")
     ax2.legend([plt.Line2D([0],[0], color='none')], [f"Overall hit rate: {overall_hit_rate*100:.1f}%"],
                loc="upper left", frameon=False)
-    plt.title(title, loc="left"); plt.tight_layout()
+    plt.tight_layout()
     plt.savefig(out_png, dpi=240, bbox_inches="tight"); print(f"[save] bars -> {out_png}")
 
 # ---------- multi-method timeline ----------
 def draw_timeline_multi(method_events: Dict[str, List[Dict[str,Any]]],
-                        out_png: pathlib.Path, title: str, legend_topk: int = 16):
+                        out_png: pathlib.Path, legend_topk: int = 16):
     plt.rcParams.update({"font.family": "Times New Roman", "font.size": 18})
     PRED_LABEL = "__predictor__"
     # collect circuit labels
@@ -449,7 +449,7 @@ def draw_timeline_multi(method_events: Dict[str, List[Dict[str,Any]]],
     plt.savefig(out_png, dpi=600, bbox_inches="tight")
     print(f"[save] timeline -> {out_png}")
 
-def plot_cache_size_change(cache_size_cahnges: Dict[str, List[Dict[str,Any]]],):
+def plot_cache_size_change(cache_size_cahnges: Dict[str, List[Dict[str,Any]]],out_png: pathlib.Path, ):
     plt.rcParams.update({"font.family": "Times New Roman", "font.size": 18})
 
     def _to_xy(series):
@@ -469,7 +469,6 @@ def plot_cache_size_change(cache_size_cahnges: Dict[str, List[Dict[str,Any]]],):
     ax.grid(True, linestyle="--", alpha=0.5)
     ax.legend(frameon=False)
 
-    out_png = PLOT_DIR / "cache_size.png"
     fig.tight_layout()
     fig.savefig(out_png, dpi=600)
     print(f"[save] cache-size lines -> {out_png}")

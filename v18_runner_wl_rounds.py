@@ -456,9 +456,11 @@ def load_and_redraw(load_dir: str,
                     out_latency: str = "scaling_e2e_latency.png",
                     out_cache: str   = "scaling_final_cache_size.png",
                     out_hitrate: str = "scaling_final_hitrate.png",
-                    out_scatter: str = "scaling_latency_vs_cache_scatter.png"):
+                    out_scatter: str = "scaling_latency_vs_cache_scatter.png",
+                    methods_keep: List[str] | None = None):
     """
     从 SAVE_DIR/'summaries'/'scaling_multi_rounds_summary.json' 载入并重绘。
+    若 methods_keep 给定，则只绘制其中包含的方法（按给定顺序）。
     """
     LOAD_DIR = Path(load_dir)
     json_path = LOAD_DIR / "summaries" / "scaling_multi_rounds_summary.json"
@@ -467,26 +469,46 @@ def load_and_redraw(load_dir: str,
 
     summary = json.loads(json_path.read_text(encoding="utf-8"))
     sizes: List[int] = summary["sizes"]
-    methods: List[str] = summary["methods"]
+    methods_all: List[str] = summary["methods"]
     interval_kind = summary.get("interval_kind", "std")
-    agg_lat = summary["aggregate"]["e2e_latency"]
-    agg_csz = summary["aggregate"]["final_cache_size"]
-    agg_hit = summary["aggregate"]["final_hitrate"]
-    raw_lat = summary["raw"]["e2e_latency"]
-    raw_csz = summary["raw"]["final_cache_size"]
+    agg_lat_full = summary["aggregate"]["e2e_latency"]
+    agg_csz_full = summary["aggregate"]["final_cache_size"]
+    agg_hit_full = summary["aggregate"]["final_hitrate"]
+    raw_lat_full = summary["raw"]["e2e_latency"]
+    raw_csz_full = summary["raw"]["final_cache_size"]
+
+    # --- 选择要画的 methods（保持你给定的顺序；大小写精确匹配） ---
+    if methods_keep:
+        # 只保留 summary 里确实存在的方法；其余静默忽略
+        methods = [m for m in methods_keep if m in methods_all]
+    else:
+        methods = methods_all
+
+    # --- 同步裁剪 aggregate/raw 字典 ---
+    agg_lat = {m: agg_lat_full[m] for m in methods}
+    agg_csz = {m: agg_csz_full[m] for m in methods}
+    agg_hit = {m: agg_hit_full[m] for m in methods}
+    raw_lat = {m: raw_lat_full[m] for m in methods}
+    raw_csz = {m: raw_csz_full[m] for m in methods}
 
     out_latency_path = PLOT_DIR / out_latency
     out_cache_path   = PLOT_DIR / out_cache
     out_hitrate_path = PLOT_DIR / out_hitrate
     out_scatter_path = PLOT_DIR / out_scatter
 
+    # 线图（均值+区间）
     plot_with_interval(methods, sizes, agg_lat, "E2E latency (s)", out_latency_path, interval_kind=interval_kind)
     plot_with_interval(methods, sizes, agg_csz, "Final cache size (#circuits)", out_cache_path, interval_kind=interval_kind)
     plot_with_interval(methods, sizes, agg_hit, "Final hitrate", out_hitrate_path, interval_kind=interval_kind)
-    plot_latency_vs_cache_scatter_multi(methods, sizes, raw_lat, raw_csz, out_scatter_path, cmap_name="plasma", jitter=0.0)
+
+    # 散点（多轮）
+    plot_latency_vs_cache_scatter_multi(methods, sizes, raw_lat, raw_csz, out_scatter_path,
+                                        cmap_name="plasma", jitter=0.0)
 
     print("-"*80)
     print("[load] Redraw finished from:", json_path)
+    if methods_keep:
+        print("[load] Shown methods:", methods)
 
 # ---------------- CLI ----------------
 def build_argparser():
@@ -535,11 +557,13 @@ def main():
     if args.mode == "run":
         main_run(args)
     else:
+        # mode "load"
         load_and_redraw(load_dir=args.load_dir,
                         out_latency=args.out_latency,
                         out_cache=args.out_cache,
                         out_hitrate=args.out_hitrate,
-                        out_scatter=args.out_scatter)
+                        out_scatter=args.out_scatter,
+                        methods_keep=["FS+Pre+ttl+SE+ema", "FS+Pre", "FS", "PR"])
 
 if __name__ == "__main__":
     main()

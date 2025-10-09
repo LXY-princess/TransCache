@@ -81,8 +81,8 @@ def run_strategy(workload, makers_all,
         # TTL 去陈 —— 最小侵入、只这一小块
         if ttl_sec > 0:
             stale = [kk for kk, lu in list(last_used_t.items()) if (t - lu) > ttl_sec]
-            if len(stale) > 0:
-                print(f"ttl remove {len(stale)} items")
+            # if len(stale) > 0:
+            #     print(f"ttl remove {len(stale)} items")
             for kk in stale:
                 cache.pop(kk, None)
                 last_used_t.pop(kk, None)

@@ -1,0 +1,2102 @@
+[
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q15_d4",
+    "start": 0.0,
+    "dur": 0.03227540012449026
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q13_d6",
+    "start": 0.03227540012449026,
+    "dur": 0.09645870001986623
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q5_d6",
+    "start": 0.1287341001443565,
+    "dur": 0.05107090016826987
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d2",
+    "start": 0.17980500031262636,
+    "dur": 0.029096100013703108
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q15_d2",
+    "start": 0.20890110032632947,
+    "dur": 0.03687869990244508
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d2",
+    "start": 0.24577980022877455,
+    "dur": 0.043299200013279915
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d4",
+    "start": 0.28907900024205446,
+    "dur": 0.06536270026117563
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q5_d6",
+    "start": 0.3544417005032301,
+    "dur": 0.026506599970161915
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d4",
+    "start": 0.380948300473392,
+    "dur": 0.0372795001603663
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q11_d6",
+    "start": 0.4182278006337583,
+    "dur": 0.040575799997895956
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d6",
+    "start": 0.45880360063165426,
+    "dur": 0.07193889981135726
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d6",
+    "start": 0.5307425004430115,
+    "dur": 0.03222320042550564
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q17_d4",
+    "start": 0.5629657008685172,
+    "dur": 0.31562120001763105
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q7_d4",
+    "start": 0.8785869008861482,
+    "dur": 0.05034670000895858
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q7_d2",
+    "start": 0.9289336008951068,
+    "dur": 0.040621299762278795
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q13_d6",
+    "start": 0.9695549006573856,
+    "dur": 0.24491250002756715
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d4",
+    "start": 1.2144674006849527,
+    "dur": 0.030941300094127655
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q13_d4",
+    "start": 1.2454087007790804,
+    "dur": 0.07516639959067106
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q17_d2",
+    "start": 1.3205751003697515,
+    "dur": 0.03516170009970665
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d4",
+    "start": 1.355736800469458,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q13_d4",
+    "start": 1.355736800469458,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d4",
+    "start": 1.355736800469458,
+    "dur": 0.028573000337928534
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q13_d4",
+    "start": 1.3843098008073866,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q13_d6",
+    "start": 1.3843098008073866,
+    "dur": 0.23386080004274845
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q15_d6",
+    "start": 1.618170600850135,
+    "dur": 0.3283569999039173
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q13_d2",
+    "start": 1.9465276007540524,
+    "dur": 0.03549789963290095
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d4",
+    "start": 1.9820255003869534,
+    "dur": 0.05683640018105507
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q11_d2",
+    "start": 2.0388619005680084,
+    "dur": 0.031605000142008066
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q13_d4",
+    "start": 2.0704669007100165,
+    "dur": 0.04209159966558218
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q17_d6",
+    "start": 2.1125585003755987,
+    "dur": 0.4483563997782767
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d6",
+    "start": 2.5609149001538754,
+    "dur": 0.03499449975788593
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q11_d4",
+    "start": 2.5959093999117613,
+    "dur": 0.04202979989349842
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d2",
+    "start": 2.6379391998052597,
+    "dur": 0.02819629991427064
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q11_d2",
+    "start": 2.6661354997195303,
+    "dur": 0.030090999789536
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q11_d2",
+    "start": 2.6962264995090663,
+    "dur": 0.04593920009210706
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d2",
+    "start": 2.7421656996011734,
+    "dur": 0.02730079973116517
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q15_d2",
+    "start": 2.7694664993323386,
+    "dur": 0.036442600190639496
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q7_d4",
+    "start": 2.805909099522978,
+    "dur": 0.03359270002692938
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d6",
+    "start": 2.8395017995499074,
+    "dur": 0.046362100169062614
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q11_d4",
+    "start": 2.88586389971897,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q15_d2",
+    "start": 2.88586389971897,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q7_d4",
+    "start": 2.88586389971897,
+    "dur": 0.048974200151860714
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q7_d4",
+    "start": 2.9348380998708308,
+    "dur": 0.026367499958723783
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d6",
+    "start": 2.9612055998295546,
+    "dur": 0.07090699998661876
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q13_d2",
+    "start": 3.0321125998161733,
+    "dur": 0.028705500066280365
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q7_d4",
+    "start": 3.0608180998824537,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q13_d2",
+    "start": 3.0608180998824537,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q13_d2",
+    "start": 3.0608180998824537,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q7_d4",
+    "start": 3.0608180998824537,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q11_d4",
+    "start": 3.0608180998824537,
+    "dur": 0.026697900146245956
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q11_d4",
+    "start": 3.0875160000286996,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q15_d6",
+    "start": 3.0875160000286996,
+    "dur": 0.028253499884158373
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q7_d4",
+    "start": 3.115769499912858,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q17_d6",
+    "start": 3.115769499912858,
+    "dur": 0.058369799982756376
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q17_d6",
+    "start": 3.1741392998956144,
+    "dur": 0.060314400121569633
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d4",
+    "start": 3.234453700017184,
+    "dur": 0.028230899944901466
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q7_d4",
+    "start": 3.2626845999620855,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q7_d4",
+    "start": 3.2626845999620855,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q15_d6",
+    "start": 3.2626845999620855,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d6",
+    "start": 3.2626845999620855,
+    "dur": 0.03630749974399805
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q13_d6",
+    "start": 3.2989920997060835,
+    "dur": 0.24488819995895028
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q17_d2",
+    "start": 3.543880299665034,
+    "dur": 0.18694640044122934
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d6",
+    "start": 3.730826700106263,
+    "dur": 0.047962899785488844
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q13_d2",
+    "start": 3.778789599891752,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d6",
+    "start": 3.778789599891752,
+    "dur": 0.07062119990587234
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q11_d6",
+    "start": 3.8494107997976243,
+    "dur": 0.046696499921381474
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d4",
+    "start": 3.896107299719006,
+    "dur": 0.03815819974988699
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q5_d6",
+    "start": 3.934265499468893,
+    "dur": 0.03244310012087226
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q7_d4",
+    "start": 3.966708599589765,
+    "dur": 0.03208469972014427
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q11_d2",
+    "start": 3.9987932993099093,
+    "dur": 0.03213370032608509
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d2",
+    "start": 4.030926999635994,
+    "dur": 0.04208840010687709
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d4",
+    "start": 4.0730153997428715,
+    "dur": 0.06603720039129257
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q11_d4",
+    "start": 4.139052600134164,
+    "dur": 0.06756609957665205
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q7_d4",
+    "start": 4.206618699710816,
+    "dur": 0.04357359977439046
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q17_d6",
+    "start": 4.250192299485207,
+    "dur": 0.06854980019852519
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q17_d2",
+    "start": 4.318742099683732,
+    "dur": 0.04868709994480014
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d2",
+    "start": 4.367429199628532,
+    "dur": 0.06258030002936721
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d4",
+    "start": 4.430009499657899,
+    "dur": 0.04044810030609369
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d6",
+    "start": 4.470457599963993,
+    "dur": 0.04842170001938939
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d4",
+    "start": 4.518879299983382,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d4",
+    "start": 4.518879299983382,
+    "dur": 0.0272819004021585
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q17_d4",
+    "start": 4.546161200385541,
+    "dur": 0.3094413001090288
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q7_d4",
+    "start": 4.8556025004945695,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d4",
+    "start": 4.8556025004945695,
+    "dur": 0.03905439982190728
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d6",
+    "start": 4.894656900316477,
+    "dur": 0.04251409973949194
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d4",
+    "start": 4.937171000055969,
+    "dur": 0.03968340018764138
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q7_d6",
+    "start": 4.97685440024361,
+    "dur": 0.03823400009423494
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q11_d4",
+    "start": 5.015088400337845,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q15_d2",
+    "start": 5.015088400337845,
+    "dur": 0.053633700124919415
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d4",
+    "start": 5.0687221004627645,
+    "dur": 0.06073539983481169
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q7_d6",
+    "start": 5.129457500297576,
+    "dur": 0.05778700020164251
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q11_d4",
+    "start": 5.187244500499219,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d6",
+    "start": 5.187244500499219,
+    "dur": 0.07139110006392002
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d4",
+    "start": 5.258635600563139,
+    "dur": 0.03892129985615611
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d4",
+    "start": 5.297556900419295,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q15_d6",
+    "start": 5.297556900419295,
+    "dur": 0.32354060001671314
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q13_d4",
+    "start": 5.621097500436008,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q7_d4",
+    "start": 5.621097500436008,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q13_d4",
+    "start": 5.621097500436008,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q11_d4",
+    "start": 5.621097500436008,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q13_d2",
+    "start": 5.621097500436008,
+    "dur": 0.11068160040304065
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q7_d2",
+    "start": 5.731779100839049,
+    "dur": 0.034315899945795536
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d6",
+    "start": 5.766095000784844,
+    "dur": 0.04822380002588034
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d4",
+    "start": 5.8143188008107245,
+    "dur": 0.040432500187307596
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d4",
+    "start": 5.854751300998032,
+    "dur": 0.039544399827718735
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q7_d4",
+    "start": 5.894295700825751,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q13_d2",
+    "start": 5.894295700825751,
+    "dur": 0.05026759998872876
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d6",
+    "start": 5.94456330081448,
+    "dur": 0.06970279989764094
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q13_d2",
+    "start": 6.0142661007121205,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q11_d4",
+    "start": 6.0142661007121205,
+    "dur": 0.7577333999797702
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q15_d2",
+    "start": 6.771999500691891,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d4",
+    "start": 6.771999500691891,
+    "dur": 0.040481400210410357
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d6",
+    "start": 6.812480900902301,
+    "dur": 0.04271040018647909
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q15_d6",
+    "start": 6.85519130108878,
+    "dur": 0.05900710029527545
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q5_d4",
+    "start": 6.914198401384056,
+    "dur": 0.029804199934005737
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q13_d4",
+    "start": 6.944002601318061,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q11_d4",
+    "start": 6.944002601318061,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q5_d2",
+    "start": 6.944002601318061,
+    "dur": 0.030453999992460012
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d6",
+    "start": 6.974456601310521,
+    "dur": 0.046256099827587605
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d2",
+    "start": 7.020712701138109,
+    "dur": 0.02824690006673336
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q5_d4",
+    "start": 7.048959601204842,
+    "dur": 0.03388890018686652
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q15_d6",
+    "start": 7.082848501391709,
+    "dur": 0.8030149000696838
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q11_d2",
+    "start": 7.885863401461393,
+    "dur": 0.0651503000408411
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d6",
+    "start": 7.951013701502234,
+    "dur": 0.0782763003371656
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q17_d6",
+    "start": 8.0292900018394,
+    "dur": 0.48309999983757734
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q11_d6",
+    "start": 8.512390001676977,
+    "dur": 0.16838379995897412
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q13_d2",
+    "start": 8.68077380163595,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q7_d6",
+    "start": 8.68077380163595,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q13_d2",
+    "start": 8.68077380163595,
+    "dur": 0.10615420015528798
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q13_d6",
+    "start": 8.786928001791239,
+    "dur": 0.23905849969014525
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q13_d4",
+    "start": 9.025986501481384,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q13_d2",
+    "start": 9.025986501481384,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q15_d2",
+    "start": 9.025986501481384,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q17_d4",
+    "start": 9.025986501481384,
+    "dur": 0.05363829992711544
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q5_d2",
+    "start": 9.0796248014085,
+    "dur": 0.02849020017310977
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q17_d6",
+    "start": 9.10811500158161,
+    "dur": 0.4427788998000324
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d2",
+    "start": 9.550893901381642,
+    "dur": 0.03231089981272817
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q17_d2",
+    "start": 9.58320480119437,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d4",
+    "start": 9.58320480119437,
+    "dur": 0.034020899794995785
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q13_d2",
+    "start": 9.617225700989366,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q11_d6",
+    "start": 9.617225700989366,
+    "dur": 0.050790300127118826
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q11_d4",
+    "start": 9.668016001116484,
+    "dur": 0.040515400003641844
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d2",
+    "start": 9.708531401120126,
+    "dur": 0.026690799742937088
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q13_d6",
+    "start": 9.735222200863063,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q11_d4",
+    "start": 9.735222200863063,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q5_d2",
+    "start": 9.735222200863063,
+    "dur": 0.025252599734812975
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q11_d6",
+    "start": 9.760474800597876,
+    "dur": 0.04804249992594123
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q13_d2",
+    "start": 9.808517300523818,
+    "dur": 0.11656709993258119
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q7_d4",
+    "start": 9.925084400456399,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d2",
+    "start": 9.925084400456399,
+    "dur": 0.028599200304597616
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q11_d4",
+    "start": 9.953683600760996,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q15_d2",
+    "start": 9.953683600760996,
+    "dur": 0.027426999993622303
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q13_d6",
+    "start": 9.981110600754619,
+    "dur": 0.2366587002761662
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q15_d2",
+    "start": 10.217769301030785,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q17_d4",
+    "start": 10.217769301030785,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q17_d6",
+    "start": 10.217769301030785,
+    "dur": 0.06054340023547411
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q11_d2",
+    "start": 10.278312701266259,
+    "dur": 0.03192989993840456
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q7_d6",
+    "start": 10.310242601204664,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q5_d4",
+    "start": 10.310242601204664,
+    "dur": 0.03393210005015135
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d2",
+    "start": 10.344174701254815,
+    "dur": 0.02997490018606186
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q11_d4",
+    "start": 10.374149601440877,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q13_d2",
+    "start": 10.374149601440877,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q11_d2",
+    "start": 10.374149601440877,
+    "dur": 0.08340299967676401
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q7_d4",
+    "start": 10.45755260111764,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q17_d6",
+    "start": 10.45755260111764,
+    "dur": 0.433413099963218
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d4",
+    "start": 10.890965701080859,
+    "dur": 0.058223099913448095
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q15_d6",
+    "start": 10.949188800994307,
+    "dur": 0.3342932998202741
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q17_d2",
+    "start": 11.283482100814581,
+    "dur": 0.057581800036132336
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q7_d4",
+    "start": 11.341063900850713,
+    "dur": 0.03323529986664653
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d4",
+    "start": 11.37429920071736,
+    "dur": 0.05827810009941459
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d2",
+    "start": 11.432577300816774,
+    "dur": 0.029188500251621008
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d2",
+    "start": 11.461765801068395,
+    "dur": 0.02798339957371354
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q13_d2",
+    "start": 11.489749200642109,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q13_d4",
+    "start": 11.489749200642109,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q11_d2",
+    "start": 11.489749200642109,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q7_d4",
+    "start": 11.489749200642109,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q13_d2",
+    "start": 11.489749200642109,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d4",
+    "start": 11.489749200642109,
+    "dur": 0.027294700033962727
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d4",
+    "start": 11.517043900676072,
+    "dur": 0.057142299599945545
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d4",
+    "start": 11.574186200276017,
+    "dur": 0.028977599926292896
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d4",
+    "start": 11.60316380020231,
+    "dur": 0.058406099677085876
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d6",
+    "start": 11.661569899879396,
+    "dur": 0.0485320002771914
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q17_d4",
+    "start": 11.710101900156587,
+    "dur": 0.04215190000832081
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q7_d6",
+    "start": 11.752253800164908,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d6",
+    "start": 11.752253800164908,
+    "dur": 0.04248919989913702
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q17_d2",
+    "start": 11.794743000064045,
+    "dur": 0.05905109969899058
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q7_d4",
+    "start": 11.853794099763036,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d6",
+    "start": 11.853794099763036,
+    "dur": 0.055910099763423204
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q5_d6",
+    "start": 11.909704199526459,
+    "dur": 0.03338410006836057
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q7_d4",
+    "start": 11.94308829959482,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q7_d6",
+    "start": 11.94308829959482,
+    "dur": 0.05938259977847338
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d6",
+    "start": 12.002470899373293,
+    "dur": 0.04916630033403635
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d6",
+    "start": 12.05163719970733,
+    "dur": 0.052396100014448166
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q15_d6",
+    "start": 12.104033299721777,
+    "dur": 0.32549549965187907
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d4",
+    "start": 12.429528799373657,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q7_d4",
+    "start": 12.429528799373657,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q7_d4",
+    "start": 12.429528799373657,
+    "dur": 0.03414379991590977
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q17_d4",
+    "start": 12.463672599289566,
+    "dur": 0.044960600323975086
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d6",
+    "start": 12.508633199613541,
+    "dur": 0.03376400005072355
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q17_d6",
+    "start": 12.542397199664265,
+    "dur": 0.029121999628841877
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d4",
+    "start": 12.571519199293107,
+    "dur": 0.05577299976721406
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q15_d6",
+    "start": 12.62729219906032,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d4",
+    "start": 12.62729219906032,
+    "dur": 0.03882299968972802
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q13_d2",
+    "start": 12.666115198750049,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q7_d6",
+    "start": 12.666115198750049,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d4",
+    "start": 12.666115198750049,
+    "dur": 0.04277440020814538
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d4",
+    "start": 12.708889598958194,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q15_d2",
+    "start": 12.708889598958194,
+    "dur": 0.05439990013837814
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q15_d6",
+    "start": 12.763289499096572,
+    "dur": 0.10538399964570999
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d4",
+    "start": 12.868673498742282,
+    "dur": 0.03047339990735054
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d4",
+    "start": 12.899146898649633,
+    "dur": 0.042363600339740515
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d6",
+    "start": 12.941510498989373,
+    "dur": 0.04604659974575043
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q15_d4",
+    "start": 12.987557098735124,
+    "dur": 0.07911559985950589
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q17_d6",
+    "start": 13.06667269859463,
+    "dur": 0.44898279989138246
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q11_d2",
+    "start": 13.515655498486012,
+    "dur": 0.030678600072860718
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q15_d2",
+    "start": 13.546334098558873,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q5_d4",
+    "start": 13.546334098558873,
+    "dur": 0.038083599880337715
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q7_d6",
+    "start": 13.58441769843921,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q17_d2",
+    "start": 13.58441769843921,
+    "dur": 0.03677349956706166
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d6",
+    "start": 13.621191198006272,
+    "dur": 0.04390360042452812
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q13_d2",
+    "start": 13.6650947984308,
+    "dur": 0.10738389985635877
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d4",
+    "start": 13.77247869828716,
+    "dur": 0.06764120003208518
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q11_d6",
+    "start": 13.840119898319244,
+    "dur": 0.047521499916911125
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q17_d4",
+    "start": 13.887641398236156,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q7_d4",
+    "start": 13.887641398236156,
+    "dur": 0.03695280011743307
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q17_d6",
+    "start": 13.924594198353589,
+    "dur": 0.07110479986295104
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q15_d6",
+    "start": 13.99569899821654,
+    "dur": 0.3326687002554536
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q11_d4",
+    "start": 14.328367698471993,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d4",
+    "start": 14.328367698471993,
+    "dur": 0.028225800022482872
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d4",
+    "start": 14.356593498494476,
+    "dur": 0.0393861997872591
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q11_d4",
+    "start": 14.395979698281735,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d4",
+    "start": 14.395979698281735,
+    "dur": 0.0285840998403728
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q11_d4",
+    "start": 14.424563798122108,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q15_d2",
+    "start": 14.424563798122108,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d6",
+    "start": 14.424563798122108,
+    "dur": 0.07131209969520569
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d4",
+    "start": 14.495875897817314,
+    "dur": 0.027389999944716692
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q17_d6",
+    "start": 14.52326589776203,
+    "dur": 0.06224799994379282
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q15_d2",
+    "start": 14.585513897705823,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q17_d6",
+    "start": 14.585513897705823,
+    "dur": 0.07275159982964396
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q7_d4",
+    "start": 14.658265497535467,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d2",
+    "start": 14.658265497535467,
+    "dur": 0.03309760009869933
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d4",
+    "start": 14.691363097634166,
+    "dur": 0.0500662000849843
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q5_d4",
+    "start": 14.74142929771915,
+    "dur": 0.04784789960831404
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d2",
+    "start": 14.789277197327465,
+    "dur": 0.02824040036648512
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d4",
+    "start": 14.81751759769395,
+    "dur": 0.027030200231820345
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q7_d4",
+    "start": 14.84454779792577,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d4",
+    "start": 14.84454779792577,
+    "dur": 0.05993999959900975
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q13_d6",
+    "start": 14.90448779752478,
+    "dur": 0.05405439995229244
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d4",
+    "start": 14.958542197477072,
+    "dur": 0.028347499668598175
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q7_d6",
+    "start": 14.98688969714567,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q15_d6",
+    "start": 14.98688969714567,
+    "dur": 0.33006179984658957
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d6",
+    "start": 15.31695149699226,
+    "dur": 0.04768580012023449
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q15_d6",
+    "start": 15.364637297112495,
+    "dur": 0.05748749990016222
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q13_d4",
+    "start": 15.422124797012657,
+    "dur": 0.07070029992610216
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q7_d4",
+    "start": 15.492825096938759,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q7_d4",
+    "start": 15.492825096938759,
+    "dur": 0.032295200042426586
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q17_d6",
+    "start": 15.525120296981186,
+    "dur": 0.06136969989165664
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q13_d2",
+    "start": 15.586489996872842,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q17_d4",
+    "start": 15.586489996872842,
+    "dur": 0.08676590025424957
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d2",
+    "start": 15.673255897127092,
+    "dur": 0.02622300013899803
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d4",
+    "start": 15.69947889726609,
+    "dur": 0.03894349979236722
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q15_d6",
+    "start": 15.738422397058457,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q15_d6",
+    "start": 15.738422397058457,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q13_d4",
+    "start": 15.738422397058457,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q13_d2",
+    "start": 15.738422397058457,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q11_d4",
+    "start": 15.738422397058457,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q13_d2",
+    "start": 15.738422397058457,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q17_d6",
+    "start": 15.738422397058457,
+    "dur": 0.11909000016748905
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q13_d2",
+    "start": 15.857512397225946,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d6",
+    "start": 15.857512397225946,
+    "dur": 0.07135450001806021
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q13_d4",
+    "start": 15.928866897244006,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d2",
+    "start": 15.928866897244006,
+    "dur": 0.02817789977416396
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q7_d4",
+    "start": 15.95704479701817,
+    "dur": 0.03502419963479042
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q11_d2",
+    "start": 15.99206899665296,
+    "dur": 0.030028900131583214
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q11_d4",
+    "start": 16.022097896784544,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q13_d4",
+    "start": 16.022097896784544,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q5_d2",
+    "start": 16.022097896784544,
+    "dur": 0.03035659994930029
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q13_d6",
+    "start": 16.052454496733844,
+    "dur": 0.24348040018230677
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d2",
+    "start": 16.29593489691615,
+    "dur": 0.04553700005635619
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q13_d2",
+    "start": 16.341471896972507,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q17_d6",
+    "start": 16.341471896972507,
+    "dur": 0.05962450010702014
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d2",
+    "start": 16.401096397079527,
+    "dur": 0.025465100072324276
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d4",
+    "start": 16.42656149715185,
+    "dur": 0.05948609998449683
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q11_d6",
+    "start": 16.48604759713635,
+    "dur": 0.08079769974574447
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q11_d6",
+    "start": 16.566845296882093,
+    "dur": 0.16856270004063845
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d4",
+    "start": 16.73540799692273,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q17_d2",
+    "start": 16.73540799692273,
+    "dur": 0.9079066999256611
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d2",
+    "start": 17.643314696848392,
+    "dur": 0.026033999864012003
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q17_d4",
+    "start": 17.669348696712404,
+    "dur": 0.3295569000765681
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q13_d6",
+    "start": 17.998905596788973,
+    "dur": 0.23613259987905622
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d6",
+    "start": 18.23503819666803,
+    "dur": 0.0756466998718679
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d6",
+    "start": 18.310684896539897,
+    "dur": 0.05175489978864789
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q15_d6",
+    "start": 18.362439796328545,
+    "dur": 0.33495149994269013
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d6",
+    "start": 18.697391296271235,
+    "dur": 0.03683899994939566
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q7_d2",
+    "start": 18.73423029622063,
+    "dur": 0.030310500413179398
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q7_d6",
+    "start": 18.76454079663381,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q15_d6",
+    "start": 18.76454079663381,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d6",
+    "start": 18.76454079663381,
+    "dur": 0.07088430039584637
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q13_d2",
+    "start": 18.835425097029656,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q17_d6",
+    "start": 18.835425097029656,
+    "dur": 0.4527822998352349
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q15_d2",
+    "start": 19.28820739686489,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q13_d4",
+    "start": 19.28820739686489,
+    "dur": 0.046787900384515524
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q11_d4",
+    "start": 19.334995297249407,
+    "dur": 0.12442130036652088
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q13_d4",
+    "start": 19.459416597615927,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q11_d4",
+    "start": 19.459416597615927,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q15_d6",
+    "start": 19.459416597615927,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q5_d4",
+    "start": 19.459416597615927,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d4",
+    "start": 19.459416597615927,
+    "dur": 0.041633700020611286
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q7_d2",
+    "start": 19.50105029763654,
+    "dur": 0.026038700249046087
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d4",
+    "start": 19.527088997885585,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q13_d2",
+    "start": 19.527088997885585,
+    "dur": 0.11426299996674061
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d6",
+    "start": 19.641351997852325,
+    "dur": 0.07175410026684403
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q7_d2",
+    "start": 19.71310609811917,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d4",
+    "start": 19.71310609811917,
+    "dur": 0.026862199883908033
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q17_d4",
+    "start": 19.739968298003078,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d4",
+    "start": 19.739968298003078,
+    "dur": 0.04381849989295006
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q17_d4",
+    "start": 19.783786797896028,
+    "dur": 0.3282894999720156
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q7_d6",
+    "start": 20.112076297868043,
+    "dur": 0.03462619986385107
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q7_d6",
+    "start": 20.146702497731894,
+    "dur": 0.03909979993477464
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q13_d4",
+    "start": 20.18580229766667,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q13_d6",
+    "start": 20.18580229766667,
+    "dur": 0.054256000090390444
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q5_d4",
+    "start": 20.24005829775706,
+    "dur": 0.03196129994466901
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d6",
+    "start": 20.27201959770173,
+    "dur": 0.04683260014280677
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q15_d2",
+    "start": 20.318852197844535,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q13_d4",
+    "start": 20.318852197844535,
+    "dur": 0.029657400213181973
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q11_d2",
+    "start": 20.348509598057717,
+    "dur": 0.03093290003016591
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q17_d4",
+    "start": 20.379442498087883,
+    "dur": 0.043620800133794546
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q17_d6",
+    "start": 20.423063298221678,
+    "dur": 0.05967140011489391
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q13_d2",
+    "start": 20.48273469833657,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q7_d6",
+    "start": 20.48273469833657,
+    "dur": 0.07213829969987273
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q11_d4",
+    "start": 20.554872998036444,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q17_d4",
+    "start": 20.554872998036444,
+    "dur": 0.3207800998352468
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d6",
+    "start": 20.87565309787169,
+    "dur": 0.04720890009775758
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q17_d6",
+    "start": 20.92286199796945,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q15_d4",
+    "start": 20.92286199796945,
+    "dur": 0.04065730003640056
+  },
+  {
+    "kind": "run",
+    "label": "QAOA-3reg_q13_d4",
+    "start": 20.96351929800585,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q13_d4",
+    "start": 20.96351929800585,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QSIM-XXZ_q17_d6",
+    "start": 20.96351929800585,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q13_d2",
+    "start": 20.96351929800585,
+    "dur": 0.12007320020347834
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q17_d4",
+    "start": 21.083592498209327,
+    "dur": 0.04620280023664236
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q17_d6",
+    "start": 21.12979529844597,
+    "dur": 0.054312500171363354
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d6",
+    "start": 21.184107798617333,
+    "dur": 0.04778779996559024
+  },
+  {
+    "kind": "run",
+    "label": "QFT-Like_q17_d4",
+    "start": 21.231895598582923,
+    "dur": 0.32461840007454157
+  },
+  {
+    "kind": "run",
+    "label": "VQE-Full_q11_d6",
+    "start": 21.556513998657465,
+    "dur": 0.046705299988389015
+  },
+  {
+    "kind": "run",
+    "label": "LinearEnt_q7_d6",
+    "start": 21.603219298645854,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "GHZ-Chain_q15_d6",
+    "start": 21.603219298645854,
+    "dur": 0.0
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q11_d2",
+    "start": 21.603219298645854,
+    "dur": 0.02994680032134056
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d4",
+    "start": 21.633166098967195,
+    "dur": 0.028405100107192993
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q13_d4",
+    "start": 21.661571199074388,
+    "dur": 0.038815200328826904
+  },
+  {
+    "kind": "run",
+    "label": "RCA_q5_d2",
+    "start": 21.700386399403214,
+    "dur": 0.02511819964274764
+  }
+]

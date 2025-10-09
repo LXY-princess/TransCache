@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Tuple, Optional, Set
+from typing import Any, Dict, List, Tuple, Optional, Set, Callable
 from collections import Counter, defaultdict, deque
 import time
 import math
@@ -35,6 +35,90 @@ def prewarm_simple_topk(
         cache[k] = qc_exec
         inserted.append(k)
     return inserted
+
+def prewarm_simple_topk_ema(
+    predictor, makers_all, now_t: float,
+    lookahead_sec: float, prob_th: float,
+    cache: Dict[str, Any],
+    est_compile_ema: Dict[str, float],
+    default_compile_est: float = 0.08,
+    max_compile: int = 3,
+    last_used_t: Optional[Dict[str, float]] = None,
+    on_compiled: Optional[Callable[[str, str, float], None]] = None,
+    return_details: bool = False,
+):
+    """
+    Top-K 预热（与 prewarm_simple_topk 相同的候选选择），但会把“真实编译耗时”回灌到
+    label 级别的编译时长 EMA（冷启动用 default_compile_est）。
+
+    参数
+    ----
+    predictor, makers_all, now_t, lookahead_sec, prob_th, cache, max_compile:
+        与 prewarm_simple_topk 相同。
+    est_compile_ema: Dict[label, float]
+        label 级 EMA 表。若某 label 不存在，使用 default_compile_est 作为 prev。
+    default_compile_est: float
+        冷启动时的初始编译时长估计（秒）。
+    last_used_t: Optional[Dict[str, float]]
+        若提供，则在插入 cache 后将 key 的 last_used_t 置为 now_t（便于 TTL 宽限）。
+    on_compiled: Optional[Callable[[label, key, cost], None]]
+        若提供，每成功编译插入一个 key，会回调一次（label, key, compile_cost）。
+    return_details: bool
+        False（默认）→ 返回 List[str]（插入的 keys）；
+        True → 返回 List[Dict]，包含 {"key","label","compile_sec"}。
+
+    返回
+    ----
+    - return_details=False: List[str]
+    - return_details=True:  List[Dict[str, Any]]
+    """
+    decided = predictor.score_candidates(makers_all, lookahead_sec, prob_th, now=now_t)
+    decided.sort(key=lambda x: x["prob"], reverse=True)
+
+    inserted_keys: List[str] = []
+    details: List[Dict[str, Any]] = []
+
+    for item in decided:
+        if len(inserted_keys) >= max_compile:
+            break
+        key = item["key"]
+        if key in cache:
+            # 已存在：如果需要，也可以刷新 last_used_t
+            if last_used_t is not None:
+                last_used_t[key] = now_t
+            continue
+
+        # 编译并计时
+        qc_raw = item["qc_raw"]
+        t1 = time.perf_counter()
+        qc_exec = transpile(qc_raw, **_prepare_kwargs())
+        cost = time.perf_counter() - t1
+
+        # 插入 cache
+        cache[key] = qc_exec
+
+        # 计算 label，回灌 EMA
+        lbl = label_of(item["info"]["circ"], item["info"]["q"], item["info"]["d"])
+        prev = est_compile_ema.get(lbl, float(default_compile_est))
+        est_compile_ema[lbl] = 0.7 * prev + 0.3 * float(cost)
+
+        # 触达时间（便于 TTL 宽限）
+        if last_used_t is not None:
+            last_used_t[key] = now_t
+
+        # 回调
+        if on_compiled is not None:
+            try:
+                on_compiled(lbl, key, float(cost))
+            except Exception:
+                # 避免回调失败影响主流程
+                pass
+
+        inserted_keys.append(key)
+        if return_details:
+            details.append({"key": key, "label": lbl, "compile_sec": float(cost)})
+
+    return details if return_details else inserted_keys
 
 def _median_or(x: List[float], fallback: float) -> float:
     arr = [float(v) for v in x if v is not None]

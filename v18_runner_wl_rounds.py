@@ -28,6 +28,7 @@ import v18_strat_FS_Pre as S_FS_Pre             # FirstSeen + predictor prewarm
 import v18_strat_PR as S_PR
 import v18_strat_FS_Pre_ttl as S_FS_Pre_ttl
 import v18_strat_FS_Pre_ttl_SE as S_FS_Pre_ttl_SE
+import v18_strat_FS_Pre_ttl_SE_ema as S_FS_Pre_ttl_SE_ema
 
 # ---------------- JSON utilities (safe for numpy) ----------------
 def _json_default(o):
@@ -281,6 +282,7 @@ def main_run(args):
         return dict(workload=workload, shots=args.shots, include_exec=False)
 
     STRATS = [
+        ("FS+Pre+ttl+SE+ema", S_FS_Pre_ttl_SE_ema.run_strategy, _common_kwargs),
         ("FS+Pre+ttl+SE", S_FS_Pre_ttl_SE.run_strategy, _common_kwargs),
         ("FS+Pre+ttl", S_FS_Pre_ttl.run_strategy, _common_kwargs),
         ("FS+Pre", S_FS_Pre.run_strategy, _common_kwargs),
@@ -512,7 +514,7 @@ def build_argparser():
     ap.add_argument("--prewarm_every", type=int, default=5)
 
     # multi-round
-    ap.add_argument("--rounds", type=int, default=3, help="每个 workload 大小的重复轮数")
+    ap.add_argument("--rounds", type=int, default=5, help="每个 workload 大小的重复轮数")
     ap.add_argument("--interval_kind", type=str, choices=["std", "minmax"], default="std",
                     help="线图区间：std=均值±1σ；minmax=[最小, 最大]")
     ap.add_argument("--jitter", type=float, default=0.01,

@@ -148,8 +148,8 @@ def run_strategy(workload, makers_all,
         # TTL 去陈 —— 最小侵入、只这一小块
         if ttl_sec > 0:
             stale = [kk for kk, lu in list(last_used_t.items()) if (t - lu) > ttl_sec]
-            if len(stale) > 0:
-                print(f"ttl remove {len(stale)} items")
+            # if len(stale) > 0:
+            #     print(f"ttl remove {len(stale)} items")
             for kk in stale:
                 cache.pop(kk, None)
                 last_used_t.pop(kk, None)
@@ -157,8 +157,8 @@ def run_strategy(workload, makers_all,
         # 周期性清理（sweep）
         if (idx > 0) and (idx % max(1, int(sweep_every)) == 0):
             evicted = _sweep(now_t=t)
-            if evicted:
-                print(f"evicted {len(evicted)} items")
+            # if evicted:
+            #     print(f"evicted {len(evicted)} items")
         cache_size_series.append((t, len(cache)))
 
     metrics = {"hit_by_label": dict(hit_by_label), "total_hits": int(total_hits),

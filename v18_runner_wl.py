@@ -296,8 +296,8 @@ def main_run(args):
     STRATS = [
         # ("TransCache(Adaptive)", SA.run_strategy, _common_kwargs),
         ("FS+Pre+ttl+SE+ema", S_FS_Pre_ttl_SE_ema.run_strategy, _common_kwargs),
-        ("FS+Pre+ttl+SE", S_FS_Pre_ttl_SE.run_strategy, _common_kwargs),
-        ("FS+Pre+ttl", S_FS_Pre_ttl.run_strategy, _common_kwargs),
+        # ("FS+Pre+ttl+SE", S_FS_Pre_ttl_SE.run_strategy, _common_kwargs),
+        # ("FS+Pre+ttl", S_FS_Pre_ttl.run_strategy, _common_kwargs),
         ("FS+Pre", S_FS_Pre.run_strategy, _common_kwargs),
         ("FS",S_FS.run_strategy,  _baseline_kwargs),
         ("PR",S_PR.run_strategy,  _baseline_kwargs),

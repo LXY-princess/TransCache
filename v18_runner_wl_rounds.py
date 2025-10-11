@@ -22,6 +22,8 @@ from v18_core import (
     compute_freq_and_hits                        # 计算命中率
 )
 
+from v18_replot_regions2 import load_and_replot_regions
+
 # ---- strategies (与现有 runner 保持一致) ----
 import v18_strat_FS as S_FS                     # FirstSeen
 import v18_strat_FS_Pre as S_FS_Pre             # FirstSeen + predictor prewarm
@@ -29,6 +31,7 @@ import v18_strat_PR as S_PR
 import v18_strat_FS_Pre_ttl as S_FS_Pre_ttl
 import v18_strat_FS_Pre_ttl_SE as S_FS_Pre_ttl_SE
 import v18_strat_FS_Pre_ttl_SE_ema as S_FS_Pre_ttl_SE_ema
+import v18_strat_FS_Pre_ttl_SE_ema_SWR as S_FS_Pre_ttl_SE_ema_SWR
 
 # ---------------- JSON utilities (safe for numpy) ----------------
 def _json_default(o):
@@ -282,9 +285,10 @@ def main_run(args):
         return dict(workload=workload, shots=args.shots, include_exec=False)
 
     STRATS = [
+        # ("FS+Pre+ttl+SE+ema+SWR", S_FS_Pre_ttl_SE_ema_SWR.run_strategy, _common_kwargs),
         ("FS+Pre+ttl+SE+ema", S_FS_Pre_ttl_SE_ema.run_strategy, _common_kwargs),
-        ("FS+Pre+ttl+SE", S_FS_Pre_ttl_SE.run_strategy, _common_kwargs),
-        ("FS+Pre+ttl", S_FS_Pre_ttl.run_strategy, _common_kwargs),
+        # ("FS+Pre+ttl+SE", S_FS_Pre_ttl_SE.run_strategy, _common_kwargs),
+        # ("FS+Pre+ttl", S_FS_Pre_ttl.run_strategy, _common_kwargs),
         ("FS+Pre", S_FS_Pre.run_strategy, _common_kwargs),
         ("FS",     S_FS.run_strategy,     _baseline_kwargs),
         ("PR",     S_PR.run_strategy,     _baseline_kwargs),
@@ -517,7 +521,7 @@ def build_argparser():
                     help="run: 运行仿真并绘图；load: 从 summary 重绘")
 
     # workload shape
-    ap.add_argument("--sizes", type=str, default="50,100,150,200,300,350,400,450,500",
+    ap.add_argument("--sizes", type=str, default="10,20,30,40,50", # 50,100,150,200,300,350,400,450,500
                     help="Comma-separated workload lengths to test.")
     ap.add_argument("--q_list", type=str, default="5,7,11,13,15,17")
     ap.add_argument("--d_list", type=str, default="2,4,6")
@@ -536,7 +540,7 @@ def build_argparser():
     ap.add_argument("--prewarm_every", type=int, default=5)
 
     # multi-round
-    ap.add_argument("--rounds", type=int, default=5, help="每个 workload 大小的重复轮数")
+    ap.add_argument("--rounds", type=int, default=1, help="每个 workload 大小的重复轮数")
     ap.add_argument("--interval_kind", type=str, choices=["std", "minmax"], default="std",
                     help="线图区间：std=均值±1σ；minmax=[最小, 最大]")
     ap.add_argument("--jitter", type=float, default=0.01,
@@ -556,6 +560,16 @@ def main():
     args = ap.parse_args()
     if args.mode == "run":
         main_run(args)
+        load_and_replot_regions(
+            load_dir=str((ROOT / "scaling").resolve()),
+            out_png="scaling_latency_vs_cache_scatter_regions.png",
+            show_scatter=True,
+            region_kind="ellipse",  # "ellipse" | "hull" | "both"
+            ellipse_q=0.90,  # 椭圆覆盖概率（常用 0.90/0.95）
+            emphasize_method="FS+Pre+ttl+SE+ema",  # 高亮你的方法
+            point_kind="geom_median",  # 代表点：几何中位数
+            methods_keep=["FS+Pre+ttl+SE+ema", "FS+Pre", "FS", "PR"]
+        )
     else:
         # mode "load"
         load_and_redraw(load_dir=args.load_dir,
@@ -564,6 +578,15 @@ def main():
                         out_hitrate=args.out_hitrate,
                         out_scatter=args.out_scatter,
                         methods_keep=["FS+Pre+ttl+SE+ema", "FS+Pre", "FS", "PR"])
+        load_and_replot_regions(
+            load_dir=args.load_dir,
+            out_png="scaling_latency_vs_cache_scatter_regions.png",
+            show_scatter=True,
+            region_kind="ellipse",  # "ellipse" | "hull" | "both"
+            ellipse_q=0.90,  # 椭圆覆盖概率（常用 0.90/0.95）
+            emphasize_method="FS+Pre+ttl+SE+ema",  # 高亮你的方法
+            point_kind="geom_median",  # 代表点：几何中位数
+            methods_keep=["FS+Pre+ttl+SE+ema", "FS+Pre", "FS", "PR"])
 
 if __name__ == "__main__":
     main()

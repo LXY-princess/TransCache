@@ -36,10 +36,10 @@ def md5_qasm(circ: QuantumCircuit) -> str:
 def _prepare_kwargs():
     aer = AerSimulator()
     try:
-        return {"target": aer.target, "optimization_level": 3, "seed_transpiler": 42}
+        return {"target": aer.target, "optimization_level": 2, "seed_transpiler": 42}
     except Exception:
         cfg = aer.configuration()
-        return {"basis_gates": cfg.basis_gates, "optimization_level": 3, "seed_transpiler": 42}
+        return {"basis_gates": cfg.basis_gates, "optimization_level": 2, "seed_transpiler": 42}
 
 # --------- recent calls (for predictor) ----------
 SLIDING_MAXLEN = 256

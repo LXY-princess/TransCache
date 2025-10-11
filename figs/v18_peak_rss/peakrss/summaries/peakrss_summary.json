@@ -1,0 +1,52 @@
+{
+  "sizes": [
+    50,
+    100
+  ],
+  "methods": [
+    "TransCache",
+    "FS",
+    "PR"
+  ],
+  "peak_rss_mb": {
+    "TransCache": [
+      189.00390625,
+      195.07421875
+    ],
+    "FS": [
+      189.76953125,
+      192.80859375
+    ],
+    "PR": [
+      241.67578125,
+      242.87109375
+    ]
+  },
+  "config": {
+    "q_list": [
+      5,
+      7,
+      11,
+      13
+    ],
+    "d_list": [
+      2,
+      4,
+      6
+    ],
+    "shots": 256,
+    "hot_fraction": 0.25,
+    "hot_boost": 8.0,
+    "rps": 1.0,
+    "rng_seed_base": 123,
+    "include_exec": true,
+    "predictor_cfg": {
+      "sliding_window_sec": 60.0,
+      "min_samples": 2
+    },
+    "prewarm_every": 5,
+    "lookahead": 8.0,
+    "prob_th": 0.45,
+    "max_compile": 3
+  }
+}

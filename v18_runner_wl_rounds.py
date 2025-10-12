@@ -31,7 +31,6 @@ import v18_strat_PR as S_PR
 import v18_strat_FS_Pre_ttl as S_FS_Pre_ttl
 import v18_strat_FS_Pre_ttl_SE as S_FS_Pre_ttl_SE
 import v18_strat_FS_Pre_ttl_SE_ema as S_FS_Pre_ttl_SE_ema
-import v18_strat_FS_Pre_ttl_SE_ema_SWR as S_FS_Pre_ttl_SE_ema_SWR
 
 # ---------------- JSON utilities (safe for numpy) ----------------
 def _json_default(o):
@@ -521,7 +520,7 @@ def build_argparser():
                     help="run: 运行仿真并绘图；load: 从 summary 重绘")
 
     # workload shape
-    ap.add_argument("--sizes", type=str, default="10,20,30,40,50", # 50,100,150,200,300,350,400,450,500
+    ap.add_argument("--sizes", type=str, default="10,20,30,40,50", # 50,100,150,200,250,300,350,400,450,500
                     help="Comma-separated workload lengths to test.")
     ap.add_argument("--q_list", type=str, default="5,7,11,13,15,17")
     ap.add_argument("--d_list", type=str, default="2,4,6")

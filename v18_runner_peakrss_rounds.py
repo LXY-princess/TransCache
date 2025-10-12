@@ -328,7 +328,7 @@ def run(args):
 
 def build_argparser():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--sizes", type=str, default="50,100,150,200,300,350,400,450,500") #
+    ap.add_argument("--sizes", type=str, default="250") #50,100,150,200,250,300,350,400,450,500
     ap.add_argument("--q_list", type=str, default="5,7,11,13")
     ap.add_argument("--d_list", type=str, default="2,4,6")
     ap.add_argument("--shots", type=int, default=256)

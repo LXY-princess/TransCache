@@ -1,0 +1,50 @@
+{
+  "hit_by_label": {
+    "GHZ-Chain_q23_d2": 9
+  },
+  "total_hits": 9,
+  "cache_size_series": [
+    {
+      "t": 0.20265069999732077,
+      "size": 1
+    },
+    {
+      "t": 0.28860790003091097,
+      "size": 1
+    },
+    {
+      "t": 0.370625400042627,
+      "size": 1
+    },
+    {
+      "t": 0.4579196000122465,
+      "size": 1
+    },
+    {
+      "t": 0.5404891999787651,
+      "size": 1
+    },
+    {
+      "t": 0.6255356999463402,
+      "size": 1
+    },
+    {
+      "t": 0.7225725999451242,
+      "size": 1
+    },
+    {
+      "t": 0.8042172999703325,
+      "size": 1
+    },
+    {
+      "t": 0.8868158999248408,
+      "size": 1
+    },
+    {
+      "t": 0.986640099901706,
+      "size": 1
+    }
+  ],
+  "cache_capacity": null,
+  "note": "Only parameterize gates in ['rx', 'rz']; others stay constant; cache key = md5(template QASM)."
+}

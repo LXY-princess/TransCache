@@ -23,7 +23,7 @@ ROOT = pathlib.Path("./figs")/f"v{VNUM}"
 PLOT_DIR = ROOT/"plots"
 # EVENTS_DIR.mkdir(parents=True, exist_ok=True)
 PLOT_DIR.mkdir(parents=True, exist_ok=True)
-LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}_score_eviction_rounds5"
+LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}_e2e_d34"
 LOAD_EVENTS_DIR = LOAD_ROOT/"events"
 
 def md5_qasm(circ: QuantumCircuit) -> str:
@@ -296,8 +296,10 @@ def seed_recent_calls_for_predictor(predictor_window_sec: float, makers_all, wor
 def compile_with_idle_cache(qc_raw: QuantumCircuit, bk_name: str,
                             cache: Dict[str, QuantumCircuit]) -> Tuple[QuantumCircuit, str, bool, float]:
     key = f"{bk_name}:{md5_qasm(qc_raw)}"
-    qc_exec = cache.get(key); hit = qc_exec is not None
-    compile_sec = 0.0
+    t0 = time.perf_counter()
+    qc_exec = cache.get(key)
+    hit = qc_exec is not None
+    compile_sec = time.perf_counter() - t0
     if not hit:
         t0 = time.perf_counter()
         qc_exec = transpile(qc_raw, **_prepare_kwargs())

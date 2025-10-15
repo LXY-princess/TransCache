@@ -1,0 +1,50 @@
+{
+  "hit_by_label": {
+    "QAOA-3reg_q23_d4": 9
+  },
+  "total_hits": 9,
+  "cache_size_series": [
+    {
+      "t": 0.8659496999753173,
+      "size": 1
+    },
+    {
+      "t": 1.4915325999609195,
+      "size": 1
+    },
+    {
+      "t": 2.13663479994284,
+      "size": 1
+    },
+    {
+      "t": 2.7887467999535147,
+      "size": 1
+    },
+    {
+      "t": 3.406111099931877,
+      "size": 1
+    },
+    {
+      "t": 4.036536699917633,
+      "size": 1
+    },
+    {
+      "t": 4.6861662999144755,
+      "size": 1
+    },
+    {
+      "t": 5.298187499894993,
+      "size": 1
+    },
+    {
+      "t": 5.962326099863276,
+      "size": 1
+    },
+    {
+      "t": 6.601145799882943,
+      "size": 1
+    }
+  ],
+  "cache_capacity": null,
+  "note": "Only parameterize gates in ['rx', 'rz']; others stay constant; cache key = md5(template QASM)."
+}

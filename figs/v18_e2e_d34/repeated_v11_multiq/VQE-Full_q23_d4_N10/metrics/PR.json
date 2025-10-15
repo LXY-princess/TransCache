@@ -1,0 +1,48 @@
+{
+  "hit_by_label": {},
+  "total_hits": 0,
+  "cache_size_series": [
+    {
+      "t": 0.4744377000024542,
+      "size": 0
+    },
+    {
+      "t": 0.9399741999804974,
+      "size": 0
+    },
+    {
+      "t": 1.602528999967035,
+      "size": 0
+    },
+    {
+      "t": 2.1101123999687843,
+      "size": 0
+    },
+    {
+      "t": 2.584322999988217,
+      "size": 0
+    },
+    {
+      "t": 3.045354900008533,
+      "size": 0
+    },
+    {
+      "t": 3.508719499979634,
+      "size": 0
+    },
+    {
+      "t": 3.9742848000023514,
+      "size": 0
+    },
+    {
+      "t": 4.441852500021923,
+      "size": 0
+    },
+    {
+      "t": 4.902264999982435,
+      "size": 0
+    }
+  ],
+  "cache_capacity": null,
+  "note": "Only parameterize gates in ['rx', 'rz']; others stay constant; cache key = md5(template QASM)."
+}

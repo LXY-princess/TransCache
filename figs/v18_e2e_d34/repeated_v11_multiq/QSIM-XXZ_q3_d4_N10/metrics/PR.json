@@ -1,0 +1,50 @@
+{
+  "hit_by_label": {
+    "QSIM-XXZ_q3_d4": 9
+  },
+  "total_hits": 9,
+  "cache_size_series": [
+    {
+      "t": 0.03979110001819208,
+      "size": 1
+    },
+    {
+      "t": 0.04222880001179874,
+      "size": 1
+    },
+    {
+      "t": 0.04483510000864044,
+      "size": 1
+    },
+    {
+      "t": 0.046751399990171194,
+      "size": 1
+    },
+    {
+      "t": 0.04960549995303154,
+      "size": 1
+    },
+    {
+      "t": 0.05156319995876402,
+      "size": 1
+    },
+    {
+      "t": 0.053824299946427345,
+      "size": 1
+    },
+    {
+      "t": 0.05596279993187636,
+      "size": 1
+    },
+    {
+      "t": 0.05797389993676916,
+      "size": 1
+    },
+    {
+      "t": 0.06002269993769005,
+      "size": 1
+    }
+  ],
+  "cache_capacity": null,
+  "note": "Only parameterize gates in ['rx', 'rz']; others stay constant; cache key = md5(template QASM)."
+}

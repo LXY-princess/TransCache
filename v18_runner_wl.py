@@ -22,7 +22,7 @@ from v18_core import (
 )
 
 # strategies
-# import v18_strategy_baseline as S0          # FullCompilation (Baseline)
+import v18_strat_fullComp as S0          # FullCompilation (Baseline)
 import v18_strat_FS as S_FS  # FirstSeen
 import v18_strat_FS_Pre as S_FS_Pre  # FirstSeen + predictor prewarm
 import v18_strat_PR as S_PR
@@ -302,7 +302,7 @@ def main_run(args):
         ("FS",S_FS.run_strategy,  _baseline_kwargs),
         ("PR",S_PR.run_strategy,  _baseline_kwargs),
         # ("ParamReuse",           SPR.run_strategy, _baseline_kwargs),
-        # ("FullCompilation",      S0.run_strategy,  _baseline_kwargs),
+        ("FullCompilation",      S0.run_strategy,  _baseline_kwargs),
     ]
 
     # storage for plotting
@@ -501,7 +501,7 @@ def build_argparser():
                     help="run: 运行仿真并绘图；load: 仅从summary加载并重绘图")
 
     # workload shape
-    ap.add_argument("--sizes", type=str, default="50,100", #50,100,150,200,300,350,400,450,500
+    ap.add_argument("--sizes", type=str, default="50", #50,100,150,200,250,300,350,400,450,500
                     help="Comma-separated workload lengths to test.")
     # ap.add_argument("--q_list", type=str, default="5,7,11,13")
     # ap.add_argument("--d_list", type=str, default="4,8")

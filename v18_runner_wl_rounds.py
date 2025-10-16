@@ -31,6 +31,8 @@ import v18_strat_PR as S_PR
 import v18_strat_FS_Pre_ttl as S_FS_Pre_ttl
 import v18_strat_FS_Pre_ttl_SE as S_FS_Pre_ttl_SE
 import v18_strat_FS_Pre_ttl_SE_ema as S_FS_Pre_ttl_SE_ema
+import v18_strat_FS_ttl_SE_ema as S_FS_ttl_SE_ema
+import v18_strat_fullComp as S_full
 
 # ---------------- JSON utilities (safe for numpy) ----------------
 def _json_default(o):
@@ -288,9 +290,10 @@ def main_run(args):
         ("FS+Pre+ttl+SE+ema", S_FS_Pre_ttl_SE_ema.run_strategy, _common_kwargs),
         # ("FS+Pre+ttl+SE", S_FS_Pre_ttl_SE.run_strategy, _common_kwargs),
         # ("FS+Pre+ttl", S_FS_Pre_ttl.run_strategy, _common_kwargs),
+        ("FS+ttl+SE+ema", S_FS_ttl_SE_ema.run_strategy, _common_kwargs),
         ("FS+Pre", S_FS_Pre.run_strategy, _common_kwargs),
         ("FS",     S_FS.run_strategy,     _baseline_kwargs),
-        ("PR",     S_PR.run_strategy,     _baseline_kwargs),
+        ("NoCache",     S_full.run_strategy,     _baseline_kwargs),
     ]
 
     methods = [name for (name, _, _) in STRATS]
@@ -455,15 +458,74 @@ def main_run(args):
         print(" | ".join([f"{N:>20d}"] + [f"{c:>20s}" for c in cells]))
 
 # ---------------- load-mode: read summary json and redraw ----------------
+# def load_and_redraw(load_dir: str,
+#                     out_latency: str = "scaling_e2e_latency.png",
+#                     out_cache: str   = "scaling_final_cache_size.png",
+#                     out_hitrate: str = "scaling_final_hitrate.png",
+#                     out_scatter: str = "scaling_latency_vs_cache_scatter.png",
+#                     methods_keep: List[str] | None = None):
+#     """
+#     从 SAVE_DIR/'summaries'/'scaling_multi_rounds_summary.json' 载入并重绘。
+#     若 methods_keep 给定，则只绘制其中包含的方法（按给定顺序）。
+#     """
+#     LOAD_DIR = Path(load_dir)
+#     json_path = LOAD_DIR / "summaries" / "scaling_multi_rounds_summary.json"
+#     if not json_path.exists():
+#         raise FileNotFoundError(f"Summary not found: {json_path}")
+#
+#     summary = json.loads(json_path.read_text(encoding="utf-8"))
+#     sizes: List[int] = summary["sizes"]
+#     methods_all: List[str] = summary["methods"]
+#     interval_kind = summary.get("interval_kind", "std")
+#     agg_lat_full = summary["aggregate"]["e2e_latency"]
+#     agg_csz_full = summary["aggregate"]["final_cache_size"]
+#     agg_hit_full = summary["aggregate"]["final_hitrate"]
+#     raw_lat_full = summary["raw"]["e2e_latency"]
+#     raw_csz_full = summary["raw"]["final_cache_size"]
+#
+#     # --- 选择要画的 methods（保持你给定的顺序；大小写精确匹配） ---
+#     if methods_keep:
+#         # 只保留 summary 里确实存在的方法；其余静默忽略
+#         methods = [m for m in methods_keep if m in methods_all]
+#     else:
+#         methods = methods_all
+#
+#     # --- 同步裁剪 aggregate/raw 字典 ---
+#     agg_lat = {m: agg_lat_full[m] for m in methods}
+#     agg_csz = {m: agg_csz_full[m] for m in methods}
+#     agg_hit = {m: agg_hit_full[m] for m in methods}
+#     raw_lat = {m: raw_lat_full[m] for m in methods}
+#     raw_csz = {m: raw_csz_full[m] for m in methods}
+#
+#     out_latency_path = PLOT_DIR / out_latency
+#     out_cache_path   = PLOT_DIR / out_cache
+#     out_hitrate_path = PLOT_DIR / out_hitrate
+#     out_scatter_path = PLOT_DIR / out_scatter
+#
+#     # 线图（均值+区间）
+#     plot_with_interval(methods, sizes, agg_lat, "E2E latency (s)", out_latency_path, interval_kind=interval_kind)
+#     plot_with_interval(methods, sizes, agg_csz, "Final cache size (#circuits)", out_cache_path, interval_kind=interval_kind)
+#     plot_with_interval(methods, sizes, agg_hit, "Final hitrate", out_hitrate_path, interval_kind=interval_kind)
+#
+#     # 散点（多轮）
+#     plot_latency_vs_cache_scatter_multi(methods, sizes, raw_lat, raw_csz, out_scatter_path,
+#                                         cmap_name="plasma", jitter=0.0)
+#
+#     print("-"*80)
+#     print("[load] Redraw finished from:", json_path)
+#     if methods_keep:
+#         print("[load] Shown methods:", methods)
+
 def load_and_redraw(load_dir: str,
                     out_latency: str = "scaling_e2e_latency.png",
                     out_cache: str   = "scaling_final_cache_size.png",
                     out_hitrate: str = "scaling_final_hitrate.png",
                     out_scatter: str = "scaling_latency_vs_cache_scatter.png",
-                    methods_keep: List[str] | None = None):
+                    methods_keep: List[str] | None = None,
+                    save_dir: str = None,):
     """
     从 SAVE_DIR/'summaries'/'scaling_multi_rounds_summary.json' 载入并重绘。
-    若 methods_keep 给定，则只绘制其中包含的方法（按给定顺序）。
+    额外：把聚合后的每个 size × 方法的 mean/std 另存为 CSV（replot 子集）。
     """
     LOAD_DIR = Path(load_dir)
     json_path = LOAD_DIR / "summaries" / "scaling_multi_rounds_summary.json"
@@ -474,26 +536,57 @@ def load_and_redraw(load_dir: str,
     sizes: List[int] = summary["sizes"]
     methods_all: List[str] = summary["methods"]
     interval_kind = summary.get("interval_kind", "std")
+
+    # 聚合与原始（完整）
     agg_lat_full = summary["aggregate"]["e2e_latency"]
     agg_csz_full = summary["aggregate"]["final_cache_size"]
     agg_hit_full = summary["aggregate"]["final_hitrate"]
     raw_lat_full = summary["raw"]["e2e_latency"]
     raw_csz_full = summary["raw"]["final_cache_size"]
 
-    # --- 选择要画的 methods（保持你给定的顺序；大小写精确匹配） ---
+    # 仅绘制/导出的 methods（保持给定顺序）
     if methods_keep:
-        # 只保留 summary 里确实存在的方法；其余静默忽略
         methods = [m for m in methods_keep if m in methods_all]
     else:
         methods = methods_all
 
-    # --- 同步裁剪 aggregate/raw 字典 ---
+    # 同步裁剪到 replot 子集
     agg_lat = {m: agg_lat_full[m] for m in methods}
     agg_csz = {m: agg_csz_full[m] for m in methods}
     agg_hit = {m: agg_hit_full[m] for m in methods}
     raw_lat = {m: raw_lat_full[m] for m in methods}
     raw_csz = {m: raw_csz_full[m] for m in methods}
 
+    # ==== 新增：把聚合 mean/std 存成 CSV（replot 子集）====
+    SAVE_DIR = Path(save_dir)
+    out_table = SAVE_DIR / "summaries" / "scaling_multi_rounds_agg_replot.csv"
+    out_table.parent.mkdir(parents=True, exist_ok=True)
+    with out_table.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(
+            f,
+            fieldnames=[
+                "size", "method",
+                "e2e_latency_mean", "e2e_latency_std",
+                "final_cache_size_mean", "final_cache_size_std",
+                "final_hitrate_mean", "final_hitrate_std",
+            ],
+        )
+        w.writeheader()
+        for si, N in enumerate(sizes):
+            for m in methods:
+                w.writerow({
+                    "size": N,
+                    "method": m,
+                    "e2e_latency_mean": agg_lat[m]["mean"][si],
+                    "e2e_latency_std":  agg_lat[m]["std"][si],
+                    "final_cache_size_mean": agg_csz[m]["mean"][si],
+                    "final_cache_size_std":  agg_csz[m]["std"][si],
+                    "final_hitrate_mean":    agg_hit[m]["mean"][si],
+                    "final_hitrate_std":     agg_hit[m]["std"][si],
+                })
+    print(f"[save] {out_table}")
+
+    # ==== 重绘 ====
     out_latency_path = PLOT_DIR / out_latency
     out_cache_path   = PLOT_DIR / out_cache
     out_hitrate_path = PLOT_DIR / out_hitrate
@@ -513,6 +606,7 @@ def load_and_redraw(load_dir: str,
     if methods_keep:
         print("[load] Shown methods:", methods)
 
+
 # ---------------- CLI ----------------
 def build_argparser():
     ap = argparse.ArgumentParser()
@@ -520,7 +614,7 @@ def build_argparser():
                     help="run: 运行仿真并绘图；load: 从 summary 重绘")
 
     # workload shape
-    ap.add_argument("--sizes", type=str, default="10,20,30,40,50", # 50,100,150,200,250,300,350,400,450,500
+    ap.add_argument("--sizes", type=str, default="200,250,400,500", # 50,100,150,200,250,300,350,400,450,500
                     help="Comma-separated workload lengths to test.")
     ap.add_argument("--q_list", type=str, default="5,7,11,13,15,17")
     ap.add_argument("--d_list", type=str, default="2,4,6")
@@ -539,7 +633,7 @@ def build_argparser():
     ap.add_argument("--prewarm_every", type=int, default=5)
 
     # multi-round
-    ap.add_argument("--rounds", type=int, default=1, help="每个 workload 大小的重复轮数")
+    ap.add_argument("--rounds", type=int, default=5, help="每个 workload 大小的重复轮数")
     ap.add_argument("--interval_kind", type=str, choices=["std", "minmax"], default="std",
                     help="线图区间：std=均值±1σ；minmax=[最小, 最大]")
     ap.add_argument("--jitter", type=float, default=0.01,
@@ -567,7 +661,7 @@ def main():
             ellipse_q=0.90,  # 椭圆覆盖概率（常用 0.90/0.95）
             emphasize_method="FS+Pre+ttl+SE+ema",  # 高亮你的方法
             point_kind="geom_median",  # 代表点：几何中位数
-            methods_keep=["FS+Pre+ttl+SE+ema", "FS+Pre", "FS", "PR"]
+            methods_keep=["FS+Pre+ttl+SE+ema", "FS+ttl+SE+ema","FS+Pre", "FS", "NoCache"]
         )
     else:
         # mode "load"
@@ -576,7 +670,9 @@ def main():
                         out_cache=args.out_cache,
                         out_hitrate=args.out_hitrate,
                         out_scatter=args.out_scatter,
-                        methods_keep=["FS+Pre+ttl+SE+ema", "FS+Pre", "FS", "PR"])
+                        # methods_keep=["FS+Pre+ttl+SE+ema", "FS+Pre", "FS", "PR"])
+                        methods_keep=["FS+Pre+ttl+SE+ema", "FS+ttl+SE+ema", "FS+Pre", "FS", "NoCache"],
+                        save_dir=args.save_dir)
         load_and_replot_regions(
             load_dir=args.load_dir,
             out_png="scaling_latency_vs_cache_scatter_regions.png",
@@ -585,7 +681,8 @@ def main():
             ellipse_q=0.90,  # 椭圆覆盖概率（常用 0.90/0.95）
             emphasize_method="FS+Pre+ttl+SE+ema",  # 高亮你的方法
             point_kind="geom_median",  # 代表点：几何中位数
-            methods_keep=["FS+Pre+ttl+SE+ema", "FS+Pre", "FS", "PR"])
+            # methods_keep=["FS+Pre+ttl+SE+ema", "FS+Pre", "FS", "PR"])
+            methods_keep=["FS+Pre+ttl+SE+ema", "FS+ttl+SE+ema", "FS+Pre", "FS", "NoCache"])
 
 if __name__ == "__main__":
     main()

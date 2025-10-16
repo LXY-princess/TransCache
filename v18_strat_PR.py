@@ -8,7 +8,7 @@ from qiskit import QuantumCircuit, transpile
 from qiskit.circuit import Parameter
 from qiskit_aer.primitives import Sampler as AerSampler
 
-from v15_core import md5_qasm, label_of, _prepare_kwargs, record_arrival
+from v18_core import md5_qasm, label_of, _prepare_kwargs, record_arrival
 
 # ---- 白名单：只把这些门视为“可参数化”的单比特旋转 ----
 # 默认：RX/RY/RZ/UGate（含历史 U3）

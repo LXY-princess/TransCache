@@ -1,0 +1,359 @@
+{
+  "circuits": [
+    "VQE-Full"
+  ],
+  "methods": [
+    "TransCache",
+    "CCache",
+    "Braket",
+    "FullComp"
+  ],
+  "qs": [
+    3,
+    7,
+    15,
+    31,
+    63,
+    95,
+    127
+  ],
+  "summary": {
+    "VQE-Full": {
+      "3": {
+        "TransCache": {
+          "e2e_latency_mean": 3.2400013878941538e-06,
+          "e2e_latency_std": 1.6732284518238124e-07,
+          "final_cache_size_mean": 1.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 1.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "CCache": {
+          "e2e_latency_mean": 0.023309039993910118,
+          "e2e_latency_std": 0.0007861241159077362,
+          "final_cache_size_mean": 1.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.9,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "Braket": {
+          "e2e_latency_mean": 0.21155708000296727,
+          "e2e_latency_std": 0.03371239690390936,
+          "final_cache_size_mean": 0.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "FullComp": {
+          "e2e_latency_mean": 0.22717249997076577,
+          "e2e_latency_std": 0.06302471108064542,
+          "final_cache_size_mean": 0.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        }
+      },
+      "7": {
+        "TransCache": {
+          "e2e_latency_mean": 3.1999952625483274e-06,
+          "e2e_latency_std": 1.870998521485565e-07,
+          "final_cache_size_mean": 1.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 1.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "CCache": {
+          "e2e_latency_mean": 0.023009600001387298,
+          "e2e_latency_std": 0.000874850602117104,
+          "final_cache_size_mean": 1.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.9,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "Braket": {
+          "e2e_latency_mean": 0.20079750000149943,
+          "e2e_latency_std": 0.0030456587793658715,
+          "final_cache_size_mean": 0.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "FullComp": {
+          "e2e_latency_mean": 0.20454789999639617,
+          "e2e_latency_std": 0.00496939193843826,
+          "final_cache_size_mean": 0.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        }
+      },
+      "15": {
+        "TransCache": {
+          "e2e_latency_mean": 3.74001101590693e-06,
+          "e2e_latency_std": 4.159327055115532e-07,
+          "final_cache_size_mean": 1.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 1.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "CCache": {
+          "e2e_latency_mean": 0.025179160019615666,
+          "e2e_latency_std": 0.0004936106194529402,
+          "final_cache_size_mean": 1.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.9,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "Braket": {
+          "e2e_latency_mean": 0.22621507999137974,
+          "e2e_latency_std": 0.016682820439028037,
+          "final_cache_size_mean": 0.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "FullComp": {
+          "e2e_latency_mean": 0.21771683999686503,
+          "e2e_latency_std": 0.0037893924777210267,
+          "final_cache_size_mean": 0.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        }
+      },
+      "31": {
+        "TransCache": {
+          "e2e_latency_mean": 4.160020034760237e-06,
+          "e2e_latency_std": 3.209299597666495e-07,
+          "final_cache_size_mean": 1.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 1.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "CCache": {
+          "e2e_latency_mean": 0.028402880002977325,
+          "e2e_latency_std": 0.0015450034815083814,
+          "final_cache_size_mean": 1.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.9,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "Braket": {
+          "e2e_latency_mean": 0.2831788600247819,
+          "e2e_latency_std": 0.04666268558853141,
+          "final_cache_size_mean": 0.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "FullComp": {
+          "e2e_latency_mean": 0.27857385998941026,
+          "e2e_latency_std": 0.041517781044283456,
+          "final_cache_size_mean": 0.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        }
+      },
+      "63": {
+        "TransCache": {
+          "e2e_latency_mean": 4.8999849241226915e-06,
+          "e2e_latency_std": 4.52775919139145e-07,
+          "final_cache_size_mean": 1.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 1.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "CCache": {
+          "e2e_latency_mean": 0.0366418800142128,
+          "e2e_latency_std": 0.005952017992773169,
+          "final_cache_size_mean": 1.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.9,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "Braket": {
+          "e2e_latency_mean": 0.314583340001991,
+          "e2e_latency_std": 0.022686539918734604,
+          "final_cache_size_mean": 0.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "FullComp": {
+          "e2e_latency_mean": 0.3055803799885325,
+          "e2e_latency_std": 0.005463427908712811,
+          "final_cache_size_mean": 0.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        }
+      },
+      "95": {
+        "TransCache": {
+          "e2e_latency_mean": 5.459989188238978e-06,
+          "e2e_latency_std": 8.203705997854495e-07,
+          "final_cache_size_mean": 1.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 1.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "CCache": {
+          "e2e_latency_mean": 0.04086961998254992,
+          "e2e_latency_std": 0.002937765829090249,
+          "final_cache_size_mean": 1.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.9,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "Braket": {
+          "e2e_latency_mean": 0.41538203997770323,
+          "e2e_latency_std": 0.02688378854977942,
+          "final_cache_size_mean": 0.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "FullComp": {
+          "e2e_latency_mean": 0.39704079999937675,
+          "e2e_latency_std": 0.04004305003704402,
+          "final_cache_size_mean": 0.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        }
+      },
+      "127": {
+        "TransCache": {
+          "e2e_latency_mean": 5.539995618164539e-06,
+          "e2e_latency_std": 4.098939333728712e-07,
+          "final_cache_size_mean": 1.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 1.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "CCache": {
+          "e2e_latency_mean": 0.04587458000751212,
+          "e2e_latency_std": 0.0017196646808985722,
+          "final_cache_size_mean": 1.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.9,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "Braket": {
+          "e2e_latency_mean": 0.4693400999880396,
+          "e2e_latency_std": 0.033158112650381745,
+          "final_cache_size_mean": 0.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        },
+        "FullComp": {
+          "e2e_latency_mean": 0.4776389999780804,
+          "e2e_latency_std": 0.032339581994442805,
+          "final_cache_size_mean": 0.0,
+          "final_cache_size_std": 0.0,
+          "final_hitrate_mean": 0.0,
+          "final_hitrate_std": 0.0,
+          "d": 2,
+          "N": 10,
+          "repeats": 5
+        }
+      }
+    }
+  },
+  "config": {
+    "d": 2,
+    "N": 10,
+    "repeats": 5,
+    "rps": 1.0,
+    "shots": 256,
+    "lookahead": 8.0,
+    "prob_th": 0.45,
+    "max_compile": 3,
+    "sliding_window_sec": 60.0,
+    "min_samples": 2,
+    "prewarm_every": 5
+  }
+}

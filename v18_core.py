@@ -23,7 +23,7 @@ ROOT = pathlib.Path("./figs")/f"v{VNUM}"
 PLOT_DIR = ROOT/"plots"
 # EVENTS_DIR.mkdir(parents=True, exist_ok=True)
 PLOT_DIR.mkdir(parents=True, exist_ok=True)
-LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}_e2e_d34"
+LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}_ablation_transLatency"
 LOAD_EVENTS_DIR = LOAD_ROOT/"events"
 
 def md5_qasm(circ: QuantumCircuit) -> str:
@@ -35,11 +35,11 @@ def md5_qasm(circ: QuantumCircuit) -> str:
 
 def _prepare_kwargs():
     aer = AerSimulator()
-    try:
-        return {"target": aer.target, "optimization_level": 2, "seed_transpiler": 42}
-    except Exception:
-        cfg = aer.configuration()
-        return {"basis_gates": cfg.basis_gates, "optimization_level": 2, "seed_transpiler": 42}
+    # try:
+    #     return {"target": aer.target, "optimization_level": 2, "seed_transpiler": 42}
+    # except Exception:
+    cfg = aer.configuration()
+    return {"basis_gates": list(sorted(set((cfg.basis_gates or []) + ["measure"]))), "optimization_level": 2, "seed_transpiler": 42}
 
 # --------- recent calls (for predictor) ----------
 SLIDING_MAXLEN = 256

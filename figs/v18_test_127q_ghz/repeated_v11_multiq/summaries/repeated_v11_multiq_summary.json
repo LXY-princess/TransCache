@@ -1,0 +1,247 @@
+{
+  "circuits": [
+    "GHZ-Chain"
+  ],
+  "methods": [
+    "TransCache",
+    "CCache",
+    "Braket",
+    "FullComp"
+  ],
+  "qs": [
+    3,
+    7,
+    15,
+    31,
+    63,
+    95,
+    127
+  ],
+  "summary": {
+    "GHZ-Chain": {
+      "3": {
+        "TransCache": {
+          "e2e_latency": 3.6399898817762734e-06,
+          "final_cache_size": 1.0,
+          "final_hitrate": 1.0,
+          "d": 2,
+          "N": 10
+        },
+        "CCache": {
+          "e2e_latency": 0.030910820013377815,
+          "final_cache_size": 1.0,
+          "final_hitrate": 0.9,
+          "d": 2,
+          "N": 10
+        },
+        "Braket": {
+          "e2e_latency": 0.020478160001221112,
+          "final_cache_size": 1.0,
+          "final_hitrate": 0.9,
+          "d": 2,
+          "N": 10
+        },
+        "FullComp": {
+          "e2e_latency": 0.19258405999280512,
+          "final_cache_size": 0.0,
+          "final_hitrate": 0.0,
+          "d": 2,
+          "N": 10
+        }
+      },
+      "7": {
+        "TransCache": {
+          "e2e_latency": 3.920006565749645e-06,
+          "final_cache_size": 1.0,
+          "final_hitrate": 1.0,
+          "d": 2,
+          "N": 10
+        },
+        "CCache": {
+          "e2e_latency": 0.0230453799944371,
+          "final_cache_size": 1.0,
+          "final_hitrate": 0.9,
+          "d": 2,
+          "N": 10
+        },
+        "Braket": {
+          "e2e_latency": 0.021881720004603266,
+          "final_cache_size": 1.0,
+          "final_hitrate": 0.9,
+          "d": 2,
+          "N": 10
+        },
+        "FullComp": {
+          "e2e_latency": 0.21297004000807646,
+          "final_cache_size": 0.0,
+          "final_hitrate": 0.0,
+          "d": 2,
+          "N": 10
+        }
+      },
+      "15": {
+        "TransCache": {
+          "e2e_latency": 4.519990761764348e-06,
+          "final_cache_size": 1.0,
+          "final_hitrate": 1.0,
+          "d": 2,
+          "N": 10
+        },
+        "CCache": {
+          "e2e_latency": 0.024985980003839357,
+          "final_cache_size": 1.0,
+          "final_hitrate": 0.9,
+          "d": 2,
+          "N": 10
+        },
+        "Braket": {
+          "e2e_latency": 0.023030099997413345,
+          "final_cache_size": 1.0,
+          "final_hitrate": 0.9,
+          "d": 2,
+          "N": 10
+        },
+        "FullComp": {
+          "e2e_latency": 0.23670905999606476,
+          "final_cache_size": 0.0,
+          "final_hitrate": 0.0,
+          "d": 2,
+          "N": 10
+        }
+      },
+      "31": {
+        "TransCache": {
+          "e2e_latency": 4.39999857917428e-06,
+          "final_cache_size": 1.0,
+          "final_hitrate": 1.0,
+          "d": 2,
+          "N": 10
+        },
+        "CCache": {
+          "e2e_latency": 0.03016419999767095,
+          "final_cache_size": 1.0,
+          "final_hitrate": 0.9,
+          "d": 2,
+          "N": 10
+        },
+        "Braket": {
+          "e2e_latency": 0.02866939999803435,
+          "final_cache_size": 1.0,
+          "final_hitrate": 0.9,
+          "d": 2,
+          "N": 10
+        },
+        "FullComp": {
+          "e2e_latency": 0.24689230000367388,
+          "final_cache_size": 0.0,
+          "final_hitrate": 0.0,
+          "d": 2,
+          "N": 10
+        }
+      },
+      "63": {
+        "TransCache": {
+          "e2e_latency": 5.360008799470961e-06,
+          "final_cache_size": 1.0,
+          "final_hitrate": 1.0,
+          "d": 2,
+          "N": 10
+        },
+        "CCache": {
+          "e2e_latency": 0.034391100006178024,
+          "final_cache_size": 1.0,
+          "final_hitrate": 0.9,
+          "d": 2,
+          "N": 10
+        },
+        "Braket": {
+          "e2e_latency": 0.03123494000174105,
+          "final_cache_size": 1.0,
+          "final_hitrate": 0.9,
+          "d": 2,
+          "N": 10
+        },
+        "FullComp": {
+          "e2e_latency": 0.3359842399979243,
+          "final_cache_size": 0.0,
+          "final_hitrate": 0.0,
+          "d": 2,
+          "N": 10
+        }
+      },
+      "95": {
+        "TransCache": {
+          "e2e_latency": 1.1520003317855298e-05,
+          "final_cache_size": 1.0,
+          "final_hitrate": 1.0,
+          "d": 2,
+          "N": 10
+        },
+        "CCache": {
+          "e2e_latency": 0.07503857999690808,
+          "final_cache_size": 1.0,
+          "final_hitrate": 0.9,
+          "d": 2,
+          "N": 10
+        },
+        "Braket": {
+          "e2e_latency": 0.06850309999717866,
+          "final_cache_size": 1.0,
+          "final_hitrate": 0.9,
+          "d": 2,
+          "N": 10
+        },
+        "FullComp": {
+          "e2e_latency": 0.5611987200187286,
+          "final_cache_size": 0.0,
+          "final_hitrate": 0.0,
+          "d": 2,
+          "N": 10
+        }
+      },
+      "127": {
+        "TransCache": {
+          "e2e_latency": 1.2439992860890926e-05,
+          "final_cache_size": 1.0,
+          "final_hitrate": 1.0,
+          "d": 2,
+          "N": 10
+        },
+        "CCache": {
+          "e2e_latency": 0.14668823999818414,
+          "final_cache_size": 1.0,
+          "final_hitrate": 0.9,
+          "d": 2,
+          "N": 10
+        },
+        "Braket": {
+          "e2e_latency": 0.06963254000002053,
+          "final_cache_size": 1.0,
+          "final_hitrate": 0.9,
+          "d": 2,
+          "N": 10
+        },
+        "FullComp": {
+          "e2e_latency": 0.7938676999940071,
+          "final_cache_size": 0.0,
+          "final_hitrate": 0.0,
+          "d": 2,
+          "N": 10
+        }
+      }
+    }
+  },
+  "config": {
+    "d": 2,
+    "N": 10,
+    "repeats": 5,
+    "rps": 1.0,
+    "shots": 256,
+    "lookahead": 8.0,
+    "prob_th": 0.45,
+    "max_compile": 3,
+    "sliding_window_sec": 60.0,
+    "min_samples": 2,
+    "prewarm_every": 5
+  }
+}

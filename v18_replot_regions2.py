@@ -260,9 +260,11 @@ def load_and_replot_regions(load_dir: str,
 
         # 方法图例（颜色+形状）
         labels = {"FS+Pre+ttl+SE+ema": "TransCache (Proposed)",
+                  "FS+ttl+SE+ema": "CCache + CacheM",
                   "FS+Pre": "CCache + Predictor",
                   "FS": "CCache",
-                  "PR": "Braket"}
+                  "PR": "Braket",
+                  "NoCache": "NoCache"}
         method_handles = [
             Line2D([0],[0], marker=markers[i % len(markers)], linestyle="None",
                    markerfacecolor=palette[i % len(palette)], markeredgecolor="black",

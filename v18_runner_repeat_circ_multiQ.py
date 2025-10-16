@@ -130,11 +130,11 @@ def main_run(args):
         return dict(workload=workload, shots=args.shots, include_exec=True)
 
     STRATS = [
-        ("FS+Pre+ttl+SE+ema", S_FS_Pre_ttl_SE_ema.run_strategy, _common_kwargs),
+        ("TransCache", S_FS_Pre_ttl_SE_ema.run_strategy, _common_kwargs),
         # ("FS+Pre",            S_FS_Pre.run_strategy,            _common_kwargs),
-        ("FS",                S_FS.run_strategy,                _baseline_kwargs),
-        ("PR",                S_PR.run_strategy,                _baseline_kwargs),
-        ("Full",              S_FullComp.run_strategy,          _baseline_kwargs),
+        ("CCache",                S_FS.run_strategy,                _baseline_kwargs),
+        ("Braket",                S_PR.run_strategy,                _baseline_kwargs),
+        ("FullComp",              S_FullComp.run_strategy,          _baseline_kwargs),
     ]
 
     SAVE_DIR = Path(args.save_dir)
@@ -225,11 +225,11 @@ def main_run(args):
 
 def build_argparser():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--circuits", type=str, default="ALL",
+    ap.add_argument("--circuits", type=str, default="GHZ-Chain",
                     help='ALL 或 逗号分隔的 v11 电路名（如 "GHZ-Chain,RCA"）')
     ap.add_argument("--qs", type=str, default="3,11,17,23",
                     help="逗号分隔的 qubits 列表，例如 3,11,17,23")
-    ap.add_argument("--ds", type=str, default="3,4",
+    ap.add_argument("--ds", type=str, default="4",
                     help="逗号分隔的 depth 列表，例如 1,2,4,8")
     # ap.add_argument("--d", type=int, default=4, help="固定电路深度")
     ap.add_argument("--N", type=int, default=10, help="同一电路连续调用次数")

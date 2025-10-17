@@ -101,17 +101,58 @@ def _safe_label(s: str) -> str:
 
 
 # ---------------- 绘图：Latency vs Q ----------------
+# def _set_plot_style():
+#     plt.rcParams.update({
+#         "font.family": "Times New Roman",
+#         "font.size": 22,
+#         "axes.labelsize": 26,
+#         # "axes.titlesize": 26,
+#         # "legend.fontsize": 16,
+#         # "xtick.labelsize": 18,
+#         "ytick.labelsize": 18,
+#         "figure.dpi": 600,
+#         "axes.linewidth": 4,
+#     })
+
 def _set_plot_style():
     plt.rcParams.update({
+        # 字体与字号
         "font.family": "Times New Roman",
         "font.size": 22,
-        "axes.labelsize": 26,
-        # "axes.titlesize": 26,
-        # "legend.fontsize": 16,
-        # "xtick.labelsize": 18,
-        "ytick.labelsize": 18,
-        "figure.dpi": 600,
+        # 坐标轴 & 标题
         "axes.linewidth": 4,
+        "axes.labelsize": 40,  # xlabel/ylabel 字号
+        "axes.labelweight": "bold",  # xlabel/ylabel 加粗
+        "axes.titlesize": 24,
+        "axes.titleweight": "bold",
+        # 网格
+        "axes.grid": True,
+        "grid.linestyle": "--",
+        "grid.linewidth": 4,
+        "grid.alpha": 0.4,
+        # 线条/marker 的默认（仍可在 plot 里覆盖）
+        "lines.linewidth": 6,
+        "lines.markersize": 18,
+        "lines.markerfacecolor": "none",
+        "lines.markeredgewidth": 5,
+        # 刻度线（粗细 & 长度）
+        "xtick.major.width": 3.0,
+        "ytick.major.width": 3.0,
+        "xtick.minor.width": 2.0,
+        "ytick.minor.width": 2.0,
+        "xtick.major.size": 8.0,
+        "ytick.major.size": 8.0,
+        "xtick.minor.size": 5.0,
+        "ytick.minor.size": 5.0,
+        # 刻度标签字号（注意：粗体不能用 rcParams 设置，见下方循环）
+        "xtick.labelsize": 26,
+        "ytick.labelsize": 26,
+        # 图例（字号可配，但粗体仍需手动 prop）
+        "legend.frameon": False,
+        "legend.fontsize": 22,
+        # 保存
+        "savefig.dpi": 600,
+        "savefig.bbox": "tight",
     })
 
 
@@ -166,19 +207,20 @@ def plot_latency_vs_q_per_circuit(circuit: str, qs: List[int], agg_rows: List[Di
         mean_y = np.array(mean_y, dtype=float)
         std_y = np.array(std_y, dtype=float)
 
-        ax.plot(xs, mean_y, marker=markers[i % len(markers)],
-                markerfacecolor='none',markeredgewidth=5,
-                markersize=15, linewidth=6, label=label_map.get(m, m),
+        ax.plot(xs, mean_y, marker=markers[i % len(markers)],label=label_map.get(m, m),
                 color=colors.get(str(m)))
         ax.fill_between(xs, mean_y - std_y, mean_y + std_y,
                         alpha=0.20, linewidth=0, color=colors.get(str(m)))
 
+    for tick in ax.get_xticklabels() + ax.get_yticklabels():
+        tick.set_fontweight("bold")
+
     ax.set_xlabel("Qubits")
-    ax.set_ylabel("Transpilation Latency (s)")
+    ax.set_ylabel("Latency (s)")
     # ax.set_yscale("log")
-    ax.grid(True, linestyle="--", linewidth=2, alpha=0.5)
+    # ax.grid(True, linestyle="--", linewidth=2, alpha=0.5)
     # ax.legend(frameon=False, ncol=2, loc="upper left")
-    plt.title(titles.get(circuit))
+    plt.title(titles.get(circuit), fontsize=40, fontweight="bold")
 
     outdir.mkdir(parents=True, exist_ok=True)
     png = outdir / f"latency_vs_q_{_safe_label(circuit)}.png"
@@ -308,8 +350,8 @@ def reload_and_replot(save_dir: str):
     # 绘图
     outdir = PLOT_DIR / "latency_vs_q"
     for c in circuits:
-        # plot_latency_vs_q_per_circuit(c, qs, agg_rows, outdir)
-        abstract_legend(c, qs, agg_rows, outdir)
+        plot_latency_vs_q_per_circuit(c, qs, agg_rows, outdir)
+        # abstract_legend(c, qs, agg_rows, outdir)
 
 
 
@@ -559,6 +601,7 @@ def main():
     name = ["ghz", "qaoa", "qsim", "rca", "vqe", "qft"]
     # name = ["qft"]
     for n in name:
+        # LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}_test_127q"
         dir = args.load_dir + f"_{n}/repeated_v11_multiq"
         reload_and_replot(dir)
 

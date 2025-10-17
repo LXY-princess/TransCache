@@ -51,6 +51,46 @@ def autodetect_columns(df: pd.DataFrame) -> Dict[str, Optional[str]]:
         "round_col": round_col,
     }
 
+def _update_plot_params():
+    plt.rcParams.update({
+        # 字体与字号
+        "font.family": "Times New Roman",
+        "font.size": 22,
+        # 坐标轴 & 标题
+        "axes.linewidth": 4,
+        "axes.labelsize": 40,  # xlabel/ylabel 字号
+        "axes.labelweight": "bold",  # xlabel/ylabel 加粗
+        "axes.titlesize": 24,
+        "axes.titleweight": "bold",
+        # 网格
+        "axes.grid": True,
+        "grid.linestyle": "--",
+        "grid.linewidth": 4,
+        "grid.alpha": 0.4,
+        # 线条/marker 的默认（仍可在 plot 里覆盖）
+        "lines.linewidth": 6,
+        "lines.markersize": 18,
+        "lines.markerfacecolor": "none",
+        "lines.markeredgewidth": 4,
+        # 刻度线（粗细 & 长度）
+        "xtick.major.width": 3.0,
+        "ytick.major.width": 3.0,
+        "xtick.minor.width": 2.0,
+        "ytick.minor.width": 2.0,
+        "xtick.major.size": 8.0,
+        "ytick.major.size": 8.0,
+        "xtick.minor.size": 5.0,
+        "ytick.minor.size": 5.0,
+        # 刻度标签字号（注意：粗体不能用 rcParams 设置，见下方循环）
+        "xtick.labelsize": 26,
+        "ytick.labelsize": 26,
+        # 图例（字号可配，但粗体仍需手动 prop）
+        "legend.frameon": False,
+        "legend.fontsize": 22,
+        # 保存
+        "savefig.dpi": 600,
+        "savefig.bbox": "tight",
+    })
 
 # ---------- Plotting ----------
 
@@ -60,9 +100,10 @@ def plot_hitrate_curves(summary: pd.DataFrame, out_png: str, title: str = None, 
     Draws per-method curve with hollow markers and mean±std ribbon.
     """
     # methods = summary["method"].unique().tolist()
-    plt.rcParams.update({"font.family": "Times New Roman", "font.size": 22, "axes.linewidth": 2,  })
+    # —— 全局/本图统一样式：能进 rcParams 的尽量都放这里 ——
+    _update_plot_params()
     methods = ["PR", "FS", "FS+Pre+ttl+SE+ema", ]
-    plt.figure(figsize=(8, 5), dpi=140)
+    plt.figure(figsize=(8, 5), dpi=600)
 
     marker_cycle = ["o", "s", "D", "^", "v", "<", ">", "P", "X", "*"]
 
@@ -88,21 +129,26 @@ def plot_hitrate_curves(summary: pd.DataFrame, out_png: str, title: str = None, 
             x, y,
             label=lables.get(str(m)),
             marker=mk,
-            markersize=10,
-            markerfacecolor='none',  # 空心
-            markeredgewidth=3,
-            linewidth=3,
             color=colors.get(str(m)),
         )
         color = line.get_color()
         plt.fill_between(x, y - s, y + s, alpha=0.20, color=color)
 
-    plt.xlabel("Workload Size", fontsize=26)
-    plt.ylabel("Workload Hitrate", fontsize=26)
+    ax = plt.gca()
+
+    # —— 必须逐轴处理的部分（rcParams 无法直接控制粗体） ——
+    # 1) 刻度标签加粗（rcParams 没有 tick label weight）
+    for tick in ax.get_xticklabels() + ax.get_yticklabels():
+        tick.set_fontweight("bold")
+
+    # 2) 图例加粗（rcParams 仅能设字号；粗体需用 prop 或循环设置）
+    # plt.legend(prop={"weight": "bold"})
+
+    plt.xlabel("Workload Size")
+    plt.ylabel("Hitrate")
     if title:
         plt.title(title)
-    plt.legend(frameon=False, fontsize=20)
-    plt.grid(True, linestyle="--", alpha=0.4, linewidth=2)
+
     plt.tight_layout()
     os.makedirs(os.path.dirname(out_png), exist_ok=True)
     plt.savefig(out_png, bbox_inches="tight", dpi=600)

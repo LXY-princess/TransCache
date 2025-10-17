@@ -14,7 +14,38 @@ from v18_core import PLOT_DIR, LOAD_ROOT  # 与原 runner 保持一致
 
 # ---------- 基础小工具 ----------
 def _set_plot_style():
-    plt.rcParams.update({"font.family": "Times New Roman", "font.size": 16})
+    plt.rcParams.update({"font.family": "Times New Roman",
+                         "font.size": 22,
+                         # 坐标轴 & 标题
+                         "axes.linewidth": 3,
+                         "axes.labelsize": 26,
+                         "axes.labelweight": "bold",
+                         "axes.titlesize": 24,
+                         "axes.titleweight": "bold",
+                         # 网格
+                         "axes.grid": True,
+                         "grid.linestyle": "--",
+                         "grid.linewidth": 2,
+                         "grid.alpha": 0.4,
+                         # 刻度线（粗细 & 长度）
+                         "xtick.major.width": 3.0,
+                         "ytick.major.width": 3.0,
+                         "xtick.minor.width": 2.0,
+                         "ytick.minor.width": 2.0,
+                         "xtick.major.size": 8.0,
+                         "ytick.major.size": 8.0,
+                         "xtick.minor.size": 5.0,
+                         "ytick.minor.size": 5.0,
+                         # 刻度标签字号（注意：粗体不能用 rcParams 设置，见下方循环）
+                         "xtick.labelsize": 22,
+                         "ytick.labelsize": 22,
+                         # 图例（字号可配，但粗体仍需手动 prop）
+                         "legend.frameon": False,
+                         "legend.fontsize": 16,
+                         # 保存
+                         "savefig.dpi": 600,
+                         "savefig.bbox": "tight",
+                         })
 
 def _flatten_points(raw_lat: Dict[str, List[List[float]]],
                     raw_csz: Dict[str, List[List[float]]],
@@ -177,7 +208,7 @@ def _draw_sizebar(
     # —— 把刻度与标题都放到右侧，并把标题放在数字的右边
     ax_bar.yaxis.tick_right()
     ax_bar.yaxis.set_label_position("right")
-    ax_bar.set_ylabel("Workload size (#requests)", rotation=90, va="center", ha="center", labelpad=12, fontsize=20)
+    ax_bar.set_ylabel("Workload Size (#requests)", rotation=90, va="center", ha="center", labelpad=12, fontsize=22)
 
     # ax_bar.set_yticks([_norm(v) for v in tick_vals])
     # ax_bar.set_yticklabels([f"{v}" for v in tick_vals])
@@ -274,10 +305,10 @@ def load_and_replot_regions(load_dir: str,
 
         # 仅追加一个“白底蓝边 = median”的示意项（不区分方法）
         median_handle = Line2D([0], [0], marker="o", linestyle="None",
-                               markerfacecolor="white", markeredgecolor="blue", markeredgewidth=1.6,
+                               markerfacecolor="white", markeredgecolor="blue", markeredgewidth=2,
                                markersize=10, label="Median (blue edge)")
         legend_handles = method_handles + [median_handle]
-        leg1 = ax.legend(handles=legend_handles, title="Method", frameon=False, loc="upper right")
+        leg1 = ax.legend(handles=legend_handles, title="Method", frameon=False, loc="upper right", prop={"weight": "bold"})
 
         # 尺寸“colorbar”式连续条（替代 size legend）
         size_to_s = _size_scaler(sizes, s_min=40, s_max=160)
@@ -323,10 +354,17 @@ def load_and_replot_regions(load_dir: str,
         # 代表点：用同方法色的大号 marker 标出（几何中位数）
         ax.scatter([center[0]], [center[1]], s=400 if name==emphasize_method else 200,
                    marker=markers[mi % len(markers)], color=color,
-                   edgecolors="blue", linewidths=1.6, zorder=5)
+                   edgecolors="blue", linewidths=2, zorder=5)
 
-    ax.set_xlabel("Final Cache Size (#Circuits)", fontsize=20)
-    ax.set_ylabel("Compilation Latency (s)", fontsize=20)
+    ax = plt.gca()
+
+    # —— 必须逐轴处理的部分（rcParams 无法直接控制粗体） ——
+    # 1) 刻度标签加粗（rcParams 没有 tick label weight）
+    for tick in ax.get_xticklabels() + ax.get_yticklabels():
+        tick.set_fontweight("bold")
+
+    ax.set_xlabel("Final Cache Size (#Circuits)")
+    ax.set_ylabel("Compilation Latency (s)")
     ax.grid(True, linestyle="--", alpha=0.5)
     ax.set_xlim(left=0); ax.set_ylim(bottom=0)
     fig.tight_layout()
@@ -340,6 +378,7 @@ def load_and_replot_regions(load_dir: str,
 
 if __name__ == "__main__":
     # 示例：从默认目录加载并重绘
+    # LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}_score_eviction_rounds5"
     load_and_replot_regions(
         load_dir=str((LOAD_ROOT/"scaling").resolve()),
         out_png="scaling_latency_vs_cache_scatter_regions.png",
@@ -348,5 +387,5 @@ if __name__ == "__main__":
         ellipse_q=0.90,                 # 椭圆覆盖概率（常用 0.90/0.95）
         emphasize_method="FS+Pre+ttl+SE+ema",  # 高亮你的方法
         point_kind="geom_median",        # 代表点：几何中位数
-        methods_keep = ["FS+Pre+ttl+SE+ema", "FS+Pre", "FS", "PR"]
+        methods_keep = ["FS+Pre+ttl+SE+ema", "FS+Pre","FS", "PR"]
     )

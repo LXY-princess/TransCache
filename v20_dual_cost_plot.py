@@ -22,7 +22,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sympy.printing.pretty.pretty_symbology import bold_unicode
-
+from v20_hitrate_plot import _update_plot_params
 
 # ---------- Cost definition (softmax / log-sum-exp in cost domain) ----------
 
@@ -74,29 +74,30 @@ def autodetect_columns(df: pd.DataFrame) -> Dict[str, Optional[str]]:
 
 
 # ---------- Plotting ----------
-
 def plot_cost_curves(summary: pd.DataFrame, out_png: str, title: str = None):
     """
     summary columns: method, size, cost_mean, cost_std
-    作用：为每种方法分配不同的“空心”marker，并画 mean±std 阴影
+    作用：集中 rcParams 统一风格；给每种方法分配不同空心 marker，画 mean±std 阴影
     """
-    plt.rcParams.update({"font.family": "Times New Roman", "font.size": 22, "axes.linewidth": 2})
-    # methods = summary["method"].unique().tolist()
-    methods = ["PR", "FS", "FS+Pre+ttl+SE+ema",]
+    import matplotlib.pyplot as plt
+    import os
 
-    plt.figure(figsize=(8, 5), dpi=140)
+    _update_plot_params()
+    # 固定方法顺序（如需）
+    methods = ["PR", "FS", "FS+Pre+ttl+SE+ema"]
 
-    # 常见可区分度高的 marker；数量不够会循环复用
+    plt.figure(figsize=(8, 5), dpi=600)
+
     marker_cycle = ["o", "s", "D", "^", "v", "<", ">", "P", "X", "*"]
-
-    lables = {"FS+Pre+ttl+SE+ema": "TransCache",
-              "FS":"CCache",
-              "PR": "Braket"
+    labels = {
+        "FS+Pre+ttl+SE+ema": "TransCache",
+        "FS": "CCache",
+        "PR": "Braket",
     }
-
-    colors = {"FS+Pre+ttl+SE+ema": "#213d69",
-              "FS":"#6b80d6", # #6b84d6
-              "PR": "#64a6d1"
+    colors = {
+        "FS+Pre+ttl+SE+ema": "#213d69",
+        "FS": "#6b80d6",
+        "PR": "#64a6d1",
     }
 
     for i, m in enumerate(methods):
@@ -106,32 +107,32 @@ def plot_cost_curves(summary: pd.DataFrame, out_png: str, title: str = None):
         s = dfm["cost_std"].values
 
         mk = marker_cycle[i % len(marker_cycle)]
-
-        # 画曲线 + 空心 marker（markerfacecolor='none'）
         (line,) = plt.plot(
             x, y,
-            label=lables.get(str(m)),
+            label=labels.get(str(m), str(m)),
             marker=mk,
-            markersize=10,
-            markerfacecolor='none',   # 空心
-            markeredgewidth=3,
-            linewidth=3,
             color=colors.get(str(m)),
         )
+        plt.fill_between(x, y - s, y + s, alpha=0.20, color=line.get_color())
 
-        # 用与曲线相同的颜色填充阴影
-        color = line.get_color()
-        plt.fill_between(x, y - s, y + s, alpha=0.20, color=color)
+    ax = plt.gca()
 
-    plt.xlabel("Workload Size", fontsize=26)
-    plt.ylabel("BOSC", fontsize=26)
+    # —— 必须逐轴处理的部分（rcParams 无法直接控制粗体） ——
+    # 1) 刻度标签加粗（rcParams 没有 tick label weight）
+    for tick in ax.get_xticklabels() + ax.get_yticklabels():
+        tick.set_fontweight("bold")
+
+    # 2) 图例加粗（rcParams 仅能设字号；粗体需用 prop 或循环设置）
+    # plt.legend(prop={"weight": "bold"})
+
+    # 轴标签
+    plt.xlabel("Workload Size")
+    plt.ylabel("BOSC")
     if title:
         plt.title(title)
-    plt.legend(frameon=False, fontsize=20)
-    plt.grid(True, linestyle="--", alpha=0.4, linewidth=2)
     plt.tight_layout()
     os.makedirs(os.path.dirname(out_png), exist_ok=True)
-    plt.savefig(out_png, bbox_inches="tight", dpi=600)
+    plt.savefig(out_png)
     plt.close()
 
 

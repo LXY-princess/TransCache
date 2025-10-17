@@ -280,10 +280,10 @@ def main_run(args):
             predictor_cfg=predictor_cfg, prewarm_every=args.prewarm_every,
             lookahead_sec=args.lookahead, prob_th=args.prob_th,
             max_compile=args.max_compile, shots=args.shots,
-            include_exec=False,   # compile-only 为主；如需 E2E 改成 True
+            include_exec=True,   # compile-only 为主；如需 E2E 改成 True
         )
     def _baseline_kwargs(workload):
-        return dict(workload=workload, shots=args.shots, include_exec=False)
+        return dict(workload=workload, shots=args.shots, include_exec=True)
 
     STRATS = [
         # ("FS+Pre+ttl+SE+ema+SWR", S_FS_Pre_ttl_SE_ema_SWR.run_strategy, _common_kwargs),
@@ -358,10 +358,10 @@ def main_run(args):
             out_tl = PLOT_DIR / f"timeline_wl_{N}_r{r}.png"
             draw_timeline_multi(events_series, out_tl)  # 该函数内部会保存
 
-            cache_size_changes = {name: metrics_series[name].get("cache_size_series", [])
-                                  for (name, _, _) in STRATS}
-            out_sz = PLOT_DIR / f"cache_change_wl_{N}_r{r}.png"
-            plot_cache_size_change(cache_size_changes, out_sz)
+            # cache_size_changes = {name: metrics_series[name].get("cache_size_series", [])
+            #                       for (name, _, _) in STRATS}
+            # out_sz = PLOT_DIR / f"cache_change_wl_{N}_r{r}.png"
+            # plot_cache_size_change(cache_size_changes, out_sz)
 
             # ---- 每轮 workload 分布图 ----
             out_wl = PLOT_DIR / f"wl_dist_N{N}_r{r}.png"
@@ -614,7 +614,7 @@ def build_argparser():
                     help="run: 运行仿真并绘图；load: 从 summary 重绘")
 
     # workload shape
-    ap.add_argument("--sizes", type=str, default="200,250,400,500", # 50,100,150,200,250,300,350,400,450,500
+    ap.add_argument("--sizes", type=str, default="500", # 50,100,150,200,250,300,350,400,450,500
                     help="Comma-separated workload lengths to test.")
     ap.add_argument("--q_list", type=str, default="5,7,11,13,15,17")
     ap.add_argument("--d_list", type=str, default="2,4,6")
@@ -653,16 +653,24 @@ def main():
     args = ap.parse_args()
     if args.mode == "run":
         main_run(args)
-        load_and_replot_regions(
-            load_dir=str((ROOT / "scaling").resolve()),
-            out_png="scaling_latency_vs_cache_scatter_regions.png",
-            show_scatter=True,
-            region_kind="ellipse",  # "ellipse" | "hull" | "both"
-            ellipse_q=0.90,  # 椭圆覆盖概率（常用 0.90/0.95）
-            emphasize_method="FS+Pre+ttl+SE+ema",  # 高亮你的方法
-            point_kind="geom_median",  # 代表点：几何中位数
-            methods_keep=["FS+Pre+ttl+SE+ema", "FS+ttl+SE+ema","FS+Pre", "FS", "NoCache"]
-        )
+        # load_and_replot_regions(
+        #     load_dir=str((ROOT / "scaling").resolve()),
+        #     out_png="scaling_latency_vs_cache_scatter_regions.png",
+        #     show_scatter=True,
+        #     region_kind="ellipse",  # "ellipse" | "hull" | "both"
+        #     ellipse_q=0.90,  # 椭圆覆盖概率（常用 0.90/0.95）
+        #     emphasize_method="FS+Pre+ttl+SE+ema",  # 高亮你的方法
+        #     point_kind="geom_median",  # 代表点：几何中位数
+        #     methods_keep=["FS+Pre+ttl+SE+ema", "FS+ttl+SE+ema","FS+Pre", "FS", "NoCache"]
+        # )
+        load_and_redraw(load_dir=args.save_dir,
+                        out_latency=args.out_latency,
+                        out_cache=args.out_cache,
+                        out_hitrate=args.out_hitrate,
+                        out_scatter=args.out_scatter,
+                        # methods_keep=["FS+Pre+ttl+SE+ema", "FS+Pre", "FS", "PR"])
+                        methods_keep=["FS+Pre+ttl+SE+ema", "FS+ttl+SE+ema", "FS+Pre", "FS", "NoCache"],
+                        save_dir=args.save_dir)
     else:
         # mode "load"
         load_and_redraw(load_dir=args.load_dir,

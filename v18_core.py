@@ -10,7 +10,7 @@ import matplotlib.patches as patches
 from qiskit import QuantumCircuit, transpile, qasm3
 from qiskit_aer import AerSimulator
 from qiskit_aer.primitives import Sampler as AerSampler
-
+from matplotlib import cm, colors as mcolors
 # circuits
 from v11_quasa_bench_circuits import CIRCUITS_QUASA as CIRCUITS
 
@@ -23,7 +23,7 @@ ROOT = pathlib.Path("./figs")/f"v{VNUM}"
 PLOT_DIR = ROOT/"plots"
 # EVENTS_DIR.mkdir(parents=True, exist_ok=True)
 PLOT_DIR.mkdir(parents=True, exist_ok=True)
-LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}_score_eviction_rounds5"
+LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}_e2e_latency_breakdown_wl150"
 LOAD_EVENTS_DIR = LOAD_ROOT/"events"
 
 def md5_qasm(circ: QuantumCircuit) -> str:
@@ -388,9 +388,247 @@ def plot_freq_hitrate_bars(freq_by_label, hitrate_by_label, overall_hit_rate,
     plt.tight_layout()
     plt.savefig(out_png, dpi=240, bbox_inches="tight"); print(f"[save] bars -> {out_png}")
 
+def draw_timeline_run_only(method_events: Dict[str, List[Dict[str,Any]]],
+                           out_png: pathlib.Path,
+                           legend_topk: int = 16):
+    """
+    仅绘制 kind == 'run' 的事件块；y 轴方法标签用映射名；严格按 method_order 的顺序绘制。
+    - method_order: 明确指定方法的上下顺序（从下到上绘制的顺序）。如果为 None，则使用 method_events 的键当前顺序。
+    """
+    plt.rcParams.update({"font.family": "Times New Roman", "font.size": 18})
+    PRED_LABEL = "__predictor__"
+
+    method_order = ["FullCompilation", "PR","FS", "FS+Pre+ttl+SE+ema",]
+    # ----------- 仅统计 run 标签用于配色/图例 -----------
+    run_labels = []
+    for k in method_order:
+        for e in method_events[k]:
+            if e.get("kind", "run") == "run" and e.get("label") and e["label"] != PRED_LABEL:
+                run_labels.append(e["label"])
+    freq = Counter(run_labels)
+    uniq = list(freq.keys())
+
+    cmap = plt.cm.get_cmap("tab20", max(20, len(uniq)))
+    label2color = {lab: cmap(i % cmap.N) for i, lab in enumerate(uniq)}
+
+    # ----------- 画布 & 轴范围 -----------
+    n = len(method_order)
+    method_labels = {
+        "FullCompilation": "FullComp",
+        "PR": "Braket",
+        "FS": "CCache",
+        "FS+Pre+ttl+SE+ema": "TransCache",
+    }
+
+    fig, ax = plt.subplots(figsize=(14, 7))
+
+    # 全局时间上限
+    T = 0.0
+    for k in method_order:
+        evs = method_events[k]
+        T = max(T, max((e["start"] + e["dur"] for e in evs), default=0.0))
+    ax.set_xlim(0, T * 1.05)
+    ax.set_ylim(-0.6, n - 0.4)
+
+    # y 轴刻度与标签：从下到上按 method_order 绘制，因此从上到下显示时要反转
+    top_to_bottom_labels = [method_labels.get(k, k) for k in method_order][::-1]
+    ax.set_yticks(range(n))
+    ax.set_yticklabels(top_to_bottom_labels, fontweight="bold")
+
+    ax.set_xlabel("Time (s)", fontweight="bold")
+    ax.grid(axis="x", linestyle="--", linewidth=0.8, alpha=0.5, zorder=0)
+    for spine in ax.spines.values():
+        spine.set_linewidth(2)
+
+    # ----------- 逐行绘制（严格按 method_order） -----------
+    def draw_row(evs, y):
+        h = 0.3
+        for e in evs:
+            x0, w = e["start"], e["dur"]
+            kind = e.get("kind", "run")
+            if kind == "predict":
+                rect = patches.Rectangle((x0, y - h/2), w, h,
+                                         facecolor="white", edgecolor="k",
+                                         hatch="xx", alpha=0.9)
+            elif kind == "prewarm":
+                color = label2color.get(e.get("label"), (0.7, 0.7, 0.7, 1.0))
+                rect = patches.Rectangle((x0, y - h/2), w, h,
+                                         facecolor=color, edgecolor="k",
+                                         hatch="//", alpha=0.85)
+            elif kind == "queue_wait":
+                rect = patches.Rectangle((x0, y - h/2), w, h,
+                                         facecolor="none", edgecolor="k",
+                                         linestyle="--", alpha=0.6)
+            else:  # run
+                color = label2color.get(e.get("label"), (0.7, 0.7, 0.7, 1.0))
+                rect = patches.Rectangle((x0, y - h/2), w, h,
+                                         facecolor=color, edgecolor="none",
+                                         alpha=0.95)
+            ax.add_patch(rect)
+
+    for idx, k in enumerate(method_order):
+        draw_row(method_events[k], y=(n - 1 - idx))  # 使 method_order[0] 在最下方
+
+    # ----------- 图例：仅展示 run 的 label，按频次取前 legend_topk -----------
+    handles = [patches.Patch(facecolor=label2color[lab], edgecolor="k", label=lab)
+               for lab, _ in freq.most_common(legend_topk)]
+    ax.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.5, 1.3),
+              ncol=4, fontsize=12, frameon=False)
+
+    plt.tight_layout()
+    plt.savefig(out_png, dpi=600, bbox_inches="tight")
+    print(f"[save] timeline -> {out_png}")
+
+def draw_timeline_run_only_colorbar(method_events: Dict[str, List[Dict[str,Any]]],
+                           out_png: pathlib.Path,
+                           legend_topk: int = 16):  # legend_topk 已无用，但保留签名兼容
+    """
+    仅绘制 kind == 'run' 的事件块；
+    颜色用连续 colormap 根据“电路索引”映射；
+    colorbar 显示索引号（不展示电路具体名称）。
+    """
+    plt.rcParams.update({"font.family": "Times New Roman", "font.size": 45})
+    PRED_LABEL = "__predictor__"
+
+    # ----------- 明确绘图顺序（从下到上） -----------
+    method_order = ["FullCompilation", "PR", "FS", "FS+Pre+ttl+SE+ema"]
+
+    # ----------- 为 run 事件建立“电路索引”映射（按出现顺序稳定编号） -----------
+    label2idx = {}
+    for k in method_order:
+        if k not in method_events:
+            continue
+        for e in method_events[k]:
+            if e.get("kind", "run") == "run" and e.get("label") and e["label"] != PRED_LABEL:
+                lab = e["label"]
+                if lab not in label2idx:
+                    label2idx[lab] = len(label2idx)  # 0..K-1
+
+    K = max(len(label2idx), 1)
+    cmap = cm.get_cmap("twilight")
+    norm = mcolors.Normalize(vmin=0, vmax=K-1)
+
+    # def color_for_label(lab):
+    #     idx = label2idx.get(lab, None)
+    #     return cmap(norm(idx)) if idx is not None else (0.7, 0.7, 0.7, 1.0)
+
+    def color_for_label(lab):
+        idx = label2idx.get(lab, None)
+        if idx is None:
+            return (0.7, 0.7, 0.7, 1.0)
+        p = idx2perm[idx]  # 乱序后的离散位置 0..K-1
+        pos = (p + 0.5) / K  # 放在每个色段的中点，视觉更均匀
+        return cmap(pos)
+
+    # 方式 A：固定随机种子（全局一致且可复现）
+    rng = np.random.default_rng(seed=2025)
+    perm = rng.permutation(K)
+    # 反查：原始 idx -> 乱序后 idx
+    idx2perm = {i: p for i, p in enumerate(perm)}
+
+    # ----------- 画布 & 轴范围 -----------
+    n = len(method_order)
+    method_labels = {
+        "FullCompilation": "FullComp",
+        "PR": "Braket",
+        "FS": "CCache",
+        "FS+Pre+ttl+SE+ema": "TransCache",
+    }
+
+    fig, ax = plt.subplots(figsize=(20, 7))
+
+    # 全局时间上限
+    T = 0.0
+    for k in method_order:
+        if k not in method_events:
+            continue
+        evs = method_events[k]
+        T = max(T, max((e["start"] + e["dur"] for e in evs), default=0.0))
+    ax.set_xlim(-0.02, T * 1.05)
+    ax.set_ylim(-0.6, n - 0.4)
+
+    # y 轴刻度与标签（从上到下显示反序）
+    top_to_bottom_labels = [method_labels.get(k, k) for k in method_order][::-1]
+    ax.set_yticks(range(n))
+    ax.set_yticklabels(top_to_bottom_labels, fontweight="bold")
+
+    ax.set_xlabel("Time (s)", fontweight="bold")
+    ax.grid(axis="x", linestyle="--", linewidth=4, alpha=0.5, zorder=0)
+
+
+    # ----------- 逐行绘制（严格按 method_order） -----------
+    def draw_row(evs, y):
+        h = 0.4
+        for e in evs:
+            x0, w = e["start"], e["dur"]
+            kind = e.get("kind", "run")
+            lab  = e.get("label")
+            if kind == "predict":
+                rect = patches.Rectangle((x0, y - h/2), w, h,
+                                         facecolor="white", edgecolor="k",
+                                         hatch="xx", alpha=0.9)
+            elif kind == "prewarm":
+                rect = patches.Rectangle((x0, y - h/2), w, h,
+                                         facecolor=color_for_label(lab), edgecolor="k",
+                                         hatch="//", alpha=0.85)
+            elif kind == "queue_wait":
+                rect = patches.Rectangle((x0, y - h/2), w, h,
+                                         facecolor="none", edgecolor="k",
+                                         linestyle="--", alpha=0.6)
+            else:  # run
+                rect = patches.Rectangle((x0, y - h/2), w, h,
+                                         facecolor=color_for_label(lab), edgecolor="none",
+                                         alpha=0.95, zorder=3)
+            ax.add_patch(rect)
+
+    for idx, k in enumerate(method_order):
+        if k not in method_events:
+            continue
+        draw_row(method_events[k], y=(n - 1 - idx))  # 使 method_order[0] 在最下方
+
+    # ----------- 连续 colorbar（显示电路索引号，不显示电路名称） -----------
+    sm = cm.ScalarMappable(norm=norm, cmap=cmap)
+    sm.set_array([])
+
+    for spine in ax.spines.values():
+        spine.set_linewidth(5)
+
+    # 横向 colorbar；把刻度放到顶部
+    cbar = fig.colorbar(
+            sm, ax=ax,
+            orientation='vertical',   # ← 改为竖向
+            pad=0.02,                 # 与主图的间距
+            fraction=0.06,            # colorbar 占用的宽度比例
+            shrink=0.95,               # 适当缩短一点高度（可按需调整/删除）
+        )
+    cbar.set_label("Circuit Index", fontweight="bold")
+    cbar.ax.tick_params(labelsize=28, width=2, length=6)
+    for t in cbar.ax.get_yticklabels():  # 横向时改为 get_xticklabels()
+        t.set_fontweight("bold")
+
+    # 设定整数刻度（索引号）
+    if K <= 8:
+        ticks = np.arange(K)
+    else:
+        # 若电路过多，稀疏一些刻度（最多 ~20 个）
+        step = int(np.ceil(K / 8))
+        ticks = np.arange(0, K, step)
+    cbar.set_ticks(ticks)
+    cbar.set_ticklabels([str(int(t)) for t in ticks])
+
+    # —— 必须逐轴处理的部分（rcParams 无法直接控制粗体） ——
+    # 1) 刻度标签加粗（rcParams 没有 tick label weight）
+    for tick in ax.get_xticklabels() + ax.get_yticklabels():
+        tick.set_fontweight("bold")
+
+    plt.tight_layout()
+    plt.savefig(out_png, dpi=600, bbox_inches="tight")
+    print(f"[save] timeline -> {out_png}")
+
 # ---------- multi-method timeline ----------
 def draw_timeline_multi(method_events: Dict[str, List[Dict[str,Any]]],
                         out_png: pathlib.Path, legend_topk: int = 16):
+    # draw timeline, each top 16 circuits has a color legend
     plt.rcParams.update({"font.family": "Times New Roman", "font.size": 18})
     PRED_LABEL = "__predictor__"
     # collect circuit labels
@@ -413,7 +651,7 @@ def draw_timeline_multi(method_events: Dict[str, List[Dict[str,Any]]],
     ax.set_yticks(range(n))
     ax.set_yticklabels(list(method_events.keys())[::-1], fontweight="bold")
     ax.set_xlabel("Time (seconds)", fontweight="bold")
-    ax.grid(axis="x", linestyle="--", linewidth=0.8, alpha=0.5, zorder=0)
+    ax.grid(axis="x", linestyle="--", linewidth=0.8, alpha=0.6, zorder=0)
     for spine in ax.spines.values(): spine.set_linewidth(2)
 
     def draw_row(evs, y):
@@ -429,7 +667,7 @@ def draw_timeline_multi(method_events: Dict[str, List[Dict[str,Any]]],
                 rect = patches.Rectangle((x0, y - h/2), w, h, facecolor="none", edgecolor="k", linestyle="--", alpha=0.6)
             else:  # run
                 color = label2color.get(e["label"], (0.7,0.7,0.7,1.0))
-                rect = patches.Rectangle((x0, y - h/2), w, h, facecolor=color, edgecolor="k", alpha=0.95)
+                rect = patches.Rectangle((x0, y - h/2), w, h, facecolor=color, edgecolor="none", alpha=0.95)
             ax.add_patch(rect)
 
     for idx, (name, evs) in enumerate(method_events.items()):

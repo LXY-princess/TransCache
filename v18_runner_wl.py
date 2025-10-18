@@ -9,7 +9,9 @@ from dataclasses import asdict, dataclass
 from matplotlib.lines import Line2D
 from matplotlib.colors import Normalize
 import matplotlib.cm as cm
+from typing import Optional
 
+# from PaulseCache.v18_core import draw_timeline_run_only_colorbar
 # core helpers & paths
 from v18_core import (
     ROOT, PLOT_DIR, build_catalog,
@@ -17,6 +19,8 @@ from v18_core import (
     build_workload_poisson_superposition_exact,
     visualize_superposed_poisson_exact,
     draw_timeline_multi,
+    draw_timeline_run_only,
+    draw_timeline_run_only_colorbar,
     plot_cache_size_change,
     compute_freq_and_hits
 )
@@ -263,6 +267,161 @@ def plot_latency_vs_cache_scatter(methods: List[str],
     fig.savefig(out_path, dpi=600)
     print(f"[save] {out_path}")
 
+def export_events_for_origin_with_labels(
+    method_events: Dict[str, List[Dict[str, Any]]],
+    csv_path: str,
+    method_order: Optional[List[str]] = None,
+    method_labels: Optional[Dict[str, str]] = None,
+    include_non_run: bool = False,
+    predictor_label: str = "__predictor__"
+):
+    """
+    将 method_events 导出为 Origin 友好的长表 CSV。
+    —— 每条事件一行，包含 start、dur、end、offset/bar（偏移堆叠法）、以及用于上色的 circuit_idx；
+       同时保留电路的真实名字 circuit_label（仅作数据保留，画图使用 circuit_idx）。
+
+    参数：
+      method_events: { method_name: [ {start, dur, kind, label, ...}, ... ], ... }
+      csv_path:      输出 CSV 路径
+      method_order:  明确的绘图顺序（从下到上）；若为 None，则按 method_events 的键顺序
+      method_labels: 方法显示名映射（如 {"FS+Pre+ttl+SE+ema":"TransCache", ...}）
+      include_non_run: 是否导出非 run 事件（prewarm/predict/queue_wait）。默认 False（只导 run）
+      predictor_label: 需要过滤掉的预测器伪标签名（默认 "__predictor__"）
+
+    输出 CSV 列：
+      method, method_disp, method_order, kind,
+      circuit_label, circuit_idx,
+      start, dur, end, offset, bar
+    """
+    # 1) 顺序与显示名
+    if method_order is None:
+        method_order = list(method_events.keys())
+    if method_labels is None:
+        method_labels = {
+            "FS+Pre+ttl+SE+ema": "TransCache",
+            "FS": "CCache",
+            "PR": "Braket",
+            "FullCompilation": "FullComp",
+        }
+
+    # 2) 为 run 事件建立稳定的 circuit 索引（按出现顺序：0,1,2,...）
+    label2idx: Dict[Optional[str], int] = {}
+    for m in method_order:
+        if m not in method_events:
+            continue
+        for e in method_events[m]:
+            if e.get("kind", "run") == "run":
+                lab = e.get("label")
+                if not lab or lab == predictor_label:
+                    continue
+                if lab not in label2idx:
+                    label2idx[lab] = len(label2idx)
+
+    def to_idx(lbl: Optional[str]) -> int:
+        # 未出现在 run 中的 label（或 None）用 -1，占位（绘图时可忽略或映射为背景）
+        return label2idx.get(lbl, -1) if lbl else -1
+
+    # 3) 组装长表
+    rows: List[Dict[str, Any]] = []
+    for order_idx, m in enumerate(method_order):
+        if m not in method_events:
+            continue
+        disp = method_labels.get(m, m)
+        for ev in method_events[m]:
+            kind = ev.get("kind", "run")
+            if (not include_non_run) and kind != "run":
+                continue
+            start = float(ev["start"])
+            dur   = float(ev["dur"])
+            label = ev.get("label")
+            if label == predictor_label:
+                label = None  # 统一去掉伪标签
+            rows.append({
+                "method": m,
+                "method_disp": disp,
+                "method_order": order_idx,   # 用于排序/分面
+                "kind": kind,                # run / prewarm / predict / queue_wait
+                "circuit_label": label,      # 真实电路名（保留给数据层，不用于着色）
+                "circuit_idx": to_idx(label),# 连续色标映射用的索引（作图用）
+                "start": start,
+                "dur": dur,
+                "end": start + dur,
+                "offset": start,             # 若用“偏移堆叠条形”法：透明段
+                "bar": dur,                  # 若用“偏移堆叠条形”法：可见段
+            })
+
+    # 4) 写 CSV
+    out = Path(csv_path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    if not rows:
+        raise ValueError("No rows to export. Check filters or input.")
+    with out.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
+        w.writeheader()
+        w.writerows(rows)
+    print(f"[OK] wrote Origin CSV: {out}  (rows={len(rows)}, unique circuits={len(label2idx)})")
+
+
+def load_and_redraw_timeline(load_dir: str,
+                             wl_size: int,
+                             out_tl: Optional[str] = None,
+                             methods: Optional[List[str]] = None) -> None:
+    """
+    从 {load_dir}/N{wl_size}/events/*.json 载入事件序列，并绘制 timeline。
+    - load_dir: run 时保存的根目录（包含 N{size}/events）
+    - wl_size: 目标 workload size（整数）
+    - out_tl: 输出文件名（写到 PLOT_DIR 下）；缺省为 timeline_wl_{size}.png
+    - methods: 若提供，仅绘制这些方法（文件名 stem 需匹配）
+    """
+    base = Path(load_dir)
+    events_dir = base / f"N{int(wl_size)}" / "events"
+    if not events_dir.exists():
+        raise FileNotFoundError(f"Events dir not found: {events_dir}")
+
+    # 读取 events/*.json -> {method: events_list}
+    events_series: Dict[str, list] = {}
+    for jf in sorted(events_dir.glob("*.json")):
+        name = jf.stem  # 文件名即方法名
+        if methods and name not in methods:
+            continue
+        try:
+            events = json.loads(jf.read_text(encoding="utf-8"))
+            if isinstance(events, list):
+                events_series[name] = events
+        except Exception as e:
+            print(f"[warn] skip {jf.name}: {e}")
+
+    if not events_series:
+        raise RuntimeError(f"No events loaded under {events_dir} "
+                           f"(methods filter={methods})")
+
+    # 输出路径（与现有风格一致：默认写到 PLOT_DIR 下）
+    out_name = out_tl or f"timeline_wl_{wl_size}.png"
+    out_path = PLOT_DIR / out_name  # 依赖你文件里已有的 PLOT_DIR
+    # 复用已有的多方法时间线绘制函数
+    draw_timeline_run_only_colorbar(events_series, out_path)
+
+    # draw_timeline_multi(events_series, out_path)
+    # print(f"[load-timeline] saved: {out_path} (from {events_dir})")
+
+    # method_order = ["FullCompilation", "PR", "FS", "FS+Pre+ttl+SE+ema"]  # 从下到上的绘图顺序
+    # method_labels = {
+    #     "FS+Pre+ttl+SE+ema": "TransCache",
+    #     "FS": "CCache",
+    #     "PR": "Braket",
+    #     "FullCompilation": "FullComp",
+    # }
+    # csv_out_name = "timeline_run_only.csv"
+    # csv_out_path = PLOT_DIR / csv_out_name  # 依赖你文件里已有的 PLOT_DIR
+    #
+    # export_events_for_origin_with_labels(
+    #     events_series,  # 你的事件字典
+    #     csv_path=csv_out_path,
+    #     method_order=method_order,
+    #     method_labels=method_labels,
+    #     include_non_run=False  # 只导 run；若想包含 prewarm/predict 等，改为 True
+    # )
+
 # ---------------- run-mode core (was original main body) ----------------
 def main_run(args):
     sizes = [int(x) for x in args.sizes.split(",") if x]
@@ -288,17 +447,17 @@ def main_run(args):
             predictor_cfg=predictor_cfg, prewarm_every=args.prewarm_every,
             lookahead_sec=args.lookahead, prob_th=args.prob_th,
             max_compile=args.max_compile, shots=args.shots,
-            include_exec = False,
+            include_exec = True,
         )
     def _baseline_kwargs(workload):
-        return dict(workload=workload, shots=args.shots, include_exec = False,)
+        return dict(workload=workload, shots=args.shots, include_exec = True,)
 
     STRATS = [
         # ("TransCache(Adaptive)", SA.run_strategy, _common_kwargs),
         ("FS+Pre+ttl+SE+ema", S_FS_Pre_ttl_SE_ema.run_strategy, _common_kwargs),
         # ("FS+Pre+ttl+SE", S_FS_Pre_ttl_SE.run_strategy, _common_kwargs),
         # ("FS+Pre+ttl", S_FS_Pre_ttl.run_strategy, _common_kwargs),
-        ("FS+Pre", S_FS_Pre.run_strategy, _common_kwargs),
+        # ("FS+Pre", S_FS_Pre.run_strategy, _common_kwargs),
         ("FS",S_FS.run_strategy,  _baseline_kwargs),
         ("PR",S_PR.run_strategy,  _baseline_kwargs),
         # ("ParamReuse",           SPR.run_strategy, _baseline_kwargs),
@@ -501,12 +660,12 @@ def build_argparser():
                     help="run: 运行仿真并绘图；load: 仅从summary加载并重绘图")
 
     # workload shape
-    ap.add_argument("--sizes", type=str, default="50", #50,100,150,200,250,300,350,400,450,500
+    ap.add_argument("--sizes", type=str, default="150", #50,100,150,200,250,300,350,400,450,500
                     help="Comma-separated workload lengths to test.")
     # ap.add_argument("--q_list", type=str, default="5,7,11,13")
     # ap.add_argument("--d_list", type=str, default="4,8")
-    ap.add_argument("--q_list", type=str, default="5, 7, 11, 13, 15, 17") #5, 7, 11, 13, 15, 17, 19, 21
-    ap.add_argument("--d_list", type=str, default="2,4,6") # 2,4,6,8, 12
+    ap.add_argument("--q_list", type=str, default="5, 7, 11, 13, 15") #5, 7, 11, 13, 15, 17, 19, 21
+    ap.add_argument("--d_list", type=str, default="2,4,6,8") # 2,4,6,8, 12
     ap.add_argument("--shots", type=int, default=256)
     ap.add_argument("--hot_fraction", type=float, default=0.25)
     ap.add_argument("--hot_boost", type=float, default=8.0)
@@ -538,10 +697,14 @@ def main():
     if args.mode == "run":
         main_run(args)
     else:
-        load_and_redraw(load_dir=args.load_dir,
-                        out_latency=args.out_latency,
-                        out_cache=args.out_cache,
-                        out_scatter=args.out_scatter)
+        # LOAD_ROOT = pathlib.Path("./figs") / f"v{VNUM}_e2e_latency_breakdown_wl150"
+        load_and_redraw_timeline(load_dir=args.load_dir, wl_size=150,
+                                 methods=["FS+Pre+ttl+SE+ema", "FS", "PR", "FullCompilation"],
+                                 out_tl="timeline_wl_150_sel.png")
+        # load_and_redraw(load_dir=args.load_dir,
+        #                 out_latency=args.out_latency,
+        #                 out_cache=args.out_cache,
+        #                 out_scatter=args.out_scatter)
 
 if __name__ == "__main__":
     main()

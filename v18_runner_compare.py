@@ -69,7 +69,7 @@ def main():
     ap.add_argument("--d_list", type=str, default="4,8")
     # ap.add_argument("--q_list", type=str, default="5, 7, 11, 13, 15, 17, 19, 21")
     # ap.add_argument("--d_list", type=str, default="2,4,6,8, 12")
-    ap.add_argument("--workload_len", type=int, default=50)
+    ap.add_argument("--workload_len", type=int, default=100)
     ap.add_argument("--shots", type=int, default=256)
     # predictor / prewarm
     ap.add_argument("--lookahead", type=float, default=8.0)
@@ -113,14 +113,14 @@ def main():
         prob_th=args.prob_th,
         max_compile=args.max_compile,
         shots=args.shots,
-        include_exec=False,
+        include_exec=True,
     )
 
     # Baseline 特殊 kwargs
     baseline_kwargs = dict(
         workload=workload,
         shots=args.shots,
-        include_exec=False,
+        include_exec=True,
     )
 
     # 策略映射

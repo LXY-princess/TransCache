@@ -155,6 +155,12 @@ def make_qsim_xxz(q=12, steps=1, theta=np.pi/12):
     qc.measure(range(q), range(q))
     return qc
 
+# ------------------- qc -------------------
+def make_bell():
+    qc = QuantumCircuit(2, 2)
+    qc.h(0); qc.cx(0, 1); qc.measure([0, 1], [0, 1])
+    return qc
+
 # --------- 暴露基准集合 ----------
 CIRCUITS_QUASA: Dict[str, Callable] = {
     # 你已有
@@ -168,4 +174,5 @@ CIRCUITS_QUASA: Dict[str, Callable] = {
     # # # 论文 FT
     # "Grover":    make_grover,
     "QSIM-XXZ":  make_qsim_xxz,
+    "bell": make_bell,
 }

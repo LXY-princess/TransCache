@@ -1,0 +1,197 @@
+{
+  "sizes": [
+    150
+  ],
+  "rounds": 5,
+  "methods": [
+    "FS+Pre+ttl+SE+ema",
+    "NoCache"
+  ],
+  "interval_kind": "std",
+  "aggregate": {
+    "e2e_latency": {
+      "FS+Pre+ttl+SE+ema": {
+        "mean": [
+          4.505099399969913
+        ],
+        "std": [
+          0.7271111574951429
+        ],
+        "min": [
+          3.7097651999793015
+        ],
+        "max": [
+          5.5639274004497565
+        ]
+      },
+      "NoCache": {
+        "mean": [
+          9.235315620375331
+        ],
+        "std": [
+          0.9135084844528357
+        ],
+        "min": [
+          7.88474360096734
+        ],
+        "max": [
+          10.22073680034373
+        ]
+      }
+    },
+    "final_cache_size": {
+      "FS+Pre+ttl+SE+ema": {
+        "mean": [
+          54.6
+        ],
+        "std": [
+          7.092249290598858
+        ],
+        "min": [
+          49.0
+        ],
+        "max": [
+          66.0
+        ]
+      },
+      "NoCache": {
+        "mean": [
+          0.0
+        ],
+        "std": [
+          0.0
+        ],
+        "min": [
+          0.0
+        ],
+        "max": [
+          0.0
+        ]
+      }
+    },
+    "final_hitrate": {
+      "FS+Pre+ttl+SE+ema": {
+        "mean": [
+          0.568
+        ],
+        "std": [
+          0.046284146553892756
+        ],
+        "min": [
+          0.49333333333333335
+        ],
+        "max": [
+          0.6066666666666667
+        ]
+      },
+      "NoCache": {
+        "mean": [
+          0.0
+        ],
+        "std": [
+          0.0
+        ],
+        "min": [
+          0.0
+        ],
+        "max": [
+          0.0
+        ]
+      }
+    }
+  },
+  "raw": {
+    "e2e_latency": {
+      "FS+Pre+ttl+SE+ema": [
+        [
+          3.7097651999793015,
+          5.5639274004497565,
+          4.1735368996160105,
+          4.186402299965266,
+          4.891865199839231
+        ]
+      ],
+      "NoCache": [
+        [
+          8.875271999568213,
+          9.323772000148892,
+          7.88474360096734,
+          9.872053700848483,
+          10.22073680034373
+        ]
+      ]
+    },
+    "final_cache_size": {
+      "FS+Pre+ttl+SE+ema": [
+        [
+          49,
+          66,
+          50,
+          51,
+          57
+        ]
+      ],
+      "NoCache": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "final_hitrate": {
+      "FS+Pre+ttl+SE+ema": [
+        [
+          0.6066666666666667,
+          0.49333333333333335,
+          0.5933333333333334,
+          0.5933333333333334,
+          0.5533333333333333
+        ]
+      ],
+      "NoCache": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ]
+    }
+  },
+  "config": {
+    "q_list": [
+      5,
+      7,
+      11,
+      13,
+      15,
+      17
+    ],
+    "d_list": [
+      2,
+      4,
+      6
+    ],
+    "shots": 256,
+    "hot_fraction": 0.25,
+    "hot_boost": 8.0,
+    "rps": 1.0,
+    "rng_seed_base": 123,
+    "lookahead": 8.0,
+    "prob_th": 0.45,
+    "max_compile": 3,
+    "sliding_window_sec": 60.0,
+    "min_samples": 2,
+    "prewarm_every": 5
+  },
+  "plots": {
+    "latency_png": "figs\\v18\\plots\\scaling_e2e_latency_mean_interval.png",
+    "cache_png": "figs\\v18\\plots\\scaling_final_cache_size_mean_interval.png",
+    "hitrate_png": "figs\\v18\\plots\\scaling_final_hitrate_mean_interval.png",
+    "scatter_png": "figs\\v18\\plots\\scaling_latency_vs_cache_scatter_all_rounds.png"
+  }
+}

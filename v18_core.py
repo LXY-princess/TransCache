@@ -116,159 +116,159 @@ def build_catalog(q_list: List[int], d_list: List[int]):
                 meta.append({"name": name, "q": q, "d": d, "maker_run": _mk_run()})
     return makers, meta
 
-def build_workload_poisson_superposition_exact(
-    meta: List[Dict[str, Any]],
-    workload_len: int,
-    hot_fraction: float = 0.25,
-    hot_boost: float = 8.0,
-    rps: float = 1.0,
-    rng_seed: int = 123,
-    return_timestamps: bool = True
-) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
-    """
-    叠加泊松（superposition）精确生成：
-      - 设总率 Λ = rps；按热点权重分解为各类 λ_i，∑λ_i = Λ；
-      - 逐个事件：Δ ~ Exp(Λ), t += Δ；类别 ~ Categorical(p_i=λ_i/Λ)；
-      - 重复 N=workload_len 次，得到恰好 N 个事件；时间窗 T_end 随机，更贴近真实。
-
-    返回：
-      workload: List[dict] 与你现有策略直接兼容（含 maker_run / 可选 t_arr）
-      info: 记录 Λ、λ_i、类别概率、最终 T_end 等，便于可视化与检验
-    """
-    assert workload_len > 0 and len(meta) > 0
-    py_rng = random.Random(rng_seed)
-    np_rng = np.random.default_rng(rng_seed)
-
-    # 1) 构造热点权重 -> 归一化 -> λ_i
-    m = len(meta)
-    weights = np.ones(m, dtype=float)
-    hot_k = max(1, int(round(hot_fraction * m)))
-    for i in py_rng.sample(range(m), hot_k):
-        weights[i] *= max(1.0, float(hot_boost))
-    w_sum = float(weights.sum())
-    if w_sum <= 0:
-        weights[:] = 1.0
-        w_sum = float(weights.sum())
-
-    Λ = float(rps)
-    lambdas = (weights / w_sum) * Λ           # 每类速率 λ_i
-    probs   = (lambdas / max(1e-12, Λ))       # 分类用 p_i = λ_i / Λ
-
-    # 2) 逐事件模拟：Δ ~ Exp(Λ)，类别 ~ Categorical(probs)
-    t = 0.0
-    events: List[Tuple[float, int]] = []
-    for _ in range(workload_len):
-        u = 1.0 - py_rng.random()
-        delta = -math.log(max(1e-12, u)) / max(1e-12, Λ)  # Exp(Λ)
-        t += delta
-        i = int(np_rng.choice(m, p=probs))                 # 类别归属
-        events.append((t, i))
-
-    # 3) 组装 workload
-    out: List[Dict[str, Any]] = []
-    for t_i, idx in events:
-        rec = {
-            "name": meta[idx]["name"],
-            "q":    meta[idx]["q"],
-            "d":    meta[idx]["d"],
-            "maker_run": meta[idx]["maker_run"],
-        }
-        if return_timestamps:
-            rec["t_arr"] = float(t_i)  # 模拟到达时刻
-        out.append(rec)
-
-    info = {
-        "Lambda": float(Λ),
-        "lambdas": lambdas.tolist(),
-        "probs": probs.tolist(),
-        "weights": weights.tolist(),
-        "hot_fraction": float(hot_fraction),
-        "hot_boost": float(hot_boost),
-        "rps": float(rps),
-        "T_end": float(events[-1][0]) if events else 0.0,
-        "N": int(workload_len),
-    }
-    return out, info
-
-
-def visualize_superposed_poisson_exact(
-    workload: List[Dict[str, Any]],
-    info: Dict[str, Any],
-    meta: List[Dict[str, Any]],
-    bins: int = 40,
-    topk_classes: int = 10
-):
-    """
-    针对“superposition 精确生成”的可视化/健康检查：
-      1) 全局到达间隔 Δt 直方图 ≈ Exp(Λ)（检验 total 过程）；
-      2) N(t) 与期望 Λ t 的对比；
-      3) 类别计数与 Multinomial(N; p_i=λ_i/Λ) 期望的对比（固定 N 条的条件下）；
-    """
-    import numpy as np
-    import matplotlib.pyplot as plt
-    from collections import Counter
-
-    Λ = float(info.get("Lambda", 1.0))
-    probs = np.array(info.get("probs", []), dtype=float)
-    N = int(info.get("N", len(workload)))
-
-    # 取到达时刻
-    ts = np.array([w["t_arr"] for w in workload], dtype=float)
-    ts.sort()
-    inter = np.diff(ts)  # Δt
-
-    # 1) Δt 直方图 + 指数拟合曲线
-    fig1, ax1 = plt.subplots(figsize=(6,4))
-    if len(inter) > 0:
-        ax1.hist(inter, bins=bins, density=True, alpha=0.7, label="empirical Δt")
-        x = np.linspace(0, max(inter.max(), 1e-6), 200)
-        ax1.plot(x, Λ*np.exp(-Λ*x), "r--", lw=2, label=f"Exp(Λ={Λ:.2f})")
-    ax1.set_title("Inter-arrival histogram (should be ~Exp(Λ))")
-    ax1.set_xlabel("Δt"); ax1.set_ylabel("density")
-    ax1.legend(frameon=False)
-    plt.tight_layout()
-    plt.savefig(PLOT_DIR/f"wl_{N}_inter_arrival.png", dpi=600)
-
-    # 2) 计数过程 N(t) 与 E[N(t)]=Λ t
-    fig2, ax2 = plt.subplots(figsize=(6,4))
-    if len(ts) > 0:
-        ax2.step(ts, np.arange(1, len(ts)+1), where="post", label="N(t)")
-        tline = np.linspace(0, ts[-1], 200)
-        ax2.plot(tline, Λ*tline, "r--", lw=2, label="E[N(t)] = Λ t")
-    ax2.set_title("Counting process vs expectation")
-    ax2.set_xlabel("t"); ax2.set_ylabel("N(t)")
-    ax2.legend(frameon=False)
-    plt.tight_layout()
-    plt.savefig(PLOT_DIR/f"wl_{N}_counting_process.png", dpi=600)
-
-    # 3) 类别计数 vs Multinomial 期望
-    if probs.size > 0:
-        # 统计观测
-        keys = [f'{w["name"]}|q{w["q"]}|d{w["d"]}' for w in workload]
-        # 将 keys 映射回 meta 序号的方法：这里我们直接利用 meta 顺序的 probs 向量；
-        # 统计每个 meta 索引的次数：用 name|q|d 定位到 meta 下标
-        label2idx = {f'{m["name"]}|q{m["q"]}|d{m["d"]}': i for i, m in enumerate(meta)}
-        counts = np.zeros(len(meta), dtype=int)
-        for k in keys:
-            i = label2idx.get(k, None)
-            if i is not None:
-                counts[i] += 1
-
-        expect = N * probs
-        # 展示 top-k
-        idx_top = np.argsort(-counts)[:min(topk_classes, len(counts))]
-        fig3, ax3 = plt.subplots(figsize=(max(7, 0.6*len(idx_top)+4), 4))
-        x = np.arange(len(idx_top))
-        ax3.bar(x - 0.2, counts[idx_top], width=0.4, label="observed")
-        ax3.bar(x + 0.2, expect[idx_top], width=0.4, label="expected (N·p_i)")
-        xt = [f'{meta[i]["name"]}|q{meta[i]["q"]}|d{meta[i]["d"]}' for i in idx_top]
-        ax3.set_xticks(x); ax3.set_xticklabels(xt, rotation=45, ha="right")
-        ax3.set_title("Per-class counts vs Multinomial expectation (fixed N)")
-        ax3.set_ylabel("#events")
-        ax3.legend(frameon=False)
-    plt.tight_layout()
-    plt.savefig(PLOT_DIR/f"wl_{N}_counts_predict.png", dpi=600)
-    # plt.show()
+# def build_workload_poisson_superposition_exact(
+#     meta: List[Dict[str, Any]],
+#     workload_len: int,
+#     hot_fraction: float = 0.25,
+#     hot_boost: float = 8.0,
+#     rps: float = 1.0,
+#     rng_seed: int = 123,
+#     return_timestamps: bool = True
+# ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+#     """
+#     叠加泊松（superposition）精确生成：
+#       - 设总率 Λ = rps；按热点权重分解为各类 λ_i，∑λ_i = Λ；
+#       - 逐个事件：Δ ~ Exp(Λ), t += Δ；类别 ~ Categorical(p_i=λ_i/Λ)；
+#       - 重复 N=workload_len 次，得到恰好 N 个事件；时间窗 T_end 随机，更贴近真实。
+#
+#     返回：
+#       workload: List[dict] 与你现有策略直接兼容（含 maker_run / 可选 t_arr）
+#       info: 记录 Λ、λ_i、类别概率、最终 T_end 等，便于可视化与检验
+#     """
+#     assert workload_len > 0 and len(meta) > 0
+#     py_rng = random.Random(rng_seed)
+#     np_rng = np.random.default_rng(rng_seed)
+#
+#     # 1) 构造热点权重 -> 归一化 -> λ_i
+#     m = len(meta)
+#     weights = np.ones(m, dtype=float)
+#     hot_k = max(1, int(round(hot_fraction * m)))
+#     for i in py_rng.sample(range(m), hot_k):
+#         weights[i] *= max(1.0, float(hot_boost))
+#     w_sum = float(weights.sum())
+#     if w_sum <= 0:
+#         weights[:] = 1.0
+#         w_sum = float(weights.sum())
+#
+#     Λ = float(rps)
+#     lambdas = (weights / w_sum) * Λ           # 每类速率 λ_i
+#     probs   = (lambdas / max(1e-12, Λ))       # 分类用 p_i = λ_i / Λ
+#
+#     # 2) 逐事件模拟：Δ ~ Exp(Λ)，类别 ~ Categorical(probs)
+#     t = 0.0
+#     events: List[Tuple[float, int]] = []
+#     for _ in range(workload_len):
+#         u = 1.0 - py_rng.random()
+#         delta = -math.log(max(1e-12, u)) / max(1e-12, Λ)  # Exp(Λ)
+#         t += delta
+#         i = int(np_rng.choice(m, p=probs))                 # 类别归属
+#         events.append((t, i))
+#
+#     # 3) 组装 workload
+#     out: List[Dict[str, Any]] = []
+#     for t_i, idx in events:
+#         rec = {
+#             "name": meta[idx]["name"],
+#             "q":    meta[idx]["q"],
+#             "d":    meta[idx]["d"],
+#             "maker_run": meta[idx]["maker_run"],
+#         }
+#         if return_timestamps:
+#             rec["t_arr"] = float(t_i)  # 模拟到达时刻
+#         out.append(rec)
+#
+#     info = {
+#         "Lambda": float(Λ),
+#         "lambdas": lambdas.tolist(),
+#         "probs": probs.tolist(),
+#         "weights": weights.tolist(),
+#         "hot_fraction": float(hot_fraction),
+#         "hot_boost": float(hot_boost),
+#         "rps": float(rps),
+#         "T_end": float(events[-1][0]) if events else 0.0,
+#         "N": int(workload_len),
+#     }
+#     return out, info
+#
+#
+# def visualize_superposed_poisson_exact(
+#     workload: List[Dict[str, Any]],
+#     info: Dict[str, Any],
+#     meta: List[Dict[str, Any]],
+#     bins: int = 40,
+#     topk_classes: int = 10
+# ):
+#     """
+#     针对“superposition 精确生成”的可视化/健康检查：
+#       1) 全局到达间隔 Δt 直方图 ≈ Exp(Λ)（检验 total 过程）；
+#       2) N(t) 与期望 Λ t 的对比；
+#       3) 类别计数与 Multinomial(N; p_i=λ_i/Λ) 期望的对比（固定 N 条的条件下）；
+#     """
+#     import numpy as np
+#     import matplotlib.pyplot as plt
+#     from collections import Counter
+#
+#     Λ = float(info.get("Lambda", 1.0))
+#     probs = np.array(info.get("probs", []), dtype=float)
+#     N = int(info.get("N", len(workload)))
+#
+#     # 取到达时刻
+#     ts = np.array([w["t_arr"] for w in workload], dtype=float)
+#     ts.sort()
+#     inter = np.diff(ts)  # Δt
+#
+#     # 1) Δt 直方图 + 指数拟合曲线
+#     fig1, ax1 = plt.subplots(figsize=(6,4))
+#     if len(inter) > 0:
+#         ax1.hist(inter, bins=bins, density=True, alpha=0.7, label="empirical Δt")
+#         x = np.linspace(0, max(inter.max(), 1e-6), 200)
+#         ax1.plot(x, Λ*np.exp(-Λ*x), "r--", lw=2, label=f"Exp(Λ={Λ:.2f})")
+#     ax1.set_title("Inter-arrival histogram (should be ~Exp(Λ))")
+#     ax1.set_xlabel("Δt"); ax1.set_ylabel("density")
+#     ax1.legend(frameon=False)
+#     plt.tight_layout()
+#     plt.savefig(PLOT_DIR/f"wl_{N}_inter_arrival.png", dpi=600)
+#
+#     # 2) 计数过程 N(t) 与 E[N(t)]=Λ t
+#     fig2, ax2 = plt.subplots(figsize=(6,4))
+#     if len(ts) > 0:
+#         ax2.step(ts, np.arange(1, len(ts)+1), where="post", label="N(t)")
+#         tline = np.linspace(0, ts[-1], 200)
+#         ax2.plot(tline, Λ*tline, "r--", lw=2, label="E[N(t)] = Λ t")
+#     ax2.set_title("Counting process vs expectation")
+#     ax2.set_xlabel("t"); ax2.set_ylabel("N(t)")
+#     ax2.legend(frameon=False)
+#     plt.tight_layout()
+#     plt.savefig(PLOT_DIR/f"wl_{N}_counting_process.png", dpi=600)
+#
+#     # 3) 类别计数 vs Multinomial 期望
+#     if probs.size > 0:
+#         # 统计观测
+#         keys = [f'{w["name"]}|q{w["q"]}|d{w["d"]}' for w in workload]
+#         # 将 keys 映射回 meta 序号的方法：这里我们直接利用 meta 顺序的 probs 向量；
+#         # 统计每个 meta 索引的次数：用 name|q|d 定位到 meta 下标
+#         label2idx = {f'{m["name"]}|q{m["q"]}|d{m["d"]}': i for i, m in enumerate(meta)}
+#         counts = np.zeros(len(meta), dtype=int)
+#         for k in keys:
+#             i = label2idx.get(k, None)
+#             if i is not None:
+#                 counts[i] += 1
+#
+#         expect = N * probs
+#         # 展示 top-k
+#         idx_top = np.argsort(-counts)[:min(topk_classes, len(counts))]
+#         fig3, ax3 = plt.subplots(figsize=(max(7, 0.6*len(idx_top)+4), 4))
+#         x = np.arange(len(idx_top))
+#         ax3.bar(x - 0.2, counts[idx_top], width=0.4, label="observed")
+#         ax3.bar(x + 0.2, expect[idx_top], width=0.4, label="expected (N·p_i)")
+#         xt = [f'{meta[i]["name"]}|q{meta[i]["q"]}|d{meta[i]["d"]}' for i in idx_top]
+#         ax3.set_xticks(x); ax3.set_xticklabels(xt, rotation=45, ha="right")
+#         ax3.set_title("Per-class counts vs Multinomial expectation (fixed N)")
+#         ax3.set_ylabel("#events")
+#         ax3.legend(frameon=False)
+#     plt.tight_layout()
+#     plt.savefig(PLOT_DIR/f"wl_{N}_counts_predict.png", dpi=600)
+#     # plt.show()
 
 # --------- seeding predictor ----------
 def seed_recent_calls_for_predictor(predictor_window_sec: float, makers_all, workload,

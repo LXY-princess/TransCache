@@ -16,10 +16,10 @@ from v11_quasa_bench_circuits import CIRCUITS_QUASA
 VNUM = 21
 SAVE_DIR = pathlib.Path("./figs")/f"v{VNUM}"; SAVE_DIR.mkdir(exist_ok=True)
 
-EVENTS_CSV = SAVE_DIR / "events_times.csv"
-BREAKDOWN_CSV = SAVE_DIR / "step_durations.csv"
-JSON_LAT = SAVE_DIR / "v21_latencies.json"
-PNG_PATH = SAVE_DIR / "v21_latencies.png"
+EVENTS_file_name = "events_times.csv"
+BREAKDOWN_file_name = "step_durations.csv"
+JSON_LAT_file_name = "v21_latencies.json"
+PNG_PATH_file_name = "v21_latencies.png"
 
 # ------------------- global state -------------------
 laps = {}               # step_name -> duration (seconds)
@@ -88,7 +88,7 @@ def read_events_csv(path: pathlib.Path):
             out.append(row)
     return out
 
-def save_lat_json(d):
+def save_lat_json(d, JSON_LAT: pathlib.Path):
     d2 = {k: round(float(v), 6) for k, v in d.items()}
     JSON_LAT.write_text(json.dumps(d2, indent=2))
     print("[✔] latency JSON saved to", JSON_LAT)
@@ -96,14 +96,6 @@ def save_lat_json(d):
 
 # ------------------- main measurement path -------------------
 def tick_time(args, qc_raw):
-    # 0) bootstrap point
-    events.append({
-        "event": "01_bootstrap",
-        "time_utc": (_T0_UTC + timedelta(seconds=_BOOT_START - _T0_PERF)).isoformat(),
-        "source": "local",
-        "note": "process import start"
-    })
-
     # 1) auth
     tic("02a_tls_auth")
     svc = QiskitRuntimeService()  # 构造 QiskitRuntimeService() 的本地时长（多为本地凭证读取，真正握手常发生在下一步）
@@ -125,7 +117,7 @@ def tick_time(args, qc_raw):
     tic("04_upload_to_cloud")
     # v17 style: directly run; this avoids reading any prior QPY payloads.
     job = sampler.run([qc_qpu], shots=args.shots)
-    # job_id = "d3r6kidq5lhs73bd8l20"
+    # job_id = "d3rp6m5q5lhs73be12v0"
     # job = svc.job(job_id)
     toc("04_upload_to_cloud")
 
@@ -188,20 +180,10 @@ def tick_time(args, qc_raw):
     def _sec(a, b):
         return (b - a).total_seconds() if (a and b) else None
 
-    # queue_prep = _sec(t_created, t_running)                  # ① waiting/prep
-    # bind_load  = _sec(t_running, span_start)                 # ② bind/elec/loading pulses
-    # qpu_exec   = _sec(span_start, span_stop)                 # ③ qpu exec
-    # read_post  = _sec(span_stop, t_finished)                 # ④ readout/post
-    #
-    # if queue_prep is not None: laps["05_to_09_queue"] = queue_prep
-    # if bind_load  is not None: laps["10_11_bindElec_loadPulse"] = bind_load
-    # if qpu_exec   is not None: laps["12_qpu_exec"] = qpu_exec
-    # if read_post  is not None: laps["13_14_read_post"] = read_post
-
     return events
 
 # ------------------- offline analyzer -------------------
-def analyze_from_events_csv(path: pathlib.Path):
+def analyze_from_events_csv(path: pathlib.Path, BREAKDOWN_CSV: pathlib.Path):
     rows = read_events_csv(path)
     def to_dt(ev):
         return parse_iso(ev["time_utc"]).astimezone(timezone.utc)
@@ -260,7 +242,7 @@ def analyze_from_events_csv(path: pathlib.Path):
             print(f"{k:26s}: {v:.6f} s")
 
 # ------------------- small plot (optional) -------------------
-def plot_bar(lat_json):
+def plot_bar(lat_json, PNG_PATH: pathlib.Path):
     manual_colors = {
         "01_bootstrap":             "#c6dbef",
         "02a_tls_auth":             "#9ecae1",
@@ -294,13 +276,13 @@ def plot_bar(lat_json):
     plt.legend(bbox_to_anchor=(1.02, 1), loc="upper left")
     plt.tight_layout()
     plt.savefig(PNG_PATH, dpi=600)
-    plt.show()
+    # plt.show()
     print("[✔] stacked-bar saved to", PNG_PATH)
 
 # ------------------- main -------------------
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--backend", default="ibm_torino",help="e.g., ibm_brisbane / ibm_torino / etc.")
+    ap.add_argument("--backend", default="ibm_brisbane",help="e.g., ibm_brisbane / ibm_torino / etc.")
     ap.add_argument("--shots", type=int, default=128)
     ap.add_argument("--analyze", type=str, help="path to events_times.csv for offline analysis")
     args = ap.parse_args()
@@ -309,19 +291,34 @@ if __name__ == "__main__":
         analyze_from_events_csv(pathlib.Path(args.analyze))
         sys.exit(0)
 
-    cir_name = "VQE-Full"#, "GHZ-Chain" "QAOA-3reg" "VQE-Full", "QFT-Like"
-    qc_raw = CIRCUITS_QUASA.get(cir_name)(8, 1)
-    # laps["01_bootstrap"] = time.perf_counter() - _BOOT_START
-    #
-    # events = tick_time(args, qc_raw)
-    #
-    # write_events_csv(EVENTS_CSV, events)
-    # print("[✔] events CSV written to", EVENTS_CSV)
+    cir_name = ["GHZ-Chain", "QFT-Like", "QAOA-3reg", "VQE-Full"]#"GHZ-Chain", "QFT-Like", "QAOA-3reg", "VQE-Full"
+    qc_raw_list = {}
+    qc_raw_list["bell"] = CIRCUITS_QUASA.get("bell")()
+    for k in cir_name:
+        qc_raw_list[k] = CIRCUITS_QUASA.get(k)(8,1)
 
-    analyze_from_events_csv(EVENTS_CSV)
+    for k, qc_raw in qc_raw_list.items():
+        events.clear()
+        laps.clear()
+        events = tick_time(args, qc_raw)
+        CIRC_DIR = pathlib.Path("./figs") / f"v{VNUM}" / k
+        CIRC_DIR.mkdir(exist_ok=True)
 
-    lat_json = save_lat_json(laps)
-    try:
-        plot_bar(lat_json)
-    except Exception as e:
-        print("[i] plot skipped:", e)
+        EVENTS_CSV = CIRC_DIR / EVENTS_file_name
+        BREAKDOWN_CSV = CIRC_DIR / BREAKDOWN_file_name
+        JSON_LAT = CIRC_DIR / JSON_LAT_file_name
+        PNG_PATH = CIRC_DIR / PNG_PATH_file_name
+
+        write_events_csv(EVENTS_CSV, events)
+        print("[✔] events CSV written to", EVENTS_CSV)
+
+
+        analyze_from_events_csv(EVENTS_CSV, BREAKDOWN_CSV)
+
+        PNG_PATH_file_name = "v21_latencies.png"
+
+        lat_json = save_lat_json(laps, JSON_LAT)
+        try:
+            plot_bar(lat_json, PNG_PATH)
+        except Exception as e:
+            print("[i] plot skipped:", e)

@@ -16,11 +16,21 @@ from dataclasses import asdict, dataclass
 from v18_core import (
     ROOT, PLOT_DIR, build_catalog,
     clear_recent, LOAD_ROOT,
-    build_workload_poisson_superposition_exact,  # 总过程：Exp(Λ) + 类别 Multinomial
     draw_timeline_multi,                         # 时间线绘图（我们每轮都落盘）
     plot_cache_size_change,                      # cache 随时间变化（我们每轮都落盘）
     compute_freq_and_hits                        # 计算命中率
 )
+
+from v18_wl_kitchen import (
+    build_workload_poisson_superposition_exact,
+    visualize_superposed_poisson_exact,
+    build_workload_renewal_exact,
+    visualize_workload_common,
+)
+
+
+import v22_strat_transCache as S_transCache_ibm
+import v22_strat_fullComp as S_full_ibm
 
 from v18_replot_regions2 import load_and_replot_regions
 

@@ -16,13 +16,16 @@ from typing import Optional
 from v18_core import (
     ROOT, PLOT_DIR, build_catalog,
     clear_recent, LOAD_ROOT,
-    build_workload_poisson_superposition_exact,
-    visualize_superposed_poisson_exact,
     draw_timeline_multi,
     draw_timeline_run_only,
     draw_timeline_run_only_colorbar,
     plot_cache_size_change,
     compute_freq_and_hits
+)
+
+from v18_wl_kitchen import (
+    build_workload_poisson_superposition_exact,
+    visualize_superposed_poisson_exact,
 )
 
 # strategies

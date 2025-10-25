@@ -16,7 +16,7 @@ import pathlib
 from matplotlib.lines import Line2D
 import itertools
 
-DEFAULT_DIR = pathlib.Path("./figs/v17_polling")
+DEFAULT_DIR = pathlib.Path("./figs/v17_polling_10days")
 BACKEBND_SERIES_DIR = DEFAULT_DIR/"backends"
 DEFAULT_PLOT_DIR = DEFAULT_DIR/"plots"
 
@@ -82,7 +82,18 @@ def plot_backend(df, backend_name, metrics, window_td, save_dir=None, figsize=(1
               Allowed keys: color, marker, linestyle, linewidth, alpha, label
       vline_style: dict for props-update vline, same keys as above; label recommended
     """
-    plt.rcParams.update({"font.family": "Times New Roman", "font.size": 12})
+    plt.rcParams.update({"font.family": "Times New Roman", "font.size": 28,
+                         "axes.linewidth": 3,
+                         # 刻度线（粗细 & 长度）
+            "xtick.major.width": 3.0,
+            "ytick.major.width": 3.0,
+            "xtick.minor.width": 2.0,
+            "ytick.minor.width": 2.0,
+            "xtick.major.size": 8.0,
+            "ytick.major.size": 8.0,
+            "xtick.minor.size": 5.0,
+            "ytick.minor.size": 5.0,
+                         })
     if df is None or df.empty:
         print(f"No data for {backend_name}")
         return
@@ -96,7 +107,7 @@ def plot_backend(df, backend_name, metrics, window_td, save_dir=None, figsize=(1
     dfw["ts_utc"] = pd.to_datetime(dfw["ts_utc"], errors="coerce", utc=True)
 
     # default style cycle from rcParams
-    color_cycle = itertools.cycle([d['color'] for d in plt.rcParams['axes.prop_cycle']])
+    # color_cycle = itertools.cycle([d['color'] for d in plt.rcParams['axes.prop_cycle']])
     marker_cycle = itertools.cycle(["o", "s", "D", "^", "v", "P", "X", "*"])  # markers fallback
 
     styles = styles or {}
@@ -107,6 +118,21 @@ def plot_backend(df, backend_name, metrics, window_td, save_dir=None, figsize=(1
 
     fig, ax = plt.subplots(figsize=figsize)
     plotted_any = False
+
+    metric_label = {
+        "twoq_gate_err_median": "TwoQ Err",
+        "sx_gate_err_median": "SX Err",
+        "readout_err_mean": "Readout Err",
+        "pending_jobs": "Pending Jobs",
+        "props_update": "Update",
+    }
+
+    metric_colors = {
+        "twoq_gate_err_median": "#23de2f",
+        "sx_gate_err_median": "#265896",
+        "readout_err_mean": "#ebc315",
+        "pending_jobs": "#d523de",
+    }
 
     # plot left-axis metrics, with customizable styles
     for m in left_metrics:
@@ -119,12 +145,12 @@ def plot_backend(df, backend_name, metrics, window_td, save_dir=None, figsize=(1
 
         # style selection: user-provided or defaults from cycles
         sty = styles.get(m, {})
-        color = sty.get("color", next(color_cycle))
+        color = metric_colors.get(m)
         marker = sty.get("marker", next(marker_cycle))
         linestyle = sty.get("linestyle", sty.get("ls", "-"))
-        linewidth = sty.get("linewidth", 1)
+        linewidth = sty.get("linewidth", 3)
         alpha = sty.get("alpha", 1.0)
-        label = sty.get("label", m)
+        label = metric_label.get(m)
 
         ax.plot(dfw["ts_utc"], y, color=color, marker=marker, linestyle=linestyle,
                 linewidth=linewidth, alpha=alpha, label=label,
@@ -145,12 +171,12 @@ def plot_backend(df, backend_name, metrics, window_td, save_dir=None, figsize=(1
         ax2 = ax.twinx()
         yq = pd.to_numeric(dfw[right_metric], errors="coerce")
         sty = styles.get(right_metric, {})
-        color = sty.get("color", next(color_cycle))
+        color = color = metric_colors.get(right_metric)
         marker = sty.get("marker", next(marker_cycle))
         linestyle = sty.get("linestyle", sty.get("ls", "-"))
-        linewidth = sty.get("linewidth", 1)
+        linewidth = sty.get("linewidth", 3)
         alpha = sty.get("alpha", 0.8)
-        label = sty.get("label", right_metric)
+        label = metric_label.get(right_metric)
 
         ax2.plot(dfw["ts_utc"], yq, color=color, marker=marker, linestyle=linestyle,
                  linewidth=linewidth, alpha=alpha, label=label,
@@ -159,12 +185,12 @@ def plot_backend(df, backend_name, metrics, window_td, save_dir=None, figsize=(1
                  markersize=2,  # 缩小
                  markeredgewidth=1.0,  # 描边更清晰
                  )
-        ax2.set_ylabel(right_metric)
+        ax2.set_ylabel(label)
         plotted_any = True
 
     # ==== vlines for last_update_date_iso (optionally use reported time or snapshot time) ====
     vline_present = False
-    vline_label = vline_style.get("label", "props update")
+    vline_label = "Update"
     vline_handle = None
 
     if "last_update_date_iso" in dfw.columns:
@@ -207,10 +233,10 @@ def plot_backend(df, backend_name, metrics, window_td, save_dir=None, figsize=(1
     # place legend at top of figure (outside plot)
     if handles:
         # reasonable ncol: try to keep legend not too tall
-        ncol = min(max(1, len(labels)), 6)
+        ncol = min(max(1, len(labels)), 3)
         fig.legend(handles, labels,
                    loc='upper center',
-                   bbox_to_anchor=(0.5, 1.05),
+                   bbox_to_anchor=(0.5, 1.25),
                    ncol=ncol,
                    frameon=True)
         leg = fig.legends[-1]
@@ -222,7 +248,7 @@ def plot_backend(df, backend_name, metrics, window_td, save_dir=None, figsize=(1
         plt.subplots_adjust(top=0.82)
 
     # finalize
-    ax.set_title(backend_name)
+    # ax.set_title(backend_name)
     fig.tight_layout()
 
     if save_dir:

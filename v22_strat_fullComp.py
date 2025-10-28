@@ -5,7 +5,7 @@ from v22_core import run_once_nocache_ibm, label_of
 from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2 as Sampler
 
 
-def run_strategy(workload: List[Dict[str,Any]], shots: int = 256, include_exec: bool = True) -> Dict[str, List[Dict[str,Any]]]:
+def run_strategy(workload: List[Dict[str,Any]], shots: int = 256, include_exec: bool = True, bkd_name: str="ibm_torino") -> Dict[str, List[Dict[str,Any]]]:
     """
     Baseline: no prewarm, no cache. Return {"events": [...], "metrics": {...}}
     """
@@ -14,7 +14,6 @@ def run_strategy(workload: List[Dict[str,Any]], shots: int = 256, include_exec: 
 
     """Prepare ibm backend"""
     svc = QiskitRuntimeService()
-    bkd_name = "ibm_torino"
     backend = svc.backend(bkd_name)
     sampler = Sampler(mode=backend)
 

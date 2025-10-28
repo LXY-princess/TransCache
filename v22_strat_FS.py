@@ -1,0 +1,46 @@
+# strat_FS.py
+from typing import Any, Dict, List, Tuple
+from collections import Counter, defaultdict
+import time
+from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2 as Sampler
+
+from v22_core import (PoissonPredictor, run_once_with_cache_ibm, label_of,
+                      seed_recent_calls_for_predictor)
+
+
+def run_strategy(workload, shots=256, include_exec: bool = True, bkd_name: str = "ibm_torino"):
+    # create cache
+    cache: Dict[str, Any] = {}  # idle cache
+    t = 0.0
+
+    """Initialize records"""
+    # record events
+    events = []
+    # record hit number
+    hit_by_label: Dict[str,int] = Counter()
+    total_hits = 0
+    # record cache size change
+    cache_size_series: List[Tuple[float, int]] = []
+
+    """Prepare ibm backend"""
+    svc = QiskitRuntimeService()
+    backend = svc.backend(bkd_name)
+    sampler = Sampler(mode=backend)
+
+    """ run over workloads"""
+    for idx, it in enumerate(workload):
+        meta = run_once_with_cache_ibm(it["maker_run"], cache, shots=shots, ts=t, include_exec=include_exec,
+                                       sampler=sampler, backend=backend, bk_name=bkd_name)
+        cache_size_series.append((t, len(cache)))
+        dur = float(meta["compile_sec"]) + float(meta["exec_sec"])
+        lab = label_of(it["name"], it["q"], it["d"])
+        events.append({"kind":"run","label":lab,"start":t,"dur":dur,
+                       "transT":float(meta["compile_sec"]),
+                       "execT":float(meta["exec_sec"]),}); t += dur
+        if meta["cache_hit"]:
+            hit_by_label[lab] += 1
+            total_hits += 1
+
+    metrics = {"hit_by_label": dict(hit_by_label), "total_hits": int(total_hits),
+               "cache_size_series": [{"t": float(tt), "size": int(sz)} for (tt, sz) in cache_size_series]}
+    return {"events": events, "metrics": metrics}

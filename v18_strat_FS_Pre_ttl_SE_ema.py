@@ -129,7 +129,9 @@ def run_strategy(workload, makers_all,
         # 时间推进与记录
         dur = float(meta["compile_sec"]) + float(meta["exec_sec"])
         lab = label_of(it["name"], it["q"], it["d"])
-        events.append({"kind":"run","label":lab,"start":t,"dur":dur})
+        events.append({"kind":"run","label":lab,"start":t,"dur":dur,
+                       "transT":float(meta["compile_sec"]),
+                       "execT":float(meta["exec_sec"])})
 
         t += dur
         cache_size_series.append((t, len(cache)))

@@ -33,6 +33,7 @@ def run_strategy(workload, makers_all,
 
                  # 其他
                  default_compile_est: float = 0.08,  # 编译时长估计的冷启动
+                 bkd_name: str = "ibm_torino"
                  ):
     """
     FirstSeen + 预测预热 + TTL + 周期性清理（基于 p、编译时长估计与新鲜度的轻量打分）。
@@ -105,7 +106,6 @@ def run_strategy(workload, makers_all,
 
     """Prepare ibm backend"""
     svc = QiskitRuntimeService()
-    bkd_name = "ibm_torino"
     backend = svc.backend(bkd_name)
     sampler = Sampler(mode=backend)
 
@@ -133,7 +133,7 @@ def run_strategy(workload, makers_all,
 
         # 运行一次；**用 ts=t 统一时间基**（极重要）
         meta = run_once_with_cache_ibm(it["maker_run"], cache, shots=shots, ts=t, include_exec=include_exec,
-                                       sampler=sampler, backend=backend)
+                                       sampler=sampler, backend=backend, bk_name=bkd_name)
 
         # 时间推进与记录
         dur = float(meta["compile_sec"]) + float(meta["exec_sec"])

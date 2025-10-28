@@ -90,7 +90,7 @@ class PoissonPredictor:
         return out
 
 # --------- catalog & workload (with timestamps) ----------
-def build_catalog(q_list: List[int], d_list: List[int]):
+def build_catalog(q_list: List[int], d_list: List[int], bkd: str="ibm_torino"):
     makers = []
     meta = []
     for q in q_list:
@@ -99,7 +99,7 @@ def build_catalog(q_list: List[int], d_list: List[int]):
                 def _mk(name_=name, make_=make, q_=q, d_=d):
                     def _call():
                         qc = make_(q_, d_)
-                        key = f"ibm_torino:{md5_qasm(qc)}"
+                        key = f"{bkd}:{md5_qasm(qc)}"
                         info = {"circ": name_, "q": q_, "d": d_,
                                 "n_qubits": qc.num_qubits, "depth": qc.depth()}
                         return qc, key, info
@@ -153,11 +153,10 @@ def run_once_with_cache_ibm(qc_func: Callable[[], QuantumCircuit],
                         shots: int = 256,
                         ts: Optional[float] = None,
                         include_exec: bool = True,
-                        sampler: Sampler = None, backend: Any = None) -> Dict[str, Any]:
+                        sampler: Sampler = None, backend: Any = None, bk_name: str = "ibm_torino") -> Dict[str, Any]:
     """Compile & run once. `ts` lets you record arrival in **sim-time** if provided."""
     qc_raw = qc_func()
-    bk = "ibm_torino"
-    qc_exec, key, hit, compile_sec = compile_with_idle_cache_ibm(qc_raw, bk, cache, backend=backend)
+    qc_exec, key, hit, compile_sec = compile_with_idle_cache_ibm(qc_raw, bk_name=bk_name, cache=cache, backend=backend)
     if include_exec:
         t0 = time.perf_counter()
         # job = sampler.run([qc_exec], shots=shots)

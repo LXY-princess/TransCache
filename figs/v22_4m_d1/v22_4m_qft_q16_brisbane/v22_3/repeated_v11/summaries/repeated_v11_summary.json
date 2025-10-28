@@ -1,0 +1,60 @@
+{
+  "circuits": [
+    "QFT-Like"
+  ],
+  "methods": [
+    "FullComp",
+    "Braket",
+    "CCache",
+    "TransCache"
+  ],
+  "summary": {
+    "QFT-Like": {
+      "FullComp": {
+        "e2e_latency": 28.951773300068453,
+        "final_cache_size": 0,
+        "final_hitrate": 0.0,
+        "q": 16,
+        "d": 1,
+        "N": 10
+      },
+      "Braket": {
+        "e2e_latency": 26.62903670000378,
+        "final_cache_size": 0,
+        "final_hitrate": 0.0,
+        "q": 16,
+        "d": 1,
+        "N": 10
+      },
+      "CCache": {
+        "e2e_latency": 23.74108910013456,
+        "final_cache_size": 1,
+        "final_hitrate": 0.9,
+        "q": 16,
+        "d": 1,
+        "N": 10
+      },
+      "TransCache": {
+        "e2e_latency": 22.311467499821447,
+        "final_cache_size": 1,
+        "final_hitrate": 1.0,
+        "q": 16,
+        "d": 1,
+        "N": 10
+      }
+    }
+  },
+  "config": {
+    "q": 16,
+    "d": 1,
+    "N": 10,
+    "rps": 1.0,
+    "shots": 32,
+    "lookahead": 8.0,
+    "prob_th": 0.45,
+    "max_compile": 3,
+    "sliding_window_sec": 60.0,
+    "min_samples": 2,
+    "prewarm_every": 5
+  }
+}

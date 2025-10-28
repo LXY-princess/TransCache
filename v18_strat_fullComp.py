@@ -13,7 +13,9 @@ def run_strategy(workload: List[Dict[str,Any]], shots: int = 256, include_exec: 
         meta = run_once_nocache(it["maker_run"], shots=shots, include_exec=include_exec)
         dur = float(meta["compile_sec"]) + float(meta["exec_sec"])
         events.append({"kind":"run","label": label_of(it["name"], it["q"], it["d"]),
-                       "start": t, "dur": dur})
+                       "start": t, "dur": dur,
+                       "transT":float(meta["compile_sec"]),
+                       "execT":float(meta["exec_sec"])})
         t += dur
     metrics = {}  # Baseline无命中率
     return {"events": events, "metrics": metrics}

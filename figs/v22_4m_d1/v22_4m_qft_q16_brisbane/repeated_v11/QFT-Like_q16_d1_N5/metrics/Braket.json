@@ -1,0 +1,28 @@
+{
+  "hit_by_label": {},
+  "total_hits": 0,
+  "cache_size_series": [
+    {
+      "t": 3.0059080000501126,
+      "size": 0
+    },
+    {
+      "t": 5.260895600076765,
+      "size": 0
+    },
+    {
+      "t": 7.413697100128047,
+      "size": 0
+    },
+    {
+      "t": 9.817456300137565,
+      "size": 0
+    },
+    {
+      "t": 12.14100230007898,
+      "size": 0
+    }
+  ],
+  "cache_capacity": null,
+  "note": "Only parameterize gates in ['p', 'rx', 'ry', 'rz', 'u', 'u3']; others stay constant; cache key = md5(template QASM)."
+}

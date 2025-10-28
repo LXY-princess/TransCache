@@ -21,9 +21,9 @@ from v22_core import (
 )
 
 # ==== 策略（与现有 runner 一致的别名与参数） ====
-# import v18_strat_FS as S_FS                  # FirstSeen
+import v22_strat_FS as S_FS                  # FirstSeen
 # import v18_strat_FS_Pre as S_FS_Pre          # FirstSeen + predictor prewarm
-# import v18_strat_PR as S_PR                  # Param-Reuse-like（无预测器）
+import v22_strat_PR as S_PR                  # Param-Reuse-like（无预测器）
 import v22_strat_transCache as S_FS_Pre_ttl_SE_ema  # 强化版 FS+Pre
 import v22_strat_fullComp as S_FullComp
 
@@ -122,7 +122,7 @@ def main_run(args):
     q, d, N = int(args.q), int(args.d), int(args.N)
 
     # 2) 构建 catalog（给策略查 maker 用，限制在单一 q/d 组合即可）
-    makers_all, meta = build_catalog([q], [d])
+    makers_all, meta = build_catalog([q], [d], bkd=args.bkd_name)
 
     # NEW: (name,q,d) -> maker_run 的映射
     meta_map = {(m["name"], m["q"], m["d"]): m["maker_run"] for m in meta}
@@ -137,16 +137,18 @@ def main_run(args):
             lookahead_sec=args.lookahead, prob_th=args.prob_th,
             max_compile=args.max_compile, shots=args.shots,
             include_exec=True,
+            bkd_name = args.bkd_name
         )
     def _baseline_kwargs(workload):
-        return dict(workload=workload, shots=args.shots, include_exec=True)
+        return dict(workload=workload, shots=args.shots, include_exec=True,
+            bkd_name = args.bkd_name)
 
     STRATS = [
-        ("TransCache", S_FS_Pre_ttl_SE_ema.run_strategy, _common_kwargs),
+        ("FullComp", S_FullComp.run_strategy, _baseline_kwargs),
         # ("FS+Pre",            S_FS_Pre.run_strategy,            _common_kwargs),
-        # ("FS",                S_FS.run_strategy,                _baseline_kwargs),
-        # ("PR",                S_PR.run_strategy,                _baseline_kwargs),
-        # ("FullComp",                S_FullComp.run_strategy,        _baseline_kwargs),
+        ("Braket",                S_PR.run_strategy,                _baseline_kwargs),
+        ("CCache",                S_FS.run_strategy,                _baseline_kwargs),
+        ("TransCache", S_FS_Pre_ttl_SE_ema.run_strategy, _common_kwargs),
     ]
 
     # 4) 目录结构
@@ -245,12 +247,13 @@ def main_run(args):
 # ---------------- CLI ----------------
 def build_argparser():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--circuits", type=str, default="QAOA-3reg",
-                    help='ALL 或 逗号分隔的 v11 电路名（如 "GHZ-Chain,RCA"）')
+    ap.add_argument("--circuits", type=str, default="QAOA",
+                    help='ALL 或 逗号分隔的 v11 电路名（如 "GHZ,QFT,QAOA,Bell,VQE"）')
     ap.add_argument("--q", type=int, default=16, help="固定 qubits 数")
-    ap.add_argument("--d", type=int, default=1, help="固定电路深度")
+    ap.add_argument("--d", type=int, default=4, help="固定电路深度")
     ap.add_argument("--N", type=int, default=5, help="同一电路连续调用次数")
     ap.add_argument("--rps", type=float, default=1.0, help="请求到达率（requests per second）")
+    ap.add_argument("--bkd_name", type=str, default="ibm_brisbane", help="the ibm backend to run, ibm_torino, ibm_brisbane")
 
     # predictor / prewarm（与现有 runner 对齐）
     ap.add_argument("--lookahead", type=float, default=8.0)

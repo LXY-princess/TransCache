@@ -1,0 +1,60 @@
+{
+  "circuits": [
+    "GHZ-Chain"
+  ],
+  "methods": [
+    "TransCache",
+    "CCache",
+    "Braket",
+    "FullComp"
+  ],
+  "summary": {
+    "GHZ-Chain": {
+      "TransCache": {
+        "e2e_latency": 11.18258330016397,
+        "final_cache_size": 1,
+        "final_hitrate": 1.0,
+        "q": 4,
+        "d": 1,
+        "N": 5
+      },
+      "CCache": {
+        "e2e_latency": 11.530209500109777,
+        "final_cache_size": 1,
+        "final_hitrate": 0.8,
+        "q": 4,
+        "d": 1,
+        "N": 5
+      },
+      "Braket": {
+        "e2e_latency": 10.921955599915236,
+        "final_cache_size": 0,
+        "final_hitrate": 0.0,
+        "q": 4,
+        "d": 1,
+        "N": 5
+      },
+      "FullComp": {
+        "e2e_latency": 11.124649299890734,
+        "final_cache_size": 0,
+        "final_hitrate": 0.0,
+        "q": 4,
+        "d": 1,
+        "N": 5
+      }
+    }
+  },
+  "config": {
+    "q": 4,
+    "d": 1,
+    "N": 5,
+    "rps": 1.0,
+    "shots": 32,
+    "lookahead": 8.0,
+    "prob_th": 0.45,
+    "max_compile": 3,
+    "sliding_window_sec": 60.0,
+    "min_samples": 2,
+    "prewarm_every": 5
+  }
+}

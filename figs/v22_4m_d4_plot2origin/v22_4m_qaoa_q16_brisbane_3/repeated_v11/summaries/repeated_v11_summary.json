@@ -1,0 +1,60 @@
+{
+  "circuits": [
+    "QAOA"
+  ],
+  "methods": [
+    "FullComp",
+    "Braket",
+    "CCache",
+    "TransCache"
+  ],
+  "summary": {
+    "QAOA": {
+      "FullComp": {
+        "e2e_latency": 12.862023599911481,
+        "final_cache_size": 0,
+        "final_hitrate": 0.0,
+        "q": 16,
+        "d": 4,
+        "N": 5
+      },
+      "Braket": {
+        "e2e_latency": 12.694060600013472,
+        "final_cache_size": 1,
+        "final_hitrate": 0.8,
+        "q": 16,
+        "d": 4,
+        "N": 5
+      },
+      "CCache": {
+        "e2e_latency": 12.091599099803716,
+        "final_cache_size": 1,
+        "final_hitrate": 0.8,
+        "q": 16,
+        "d": 4,
+        "N": 5
+      },
+      "TransCache": {
+        "e2e_latency": 12.800255900016055,
+        "final_cache_size": 1,
+        "final_hitrate": 1.0,
+        "q": 16,
+        "d": 4,
+        "N": 5
+      }
+    }
+  },
+  "config": {
+    "q": 16,
+    "d": 4,
+    "N": 5,
+    "rps": 1.0,
+    "shots": 32,
+    "lookahead": 8.0,
+    "prob_th": 0.45,
+    "max_compile": 3,
+    "sliding_window_sec": 60.0,
+    "min_samples": 2,
+    "prewarm_every": 5
+  }
+}

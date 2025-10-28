@@ -156,7 +156,7 @@ def make_qsim_xxz(q=12, steps=1, theta=np.pi/12):
     return qc
 
 # ------------------- qc -------------------
-def make_bell():
+def make_bell(q=12, d=2):
     qc = QuantumCircuit(2, 2)
     qc.h(0); qc.cx(0, 1); qc.measure([0, 1], [0, 1])
     return qc
@@ -164,15 +164,15 @@ def make_bell():
 # --------- 暴露基准集合 ----------
 CIRCUITS_QUASA: Dict[str, Callable] = {
     # 你已有
-    "GHZ-Chain": make_ghz_chain,
+    "GHZ": make_ghz_chain,
     "LinearEnt": make_linear_ent,
-    "QFT-Like":  make_qft_like,
+    "QFT":  make_qft_like,
     # # # 论文 NISQ
-    "QAOA-3reg": make_qaoa_3regular,
+    "QAOA": make_qaoa_3regular,
     # "RCA":       make_rca,
-    # "VQE-Full":  make_vqe_fullent,
+    "VQE":  make_vqe_fullent,
     # # # 论文 FT
     # "Grover":    make_grover,
-    # "QSIM-XXZ":  make_qsim_xxz,
-    # "bell": make_bell,
+    "QSIM":  make_qsim_xxz,
+    "Bell": make_bell,
 }

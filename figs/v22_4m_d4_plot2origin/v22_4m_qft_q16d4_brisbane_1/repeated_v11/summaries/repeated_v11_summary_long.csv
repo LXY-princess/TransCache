@@ -1,0 +1,5 @@
+circuit,q,d,N,method,e2e_latency,final_cache_size,final_hitrate
+QFT,16,4,5,FullComp,18.345536000211723,0,0.0
+QFT,16,4,5,Braket,18.97567490010988,0,0.0
+QFT,16,4,5,CCache,13.543051099753939,1,0.8
+QFT,16,4,5,TransCache,10.757143499911763,1,1.0

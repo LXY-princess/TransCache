@@ -1,0 +1,30 @@
+{
+  "hit_by_label": {
+    "QAOA_q8_d4": 4
+  },
+  "total_hits": 4,
+  "cache_size_series": [
+    {
+      "t": 2.763428600039333,
+      "size": 1
+    },
+    {
+      "t": 4.7354052000446245,
+      "size": 1
+    },
+    {
+      "t": 6.986038799979724,
+      "size": 1
+    },
+    {
+      "t": 9.051398299983703,
+      "size": 1
+    },
+    {
+      "t": 11.056743400054984,
+      "size": 1
+    }
+  ],
+  "cache_capacity": null,
+  "note": "Only parameterize gates in ['p', 'rx', 'ry', 'rz', 'u', 'u3']; others stay constant; cache key = md5(template QASM)."
+}

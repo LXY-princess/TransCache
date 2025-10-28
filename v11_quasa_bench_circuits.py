@@ -169,7 +169,7 @@ CIRCUITS_QUASA: Dict[str, Callable] = {
     "QFT":  make_qft_like,
     # # # 论文 NISQ
     "QAOA": make_qaoa_3regular,
-    # "RCA":       make_rca,
+    "RCA":       make_rca,
     "VQE":  make_vqe_fullent,
     # # # 论文 FT
     # "Grover":    make_grover,

@@ -1,0 +1,16 @@
+event,time_utc,source,note
+02a_tls_auth_start,2025-10-28T17:50:50.643405+00:00,local,
+02a_tls_auth_end,2025-10-28T17:50:53.306460+00:00,local,
+02b_backend_query_start,2025-10-28T17:50:53.306508+00:00,local,
+02b_backend_query_end,2025-10-28T17:50:53.774283+00:00,local,
+03_transpile_start,2025-10-28T17:50:53.774491+00:00,local,
+03_transpile_end,2025-10-28T17:50:55.418518+00:00,local,
+04_upload_to_cloud_start,2025-10-28T17:50:55.418533+00:00,local,
+04_upload_to_cloud_end,2025-10-28T17:50:56.005111+00:00,local,
+client_block_start,2025-10-28T17:50:56.005123+00:00,local,
+client_result_received,2025-10-28T17:51:00.401938+00:00,local,
+srv_created,2025-10-28T17:50:56.225393+00:00,server,server job CREATED
+srv_running,2025-10-28T17:50:56.979131+00:00,server,server job RUNNING
+srv_finished,2025-10-28T17:51:00.325411+00:00,server,server job FINISHED
+srv_span_start,2025-10-28T17:50:58.580815+00:00,server,server exec span START
+srv_span_stop,2025-10-28T17:50:59.059220+00:00,server,server exec span STOP

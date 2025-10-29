@@ -1,0 +1,18 @@
+{
+  "T_end": 145.0175036714802,
+  "N": 150,
+  "kind": "nhpp",
+  "rps_mean_est": 1.0343578961323665,
+  "lambda_max": 1.6,
+  "class_mode": "weighted",
+  "class_params": {},
+  "lambda_of_t": "callable_in_info",
+  "_lambda_of_t_callable": "<function build_all_workloads.<locals>._lam_fn at 0x0000013144D2AB00>",
+  "lambda_params": {
+    "form": "sinusoid",
+    "lam_base": 1.0,
+    "amp": 0.6,
+    "period": 10.0,
+    "lambda_max": 1.6
+  }
+}

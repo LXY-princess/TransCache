@@ -1,0 +1,211 @@
+{
+  "poisson_superposition": {
+    "data": {
+      "workload_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\poisson_superposition\\data\\workload.json",
+      "info_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\poisson_superposition\\data\\info.json",
+      "bundle_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\poisson_superposition\\data\\bundle.json"
+    },
+    "plots": {
+      "inter_arrival": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\poisson_superposition\\plots\\inter_arrival_hist.png",
+      "counting": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\poisson_superposition\\plots\\counting_process.png",
+      "fano": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\poisson_superposition\\plots\\fano_curve.png",
+      "acf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\poisson_superposition\\plots\\acf_counts.png",
+      "zipf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\poisson_superposition\\plots\\class_zipf.png",
+      "heat_topk": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\poisson_superposition\\plots\\heat_topk_classes.png"
+    },
+    "meta": {
+      "N": 150,
+      "rps": 1.0
+    }
+  },
+  "renewal_gamma_k3": {
+    "data": {
+      "workload_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_gamma_k3\\data\\workload.json",
+      "info_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_gamma_k3\\data\\info.json",
+      "bundle_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_gamma_k3\\data\\bundle.json"
+    },
+    "plots": {
+      "inter_arrival": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_gamma_k3\\plots\\inter_arrival_hist.png",
+      "counting": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_gamma_k3\\plots\\counting_process.png",
+      "fano": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_gamma_k3\\plots\\fano_curve.png",
+      "acf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_gamma_k3\\plots\\acf_counts.png",
+      "zipf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_gamma_k3\\plots\\class_zipf.png",
+      "heat_topk": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_gamma_k3\\plots\\heat_topk_classes.png"
+    },
+    "meta": {
+      "N": 150,
+      "rps": 1.0
+    }
+  },
+  "renewal_weibull_k1p5": {
+    "data": {
+      "workload_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_weibull_k1p5\\data\\workload.json",
+      "info_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_weibull_k1p5\\data\\info.json",
+      "bundle_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_weibull_k1p5\\data\\bundle.json"
+    },
+    "plots": {
+      "inter_arrival": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_weibull_k1p5\\plots\\inter_arrival_hist.png",
+      "counting": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_weibull_k1p5\\plots\\counting_process.png",
+      "fano": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_weibull_k1p5\\plots\\fano_curve.png",
+      "acf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_weibull_k1p5\\plots\\acf_counts.png",
+      "zipf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_weibull_k1p5\\plots\\class_zipf.png",
+      "heat_topk": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_weibull_k1p5\\plots\\heat_topk_classes.png"
+    },
+    "meta": {
+      "N": 150,
+      "rps": 1.0
+    }
+  },
+  "renewal_lognormal_s0p75": {
+    "data": {
+      "workload_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lognormal_s0p75\\data\\workload.json",
+      "info_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lognormal_s0p75\\data\\info.json",
+      "bundle_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lognormal_s0p75\\data\\bundle.json"
+    },
+    "plots": {
+      "inter_arrival": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lognormal_s0p75\\plots\\inter_arrival_hist.png",
+      "counting": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lognormal_s0p75\\plots\\counting_process.png",
+      "fano": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lognormal_s0p75\\plots\\fano_curve.png",
+      "acf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lognormal_s0p75\\plots\\acf_counts.png",
+      "zipf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lognormal_s0p75\\plots\\class_zipf.png",
+      "heat_topk": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lognormal_s0p75\\plots\\heat_topk_classes.png"
+    },
+    "meta": {
+      "N": 150,
+      "rps": 1.0
+    }
+  },
+  "renewal_lomax_a2p5": {
+    "data": {
+      "workload_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lomax_a2p5\\data\\workload.json",
+      "info_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lomax_a2p5\\data\\info.json",
+      "bundle_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lomax_a2p5\\data\\bundle.json"
+    },
+    "plots": {
+      "inter_arrival": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lomax_a2p5\\plots\\inter_arrival_hist.png",
+      "counting": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lomax_a2p5\\plots\\counting_process.png",
+      "fano": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lomax_a2p5\\plots\\fano_curve.png",
+      "acf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lomax_a2p5\\plots\\acf_counts.png",
+      "zipf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lomax_a2p5\\plots\\class_zipf.png",
+      "heat_topk": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\renewal_lomax_a2p5\\plots\\heat_topk_classes.png"
+    },
+    "meta": {
+      "N": 150,
+      "rps": 1.0
+    }
+  },
+  "nhpp_sinusoid": {
+    "data": {
+      "workload_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\nhpp_sinusoid\\data\\workload.json",
+      "info_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\nhpp_sinusoid\\data\\info.json",
+      "bundle_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\nhpp_sinusoid\\data\\bundle.json"
+    },
+    "plots": {
+      "inter_arrival": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\nhpp_sinusoid\\plots\\inter_arrival_hist.png",
+      "counting": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\nhpp_sinusoid\\plots\\counting_process.png",
+      "fano": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\nhpp_sinusoid\\plots\\fano_curve.png",
+      "acf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\nhpp_sinusoid\\plots\\acf_counts.png",
+      "zipf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\nhpp_sinusoid\\plots\\class_zipf.png",
+      "heat_topk": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\nhpp_sinusoid\\plots\\heat_topk_classes.png"
+    },
+    "meta": {
+      "N": 150,
+      "rps": 1.0
+    }
+  },
+  "mmpp2_contrast8": {
+    "data": {
+      "workload_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\mmpp2_contrast8\\data\\workload.json",
+      "info_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\mmpp2_contrast8\\data\\info.json",
+      "bundle_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\mmpp2_contrast8\\data\\bundle.json"
+    },
+    "plots": {
+      "inter_arrival": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\mmpp2_contrast8\\plots\\inter_arrival_hist.png",
+      "counting": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\mmpp2_contrast8\\plots\\counting_process.png",
+      "fano": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\mmpp2_contrast8\\plots\\fano_curve.png",
+      "acf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\mmpp2_contrast8\\plots\\acf_counts.png",
+      "zipf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\mmpp2_contrast8\\plots\\class_zipf.png",
+      "heat_topk": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\mmpp2_contrast8\\plots\\heat_topk_classes.png"
+    },
+    "meta": {
+      "N": 150,
+      "rps": 1.0
+    }
+  },
+  "hawkes_eta0p5_b3": {
+    "data": {
+      "workload_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\hawkes_eta0p5_b3\\data\\workload.json",
+      "info_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\hawkes_eta0p5_b3\\data\\info.json",
+      "bundle_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\hawkes_eta0p5_b3\\data\\bundle.json"
+    },
+    "plots": {
+      "inter_arrival": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\hawkes_eta0p5_b3\\plots\\inter_arrival_hist.png",
+      "counting": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\hawkes_eta0p5_b3\\plots\\counting_process.png",
+      "fano": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\hawkes_eta0p5_b3\\plots\\fano_curve.png",
+      "acf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\hawkes_eta0p5_b3\\plots\\acf_counts.png",
+      "zipf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\hawkes_eta0p5_b3\\plots\\class_zipf.png",
+      "heat_topk": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\hawkes_eta0p5_b3\\plots\\heat_topk_classes.png"
+    },
+    "meta": {
+      "N": 150,
+      "rps": 1.0
+    }
+  },
+  "compound_bursty": {
+    "data": {
+      "workload_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\compound_bursty\\data\\workload.json",
+      "info_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\compound_bursty\\data\\info.json",
+      "bundle_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\compound_bursty\\data\\bundle.json"
+    },
+    "plots": {
+      "inter_arrival": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\compound_bursty\\plots\\inter_arrival_hist.png",
+      "counting": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\compound_bursty\\plots\\counting_process.png",
+      "fano": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\compound_bursty\\plots\\fano_curve.png",
+      "acf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\compound_bursty\\plots\\acf_counts.png",
+      "zipf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\compound_bursty\\plots\\class_zipf.png",
+      "heat_topk": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\compound_bursty\\plots\\heat_topk_classes.png"
+    },
+    "meta": {
+      "N": 150,
+      "rps": 1.0
+    }
+  },
+  "sessions_dirichlet": {
+    "data": {
+      "workload_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\sessions_dirichlet\\data\\workload.json",
+      "info_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\sessions_dirichlet\\data\\info.json",
+      "bundle_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\sessions_dirichlet\\data\\bundle.json"
+    },
+    "plots": {
+      "inter_arrival": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\sessions_dirichlet\\plots\\inter_arrival_hist.png",
+      "counting": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\sessions_dirichlet\\plots\\counting_process.png",
+      "fano": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\sessions_dirichlet\\plots\\fano_curve.png",
+      "acf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\sessions_dirichlet\\plots\\acf_counts.png",
+      "zipf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\sessions_dirichlet\\plots\\class_zipf.png",
+      "heat_topk": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\sessions_dirichlet\\plots\\heat_topk_classes.png"
+    },
+    "meta": {
+      "N": 150,
+      "rps": 1.0
+    }
+  },
+  "change_point": {
+    "data": {
+      "workload_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\change_point\\data\\workload.json",
+      "info_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\change_point\\data\\info.json",
+      "bundle_json": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\change_point\\data\\bundle.json"
+    },
+    "plots": {
+      "inter_arrival": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\change_point\\plots\\inter_arrival_hist.png",
+      "counting": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\change_point\\plots\\counting_process.png",
+      "fano": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\change_point\\plots\\fano_curve.png",
+      "acf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\change_point\\plots\\acf_counts.png",
+      "zipf": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\change_point\\plots\\class_zipf.png",
+      "heat_topk": "C:\\Users\\13902\\Desktop\\codes\\PaulseCache\\figs\\v18_wl_gen\\change_point\\plots\\heat_topk_classes.png"
+    },
+    "meta": {
+      "N": 150,
+      "rps": 1.0
+    }
+  }
+}

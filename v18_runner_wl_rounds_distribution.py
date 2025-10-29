@@ -30,13 +30,9 @@ from v18_wl_kitchen import (
 from v18_replot_regions2 import load_and_replot_regions
 
 # ---- strategies (与现有 runner 保持一致) ----
-import v18_strat_FS as S_FS                     # FirstSeen
-import v18_strat_FS_Pre as S_FS_Pre             # FirstSeen + predictor prewarm
+import v18_strat_FS as S_FS
 import v18_strat_PR as S_PR
-import v18_strat_FS_Pre_ttl as S_FS_Pre_ttl
-import v18_strat_FS_Pre_ttl_SE as S_FS_Pre_ttl_SE
 import v18_strat_FS_Pre_ttl_SE_ema as S_FS_Pre_ttl_SE_ema
-import v18_strat_FS_ttl_SE_ema as S_FS_ttl_SE_ema
 import v18_strat_fullComp as S_full
 
 # ---------------- JSON utilities (safe for numpy) ----------------
@@ -291,14 +287,10 @@ def main_run(args):
         return dict(workload=workload, shots=args.shots, include_exec=True)
 
     STRATS = [
-        # ("FS+Pre+ttl+SE+ema+SWR", S_FS_Pre_ttl_SE_ema_SWR.run_strategy, _common_kwargs),
-        ("FS+Pre+ttl+SE+ema", S_FS_Pre_ttl_SE_ema.run_strategy, _common_kwargs),
-        # ("FS+Pre+ttl+SE", S_FS_Pre_ttl_SE.run_strategy, _common_kwargs),
-        # ("FS+Pre+ttl", S_FS_Pre_ttl.run_strategy, _common_kwargs),
-        # ("FS+ttl+SE+ema", S_FS_ttl_SE_ema.run_strategy, _common_kwargs),
-        # ("FS+Pre", S_FS_Pre.run_strategy, _common_kwargs),
-        # ("FS",     S_FS.run_strategy,     _baseline_kwargs),
-        ("NoCache",     S_full.run_strategy,     _baseline_kwargs),
+        ("FullComp", S_full.run_strategy, _baseline_kwargs),
+        ("Braket",     S_PR.run_strategy,     _baseline_kwargs),
+        ("CCache",     S_FS.run_strategy,     _baseline_kwargs),
+        ("TransCache", S_FS_Pre_ttl_SE_ema.run_strategy, _common_kwargs),
     ]
 
     methods = [name for (name, _, _) in STRATS]
@@ -643,7 +635,7 @@ def build_argparser():
     ap.add_argument("--prewarm_every", type=int, default=5)
 
     # multi-round
-    ap.add_argument("--rounds", type=int, default=5, help="每个 workload 大小的重复轮数")
+    ap.add_argument("--rounds", type=int, default=1, help="每个 workload 大小的重复轮数")
     ap.add_argument("--interval_kind", type=str, choices=["std", "minmax"], default="std",
                     help="线图区间：std=均值±1σ；minmax=[最小, 最大]")
     ap.add_argument("--jitter", type=float, default=0.01,
@@ -679,7 +671,7 @@ def main():
                         out_hitrate=args.out_hitrate,
                         out_scatter=args.out_scatter,
                         # methods_keep=["FS+Pre+ttl+SE+ema", "FS+Pre", "FS", "PR"])
-                        methods_keep=["FS+Pre+ttl+SE+ema", "FS+ttl+SE+ema", "FS+Pre", "FS", "NoCache"],
+                        methods_keep=["FullComp", "Braket", "CCache", "TransCache"],
                         save_dir=args.save_dir)
     else:
         # mode "load"

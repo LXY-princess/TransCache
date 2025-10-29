@@ -1,0 +1,69 @@
+{
+  "sizes": [
+    150
+  ],
+  "methods": [
+    "FullComp",
+    "Braket",
+    "CCache",
+    "TransCache"
+  ],
+  "e2e_latency": {
+    "FullComp": [
+      7.740860901074484
+    ],
+    "Braket": [
+      4.964594702236354
+    ],
+    "CCache": [
+      4.134134601568803
+    ],
+    "TransCache": [
+      3.212022997206077
+    ]
+  },
+  "final_cache_size": {
+    "FullComp": [
+      0
+    ],
+    "Braket": [
+      35
+    ],
+    "CCache": [
+      58
+    ],
+    "TransCache": [
+      49
+    ]
+  },
+  "config": {
+    "q_list": [
+      5,
+      7,
+      11,
+      13,
+      15
+    ],
+    "d_list": [
+      2,
+      4,
+      6,
+      8
+    ],
+    "shots": 256,
+    "hot_fraction": 0.25,
+    "hot_boost": 8.0,
+    "rps": 1.0,
+    "rng_seed_base": 123,
+    "lookahead": 8.0,
+    "prob_th": 0.45,
+    "max_compile": 3,
+    "sliding_window_sec": 60.0,
+    "min_samples": 2,
+    "prewarm_every": 5
+  },
+  "plots": {
+    "latency_png": "figs\\v18\\plots\\scaling_e2e_latency.png",
+    "cache_png": "figs\\v18\\plots\\scaling_final_cache_size.png"
+  }
+}

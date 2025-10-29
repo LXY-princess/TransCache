@@ -294,7 +294,7 @@ if __name__ == "__main__":
     cir_name = ["QFT"]#"GHZ", "QFT", "QAOA", "VQE", "Bell"
     qc_raw_list = {}
     for k in cir_name:
-        qc_raw_list[k] = CIRCUITS_QUASA.get(k)(16,1)
+        qc_raw_list[k] = CIRCUITS_QUASA.get(k)(113,1)
 
     for k, qc_raw in qc_raw_list.items():
         events.clear()

@@ -23,7 +23,7 @@ ROOT = pathlib.Path("./figs")/f"v{VNUM}"
 PLOT_DIR = ROOT/"plots"
 # EVENTS_DIR.mkdir(parents=True, exist_ok=True)
 PLOT_DIR.mkdir(parents=True, exist_ok=True)
-LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}_e2e_latency_breakdown_wl150"
+LOAD_ROOT = pathlib.Path("./figs")/f"v{VNUM}_wl_dis_renewal"
 LOAD_EVENTS_DIR = LOAD_ROOT/"events"
 
 def md5_qasm(circ: QuantumCircuit) -> str:
@@ -491,7 +491,8 @@ def draw_timeline_run_only_colorbar(method_events: Dict[str, List[Dict[str,Any]]
     PRED_LABEL = "__predictor__"
 
     # ----------- 明确绘图顺序（从下到上） -----------
-    method_order = ["FullCompilation", "PR", "FS", "FS+Pre+ttl+SE+ema"]
+    # method_order = ["FullCompilation", "PR", "FS", "FS+Pre+ttl+SE+ema"]
+    method_order = ["FullComp", "Braket", "CCache", "TransCache"]
 
     # ----------- 为 run 事件建立“电路索引”映射（按出现顺序稳定编号） -----------
     label2idx = {}
@@ -528,11 +529,17 @@ def draw_timeline_run_only_colorbar(method_events: Dict[str, List[Dict[str,Any]]
 
     # ----------- 画布 & 轴范围 -----------
     n = len(method_order)
+    # method_labels = {
+    #     "FullCompilation": "FullComp",
+    #     "PR": "Braket",
+    #     "FS": "CCache",
+    #     "FS+Pre+ttl+SE+ema": "TransCache",
+    # }
     method_labels = {
-        "FullCompilation": "FullComp",
-        "PR": "Braket",
-        "FS": "CCache",
-        "FS+Pre+ttl+SE+ema": "TransCache",
+        "FullComp": "FullComp",
+        "Braket": "Braket",
+        "CCache": "CCache",
+        "TransCache": "TransCache",
     }
 
     fig, ax = plt.subplots(figsize=(20, 7))

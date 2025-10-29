@@ -16,7 +16,7 @@ import pathlib
 from matplotlib.lines import Line2D
 import itertools
 
-DEFAULT_DIR = pathlib.Path("./figs/v17_polling_10days")
+DEFAULT_DIR = pathlib.Path("./figs/v17_polling")
 BACKEBND_SERIES_DIR = DEFAULT_DIR/"backends"
 DEFAULT_PLOT_DIR = DEFAULT_DIR/"plots"
 

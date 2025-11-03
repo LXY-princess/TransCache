@@ -488,12 +488,12 @@ def main_run(args):
         #poisson_superposition
         workload, info = build_workload_poisson_superposition_exact(meta, N, hot_fraction=0.25, hot_boost=8.0,
                                                               rps=args.rps, rng_seed=rng_seed, return_timestamps=True)
-        # renewal_gamma_k3
-        workload, info = build_workload_renewal_exact(meta, N, rps=args.rps, renewal_kind="gamma", shape=3.0,
-                                                class_mode="weighted", rng_seed=rng_seed)
-        # hawkes_eta0p5_b3
-        workload, info = build_workload_hawkes_exact(meta, N, rps=args.rps, eta=0.5, beta=3.0,
-                                               class_mode="weighted", rng_seed=rng_seed, return_timestamps=True)
+        # # renewal_gamma_k3
+        # workload, info = build_workload_renewal_exact(meta, N, rps=args.rps, renewal_kind="gamma", shape=3.0,
+        #                                         class_mode="weighted", rng_seed=rng_seed)
+        # # hawkes_eta0p5_b3
+        # workload, info = build_workload_hawkes_exact(meta, N, rps=args.rps, eta=0.5, beta=3.0,
+        #                                        class_mode="weighted", rng_seed=rng_seed, return_timestamps=True)
 
         visualize_wl(
             name="hawkes_eta0p5_b3",
@@ -678,7 +678,7 @@ def build_argparser():
                     help="Comma-separated workload lengths to test.")
     # ap.add_argument("--q_list", type=str, default="5,7,11,13")
     # ap.add_argument("--d_list", type=str, default="4,8")
-    ap.add_argument("--q_list", type=str, default="5, 7, 11, 13, 15") #5, 7, 11, 13, 15, 17, 19, 21
+    ap.add_argument("--q_list", type=str, default="5, 7, 11, 13, 15, 19, 21") #5, 7, 11, 13, 15, 17, 19, 21
     ap.add_argument("--d_list", type=str, default="2,4,6,8") # 2,4,6,8, 12
     ap.add_argument("--shots", type=int, default=256)
     ap.add_argument("--hot_fraction", type=float, default=0.25)

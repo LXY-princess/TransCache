@@ -25,9 +25,13 @@ def run_strategy(workload, shots=256, include_exec: bool = True):
     for idx, it in enumerate(workload):
         meta = run_once_with_cache(it["maker_run"], cache, shots=shots, ts=t, include_exec=include_exec)
         cache_size_series.append((t, len(cache)))
-        dur = float(meta["compile_sec"]) + float(meta["exec_sec"])
+        dur = float(meta["compile_sec"]) + float(meta["exec_sec"]) + float(meta["load_sec"])
         lab = label_of(it["name"], it["q"], it["d"])
-        events.append({"kind":"run","label":lab,"start":t,"dur":dur}); t += dur
+        events.append({"kind":"run","label":lab,"start":t,"dur":dur,
+                       "transT":float(meta["compile_sec"]),
+                       "loadT":float(meta["load_sec"]),
+                       "execT":float(meta["exec_sec"])})
+        t += dur
         if meta["cache_hit"]:
             hit_by_label[lab] += 1
             total_hits += 1

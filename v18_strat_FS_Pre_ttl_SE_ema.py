@@ -127,10 +127,11 @@ def run_strategy(workload, makers_all,
         meta = run_once_with_cache(it["maker_run"], cache, shots=shots, ts=t, include_exec=include_exec)
 
         # 时间推进与记录
-        dur = float(meta["compile_sec"]) + float(meta["exec_sec"])
+        dur = float(meta["compile_sec"]) + float(meta["exec_sec"]) + float(meta["load_sec"])
         lab = label_of(it["name"], it["q"], it["d"])
         events.append({"kind":"run","label":lab,"start":t,"dur":dur,
                        "transT":float(meta["compile_sec"]),
+                       "loadT":float(meta["load_sec"]),
                        "execT":float(meta["exec_sec"])})
 
         t += dur

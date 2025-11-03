@@ -104,6 +104,7 @@ def run_once_param_reuse(
             "cache_hit": False,
             "compile_sec": float(compile_sec),
             "bind_sec": 0.0,
+            "load_sec": 0.0,
             "exec_sec": float(exec_sec),
             "n_qubits": qc_raw.num_qubits,
             "depth_in": qc_raw.depth(),
@@ -130,6 +131,7 @@ def run_once_param_reuse(
             "cache_hit": False,
             "compile_sec": float(compile_sec),
             "bind_sec": 0.0,
+            "load_sec": 0.0,
             "exec_sec": float(exec_sec),
             "n_qubits": qc_raw.num_qubits,
             "depth_in": qc_raw.depth(),
@@ -139,7 +141,9 @@ def run_once_param_reuse(
 
     # C) 仅有“我们替换出的参数” => 可缓存复用 + 按值绑定
     key = f"{bk}:{md5_qasm(templ)}"
+    t0 = time.perf_counter()
     qc_exec_templ = template_cache.get(key)
+    load_sec = time.perf_counter() - t0
     hit = qc_exec_templ is not None
     compile_sec = 0.0
     if not hit:
@@ -149,7 +153,8 @@ def run_once_param_reuse(
         template_cache[key] = qc_exec_templ
 
     # 绑定：使用 transpiled 电路中的实际 Parameter 实例（按 name 匹配）
-    bind_sec = 0.0
+    # bind_sec = 0.0
+    t1 = time.perf_counter()
     name2param = {p.name: p for p in qc_exec_templ.parameters}
     binding: Dict[Parameter, float] = {}
     for par_orig, val in zip(replaced_params, replaced_values):
@@ -157,14 +162,13 @@ def run_once_param_reuse(
         if p_in_exec is not None:
             binding[p_in_exec] = val
 
-    if include_exec:
-        if binding:
-            t1 = time.perf_counter()
-            qc_exec = qc_exec_templ.assign_parameters(binding, inplace=False)
-            bind_sec = time.perf_counter() - t1
-        else:
-            qc_exec = qc_exec_templ  # 理论上很少发生
+    if binding:
+        qc_exec = qc_exec_templ.assign_parameters(binding, inplace=False)
+    else:
+        qc_exec = qc_exec_templ  # 理论上很少发生
+    bind_sec = time.perf_counter() - t1
 
+    if include_exec:
         # 执行
         t2 = time.perf_counter()
         _ = sampler.run([qc_exec], shots=shots).result()
@@ -179,6 +183,7 @@ def run_once_param_reuse(
         "cache_hit": hit,
         "compile_sec": float(compile_sec),
         "bind_sec": float(bind_sec),
+        "load_sec": float(load_sec),
         "exec_sec": float(exec_sec),
         "n_qubits": qc_raw.num_qubits,
         "depth_in": qc_raw.depth(),
@@ -209,9 +214,14 @@ def run_strategy(
     for it in workload:
         meta = run_once_param_reuse(it["maker_run"], template_cache, shots=shots, include_exec=include_exec)
 
-        run_dur = float(meta.get("compile_sec", 0.0)) + float(meta.get("bind_sec", 0.0)) + float(meta.get("exec_sec", 0.0))
+        run_dur = (float(meta.get("compile_sec", 0.0)) + float(meta.get("bind_sec", 0.0))
+                   + float(meta.get("exec_sec", 0.0)) + float(meta.get("load_sec", 0.0)))
         lab = label_of(it["name"], it["q"], it["d"])
-        events.append({"kind": "run", "label": lab, "start": t, "dur": run_dur})
+        events.append({"kind": "run", "label": lab, "start": t, "dur": run_dur,
+                       "transT":float(meta["compile_sec"]),
+                       "loadT":float(meta["load_sec"]),
+                       "bindT":float(meta["bind_sec"]),
+                       "execT":float(meta["exec_sec"])})
         t += run_dur
 
         if meta.get("cache_hit", False):

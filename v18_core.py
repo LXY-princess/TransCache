@@ -293,19 +293,34 @@ def seed_recent_calls_for_predictor(predictor_window_sec: float, makers_all, wor
             record_arrival(hit_key, ts=horizon_lo + (j+1)*spacing_sec)
 
 # --------- compile/run helpers ----------
+# def compile_with_idle_cache(qc_raw: QuantumCircuit, bk_name: str,
+#                             cache: Dict[str, QuantumCircuit]) -> Tuple[QuantumCircuit, str, bool, float]:
+#     key = f"{bk_name}:{md5_qasm(qc_raw)}"
+#     t0 = time.perf_counter()
+#     qc_exec = cache.get(key)
+#     hit = qc_exec is not None
+#     compile_sec = time.perf_counter() - t0
+#     if not hit:
+#         t0 = time.perf_counter()
+#         qc_exec = transpile(qc_raw, **_prepare_kwargs())
+#         compile_sec = time.perf_counter() - t0
+#         cache[key] = qc_exec
+#     return qc_exec, key, hit, compile_sec
+
 def compile_with_idle_cache(qc_raw: QuantumCircuit, bk_name: str,
                             cache: Dict[str, QuantumCircuit]) -> Tuple[QuantumCircuit, str, bool, float]:
     key = f"{bk_name}:{md5_qasm(qc_raw)}"
     t0 = time.perf_counter()
     qc_exec = cache.get(key)
+    load_sec = time.perf_counter() - t0
     hit = qc_exec is not None
-    compile_sec = time.perf_counter() - t0
+    compile_sec = 0
     if not hit:
         t0 = time.perf_counter()
         qc_exec = transpile(qc_raw, **_prepare_kwargs())
         compile_sec = time.perf_counter() - t0
         cache[key] = qc_exec
-    return qc_exec, key, hit, compile_sec
+    return qc_exec, key, hit, compile_sec, load_sec
 
 def run_once_with_cache(qc_func: Callable[[], QuantumCircuit],
                         cache: Dict[str, QuantumCircuit],
@@ -317,7 +332,7 @@ def run_once_with_cache(qc_func: Callable[[], QuantumCircuit],
     method = "statevector" if qc_raw.num_qubits <= 25 else "matrix_product_state"
     sampler = AerSampler(skip_transpilation=True, backend_options={"method": method})
     bk = "AerSV"
-    qc_exec, key, hit, compile_sec = compile_with_idle_cache(qc_raw, bk, cache)
+    qc_exec, key, hit, compile_sec, load_sec = compile_with_idle_cache(qc_raw, bk, cache)
     if include_exec:
         t0 = time.perf_counter()
         _ = sampler.run([qc_exec], shots=shots).result()
@@ -325,7 +340,7 @@ def run_once_with_cache(qc_func: Callable[[], QuantumCircuit],
     else:
         exec_sec = 0.0  # ← 不执行，置零
     record_arrival(key, ts=ts)
-    return {"key": key, "cache_hit": hit, "compile_sec": compile_sec, "exec_sec": exec_sec,
+    return {"key": key, "cache_hit": hit, "compile_sec": compile_sec, "exec_sec": exec_sec, "load_sec": load_sec,
             "n_qubits": qc_raw.num_qubits, "depth_in": qc_raw.depth(), "depthT": qc_exec.depth()}
 
 def run_once_nocache(qc_func: Callable[[], QuantumCircuit], shots: int = 256, include_exec: bool = True) -> Dict[str, Any]:

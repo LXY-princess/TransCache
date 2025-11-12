@@ -1,5 +1,6 @@
 # v21_ibm_BD.py  — reverted to "v17-style" Sampler run path (no svc.job(job_id))
 # make a circuit and submit to ibm real backend, monitor each time durations.
+# This is a basic job submission to ibm bkd, no acceleration applied
 # Output: events_times.csv, step_durations.csv, latency.png
 
 import time as _bt; _BOOT_START = _bt.perf_counter()

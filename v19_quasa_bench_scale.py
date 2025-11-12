@@ -1,5 +1,8 @@
 # v19_quasa_bench_scale.py
 # 环境：qiskit-terra==0.46.3, qiskit-aer==0.13.3, qiskit-ibm-runtime==0.40.1
+# calculate and save circuit metrics –
+# depth, 2q depth, gate#, 1q gate #, 2q gate #, cx gate #, …
+# (logic – 没有做硬件映射, hw – 做了AerSimulator target硬件映射之后的)
 import inspect
 import pathlib
 import pandas as pd

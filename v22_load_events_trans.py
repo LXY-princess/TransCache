@@ -1,3 +1,4 @@
+# load from events.csv, abstract out transT for all rounds.
 import json
 import csv
 from pathlib import Path

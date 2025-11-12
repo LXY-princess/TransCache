@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Plot final_hitrate (mean ± std across rounds) vs Size for each method.
-
+_update_plot_params is in this py file, used for paper graph
 Keeps the calling/structure style consistent with v20_dual_cost_plot.py:
 - Auto-detects common column names, but can be overridden via CLI flags
 - Optional --methods filter (comma-separated)

@@ -1,4 +1,7 @@
 # strat_FS_Pre.py
+# TransCache method in simulation
+# ema: store compilation time when prewarm to help scoring,
+# so it does not have to begin with default but has actual compilation time.
 from typing import Any, Dict, List, Tuple
 from collections import Counter, defaultdict
 import time, math

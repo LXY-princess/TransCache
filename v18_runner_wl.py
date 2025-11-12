@@ -1,5 +1,10 @@
-# v15_runner_workload_scaling.py
-# Compare E2E latency & final cache size across workload sizes for 4 strategies.
+# V18_runner_wl.py
+# Input: workload sizes list, q list, d list.
+# For each wl size
+#   Sweep over each workload size (q list, d list together form a wl)
+# Output:
+#   workload under seed, events, metrics, draw timeline, draw cache size change,
+#   draw pareto - Compare E2E latency & final cache size across workload sizes for 4 strategies.
 import argparse, json, csv
 from typing import Dict, Any, List, Tuple
 import numpy as np

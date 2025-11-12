@@ -1,4 +1,5 @@
 # strategy_baseline.py
+# baseline full compilation, no any acceleration technique
 from typing import Any, Dict, List
 from collections import defaultdict
 from v18_core import run_once_nocache, label_of

@@ -1,5 +1,5 @@
-# v18_runner_workload_scaling_multi.py
 # Multi-round scaling runner: run each workload size for R rounds (different seeds),
+# same as V18_runner_wl_rounds.py, but generate wl under different distribution
 # aggregate stats, plot mean+interval lines, scatter all rounds, and save per-round timelines.
 import argparse, json, csv, math, time
 from typing import Dict, Any, List, Tuple, Optional, DefaultDict

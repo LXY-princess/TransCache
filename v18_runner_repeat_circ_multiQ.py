@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Runner (multi-q): 固定深度 d，针对指定 v11 电路集合，在多个 qubits 值上分别
+Runner (multi-q): v18_runner_repeat_circ.py 基础上，固定深度 d，针对指定 v11 电路集合，在多个 qubits 值上分别
 生成“同一电路连续调用 N 次”的 workload，并按既有策略运行与记录结果。
 
 - 与 v18_runner_repeat_circ.py 的风格/输出保持一致

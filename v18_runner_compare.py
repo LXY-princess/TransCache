@@ -1,4 +1,6 @@
 # runner_compare.py
+# compare strategies under one wl size
+
 import argparse, pathlib
 from typing import Dict, Any
 from collections import Counter
@@ -6,10 +8,13 @@ from collections import Counter
 from oqpy import frame
 
 from v18_core import LOAD_EVENTS_DIR
-from v18_core import (ROOT, EVENTS_DIR, PLOT_DIR, draw_timeline_multi,
-                      build_catalog, build_workload_poisson_superposition_exact,
+from v18_core import (ROOT, PLOT_DIR, draw_timeline_multi,
+                      build_catalog,
                       compute_freq_and_hits, plot_freq_hitrate_bars,
                       save_events_json, clear_recent, load_events_json, plot_cache_size_change)
+from v18_wl_kitchen import (
+    build_workload_poisson_superposition_exact
+)
 
 
 def load_and_draw_timeline(methods=None, outfile=None, title=None, legend_topk=16):

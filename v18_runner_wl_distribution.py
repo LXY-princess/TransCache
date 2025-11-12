@@ -1,5 +1,6 @@
-# v15_runner_workload_scaling.py
-# Compare E2E latency & final cache size across workload sizes for 4 strategies.
+# same as V18_runner_wl.py,
+# but generate wl under different distribution (poisson, hawkes, renewal),
+# more wl distribution are in v18_wl_kitchen.
 import argparse, json, csv
 from typing import Dict, Any, List, Tuple
 import numpy as np

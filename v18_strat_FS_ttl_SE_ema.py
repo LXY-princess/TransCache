@@ -1,4 +1,5 @@
 # strat_FS_Pre.py
+# no predictor, but has cache management. (use for ablation comparison)
 from typing import Any, Dict, List, Tuple
 from collections import Counter, defaultdict
 import time, math

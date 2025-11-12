@@ -1,5 +1,6 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+# load events json file / load metric json file
+# Output: events CSV file: row has "index", "label", "transT", "loadT", "bindT", "execT"
+# Output: metric CSV file: "index", "cache size"
 
 import json
 import csv
@@ -65,5 +66,5 @@ def load_metric():
     print(f"Wrote {len(rows)} rows to {out_path.resolve()}")
 
 if __name__ == "__main__":
-    # load_events()
-    load_metric()
+    load_events()
+    # load_metric()

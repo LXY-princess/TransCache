@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# different distribution of wl generator, and the visualization codes.
 from typing import List, Dict, Any, Tuple, Callable, Optional
 import math, random, os
 import numpy as np

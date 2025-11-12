@@ -1,4 +1,6 @@
 # strat_FS_Pre.py
+# ccache + predictor prewarm + long unseen removal (ttl: time-to-live) (add cache memory management)
+# + score eviction (add another cache memory management)
 from typing import Any, Dict, List, Tuple
 from collections import Counter, defaultdict
 import time, math

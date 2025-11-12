@@ -1,0 +1,30 @@
+{
+  "hit_by_label": {
+    "QSIM_q23_d4": 4
+  },
+  "total_hits": 4,
+  "cache_size_series": [
+    {
+      "t": 3.211167400237173,
+      "size": 1
+    },
+    {
+      "t": 5.166576100047678,
+      "size": 1
+    },
+    {
+      "t": 7.0681618000380695,
+      "size": 1
+    },
+    {
+      "t": 9.115391300059855,
+      "size": 1
+    },
+    {
+      "t": 11.216357700061053,
+      "size": 1
+    }
+  ],
+  "cache_capacity": null,
+  "note": "Only parameterize gates in ['p', 'rx', 'ry', 'rz', 'u', 'u3']; others stay constant; cache key = md5(template QASM)."
+}

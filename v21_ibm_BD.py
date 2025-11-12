@@ -285,8 +285,8 @@ def plot_bar(lat_json, PNG_PATH: pathlib.Path):
 # ------------------- main -------------------
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--backend", default="ibm_brisbane",help="e.g., ibm_brisbane / ibm_torino / ibm_marrakesh / ibm_fez /etc.")
-    ap.add_argument("--shots", type=int, default=128)
+    ap.add_argument("--backend", default="ibm_torino",help="e.g., ibm_brisbane / ibm_torino / ibm_marrakesh / ibm_fez /etc.")
+    ap.add_argument("--shots", type=int, default=32)
     ap.add_argument("--analyze", type=str, help="path to events_times.csv for offline analysis")
     args = ap.parse_args()
 
@@ -294,10 +294,10 @@ if __name__ == "__main__":
         analyze_from_events_csv(pathlib.Path(args.analyze))
         sys.exit(0)
 
-    cir_name = ["QFT"]#"GHZ", "QFT", "QAOA", "VQE", "Bell"
+    cir_name = ["QSIM"]#"GHZ", "QFT", "QAOA", "VQE", "Bell", "QSIM"
     qc_raw_list = {}
     for k in cir_name:
-        qc_raw_list[k] = CIRCUITS_QUASA.get(k)(113,1)
+        qc_raw_list[k] = CIRCUITS_QUASA.get(k)(23,4)
 
     for k, qc_raw in qc_raw_list.items():
         events.clear()

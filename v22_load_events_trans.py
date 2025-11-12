@@ -1,4 +1,6 @@
 # load from events.csv, abstract out transT for all rounds.
+# Used after v22_runner_repeat_circ.py to get the transT,
+# to generate the ibm e2e strats table in origin (std calculated in excell)
 import json
 import csv
 from pathlib import Path
@@ -6,7 +8,7 @@ from typing import List, Dict, Any, Iterable, Union
 
 # === 配置区 ===
 # 你的数据根目录（修正为你实际路径）
-LOAD_ROOT = Path(r"figs/v22/repeated_v11/QAOA_q16_d4_N5/events")
+LOAD_ROOT = Path(r"figs/v22/repeated_v11/QSIM_q23_d4_N5/events")
 # 需要处理的四种方法（也决定了 CSV 的行顺序）
 METHOD_NAMES = ["FullComp", "Braket", "CCache", "TransCache"]
 # 只导出前 N 次（例如 4）；若为 None 则导出文件里的全部次数

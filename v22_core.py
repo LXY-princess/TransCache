@@ -159,10 +159,10 @@ def run_once_with_cache_ibm(qc_func: Callable[[], QuantumCircuit],
     qc_exec, key, hit, compile_sec = compile_with_idle_cache_ibm(qc_raw, bk_name=bk_name, cache=cache, backend=backend)
     if include_exec:
         t0 = time.perf_counter()
-        # job = sampler.run([qc_exec], shots=shots)
-        svc = QiskitRuntimeService()
-        job_id = "d3sk546jbaoc73cne5ug" # 1. "d3sfk6k60rgc73aa7p50" 2. "d3sjqhkv6o9s73cs0pj0" 3."d3sjr2mjbaoc73cnds90" 4."d3sjr5s60rgc73aabmv0", 5."d3sk546jbaoc73cne5ug"
-        job = svc.job(job_id)
+        job = sampler.run([qc_exec], shots=shots)
+        # svc = QiskitRuntimeService()
+        # job_id = "d3sk546jbaoc73cne5ug" # 1. "d3sfk6k60rgc73aa7p50" 2. "d3sjqhkv6o9s73cs0pj0" 3."d3sjr2mjbaoc73cnds90" 4."d3sjr5s60rgc73aabmv0", 5."d3sk546jbaoc73cne5ug"
+        # job = svc.job(job_id)
 
         result = job.result()
         exec_sec = time.perf_counter() - t0

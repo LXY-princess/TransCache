@@ -1,0 +1,8 @@
+step,duration_sec,band
+02a_tls_auth,2.546896,client/local
+02b_backend_query,0.078064,client/local
+03_transpile,2.064775,client/local
+04_upload_to_cloud,0.410402,client/local
+05_to_09_queue,1.014192,server/utc
+server_run,3.962117,server/utc
+downlink_return,-0.994705,server/utc

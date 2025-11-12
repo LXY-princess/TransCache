@@ -6,6 +6,8 @@ Runner: 固定 (q, d)，让指定 v11 电路连续调用 N 次形成一个 workl
 - 兼容你现有 v18_runner_wl.py 的调用/保存/绘图习惯
 - 工作负载生成：build_workload_repeated_v11()
 - 电路来源：v11 CIRCUITS_QUASA（与工程保持同名 key）
+(no need to submit actual work for each wl as they are identical,
+for the origin table, we need time BD and Durations, can use v21_ibm_BD.py to help)
 """
 
 import argparse, json, csv, re
@@ -247,13 +249,13 @@ def main_run(args):
 # ---------------- CLI ----------------
 def build_argparser():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--circuits", type=str, default="QAOA",
-                    help='ALL 或 逗号分隔的 v11 电路名（如 "GHZ,QFT,QAOA,Bell,VQE"）')
-    ap.add_argument("--q", type=int, default=16, help="固定 qubits 数")
+    ap.add_argument("--circuits", type=str, default="QSIM",
+                    help='ALL 或 逗号分隔的 v11 电路名（如 "GHZ,QFT,QAOA,Bell,VQE,QSIM"）')
+    ap.add_argument("--q", type=int, default=23, help="固定 qubits 数")
     ap.add_argument("--d", type=int, default=4, help="固定电路深度")
     ap.add_argument("--N", type=int, default=5, help="同一电路连续调用次数")
     ap.add_argument("--rps", type=float, default=1.0, help="请求到达率（requests per second）")
-    ap.add_argument("--bkd_name", type=str, default="ibm_brisbane", help="the ibm backend to run, ibm_torino, ibm_brisbane")
+    ap.add_argument("--bkd_name", type=str, default="ibm_torino", help="the ibm backend to run, ibm_torino, ibm_brisbane")
 
     # predictor / prewarm（与现有 runner 对齐）
     ap.add_argument("--lookahead", type=float, default=8.0)

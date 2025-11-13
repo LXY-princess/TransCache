@@ -294,7 +294,7 @@ def load_and_replot_regions(load_dir: str,
                   "FS+ttl+SE+ema": "CCache + CacheM",
                   "FS+Pre": "CCache + Predictor",
                   "FS": "CCache",
-                  "PR": "Braket",
+                  "PR": "ParamBind",
                   "NoCache": "NoCache"}
         method_handles = [
             Line2D([0],[0], marker=markers[i % len(markers)], linestyle="None",
@@ -364,7 +364,7 @@ def load_and_replot_regions(load_dir: str,
         tick.set_fontweight("bold")
 
     ax.set_xlabel("Final Cache Size (#Circuits)")
-    ax.set_ylabel("Compilation Latency (s)")
+    ax.set_ylabel("Transpilation Latency (s)")
     ax.grid(True, linestyle="--", alpha=0.5)
     ax.set_xlim(left=0); ax.set_ylim(bottom=0)
     fig.tight_layout()

@@ -552,7 +552,7 @@ def draw_timeline_run_only_colorbar(method_events: Dict[str, List[Dict[str,Any]]
     # }
     method_labels = {
         "FullComp": "FullComp",
-        "Braket": "Braket",
+        "Braket": "ParamBind",
         "CCache": "CCache",
         "TransCache": "TransCache",
     }

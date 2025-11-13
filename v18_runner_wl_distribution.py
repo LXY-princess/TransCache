@@ -1,6 +1,7 @@
 # same as V18_runner_wl.py,
 # but generate wl under different distribution (poisson, hawkes, renewal),
 # more wl distribution are in v18_wl_kitchen.
+# can load and redraw the timeline
 import argparse, json, csv
 from typing import Dict, Any, List, Tuple
 import numpy as np
@@ -715,7 +716,7 @@ def main():
         # LOAD_ROOT = pathlib.Path("./figs") / f"v{VNUM}_e2e_latency_breakdown_wl150"
         load_and_redraw_timeline(load_dir=args.load_dir, wl_size=150,
                                  methods=["FullComp", "CCache", "Braket", "TransCache"],
-                                 out_tl="timeline_wl_150_load.png")
+                                 out_tl="timeline_wl_150_load_rename.png")
         # load_and_redraw(load_dir=args.load_dir,
         #                 out_latency=args.out_latency,
         #                 out_cache=args.out_cache,
